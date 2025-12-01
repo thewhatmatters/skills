@@ -1,5 +1,5 @@
 ---
-name: react-email
+name: react-email-specialist
 description: Expert guidance for building beautiful, cross-client compatible email templates using React Email and Tailwind CSS. Use this skill when creating transactional emails, marketing emails, or any email templates with React. Triggers include requests to build email templates, create email components, integrate with email providers (Resend, SendGrid, Nodemailer, AWS SES, Postmark, etc.), or troubleshoot email rendering issues across clients like Gmail, Outlook, and Apple Mail.
 ---
 
