@@ -199,6 +199,36 @@ committed snapshot → **(next)** the scaffold recipe → wire the self-audit.
   no-cache→`snapshot`, nothing→exit 1); preflight 4-state board verified in
   `ready`, `gated`, and `degraded`/offline states. `.cache/` confirmed
   gitignored. SSL/certifi issue found and handled (see §4).
-- **Phase 2 — next.** `reconcile.py` (frontmatter drift vs `skill-architecture.md`),
-  `references/generation-recipe.md`, the scaffold flow (§6), and wiring the
-  `skill-auditor` self-audit (§6 step 5).
+- **Phase 2 — DONE & self-audited.** `scripts/reconcile.py` (cache vs snapshot
+  frontmatter diff + changelog skill-mentions), `scripts/_env.py` (verbatim
+  copy of trendscan's key loader — template for generated skills), `SKILL.md`
+  (lean orchestration: probe → preflight → docs → reconcile → inputs →
+  scaffold → self-audit → emit), `README.md` (plain-language; spec A13), and
+  `references/generation-recipe.md` (substitution templates for the scaffold).
+  - **Smoke tests pass:** reconcile parser extracts all 15 live frontmatter
+    fields; aligned/drift/no-live branches all green; the live↔snapshot
+    version delta (live now `2.1.145`, baseline `2.1.144`) correctly reports
+    `aligned` (no skill-relevant changelog entries between).
+  - **Self-audited.** Ran `skill-auditor` on this skill in `--agent` mode
+    (the loop the SKILL.md prescribes for generated skills). Verdict:
+    0 🔴 critical · 0 🟠 important · 4 🟡 nice — all four addressed before
+    commit:
+    1. Recipe used `{{...}}` doubled braces under a `.format()` assumption
+       that didn't match the model-driven scaffold path. **Fixed:** outer
+       placeholders are now `<<NAME>>` style (purely textual substitution);
+       inner Python `{...}` left single-brace and correct.
+    2. `docs.py` could crash on cache write after a successful live fetch
+       (read-only home / denied perms). **Fixed:** writes wrapped in
+       try/except OSError; on failure emits `status=refreshed source=live`
+       with a "cache write failed" note instead of a traceback. Verified
+       with a `NotADirectoryError` harness.
+    3. `DOCS_STALE` gate's graceful dead-end (spec A7d) was implicit.
+       **Fixed:** SKILL.md Step 1 `gated` row now states that if *Refresh*
+       fails, the snapshot path covers it automatically.
+    4. `docs.py` `status: "offline"` was overloaded across "snapshot used,
+       exit 0" and "nothing available, exit 1". **Fixed:** the fatal case
+       now emits a distinct `status: "no-docs"`; JSON KEYS docstring updated.
+- **Phase 3 — next, when needed.** End-to-end exercise: actually run
+  `skill-generator` to scaffold a throwaway test skill and verify the full
+  loop (preflight → docs → reconcile → scaffold → self-audit → emit)
+  produces a passing skill from inputs. Not blocking for commit.

@@ -21,8 +21,13 @@ I/O CONTRACT
              (no network, no cache, no snapshot). Never hangs (timeouts).
 
 JSON KEYS
-    status               fresh | refreshed | stale | offline
-    source               live | cache | snapshot
+    status               fresh     — cache used as-is, within freshness window
+                         refreshed — live fetch succeeded (cache may also have
+                                     been refreshed, or refresh skipped — see notes)
+                         stale     — live failed; existing cache returned anyway
+                         offline   — live failed AND no cache; snapshot returned
+                         no-docs   — nothing available (exit 1)
+    source               live | cache | snapshot | null   (null only with no-docs)
     claude_code_version  e.g. "2.1.144"  (parsed from changelog.md; may be null)
     fetched_at           ISO-8601 UTC of this run's content, or null
     cache_age_days       float age of the cache used, or null
@@ -219,17 +224,25 @@ def main():
     if not failed:
         version = parse_version(fetched.get("changelog.md", ""))
         stamp = iso(now_utc())
-        CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        for filename, text in fetched.items():
-            (CACHE_DIR / filename).write_text(text, "utf-8")
-        new_manifest = {
-            "fetched_at": stamp,
-            "claude_code_version": version,
-            "source_urls": {f: u for _s, f, u in DOCS},
-            "docs": docs_meta,
-        }
-        MANIFEST.write_text(json.dumps(new_manifest, indent=2), "utf-8")
-        log(f"refreshed cache; Claude Code version = {version}")
+        # The live content is in hand — never crash if persisting it fails
+        # (read-only home, denied perms, full disk). Honest degrade: still
+        # emit the manifest with a note that the cache wasn't updated.
+        try:
+            CACHE_DIR.mkdir(parents=True, exist_ok=True)
+            for filename, text in fetched.items():
+                (CACHE_DIR / filename).write_text(text, "utf-8")
+            new_manifest = {
+                "fetched_at": stamp,
+                "claude_code_version": version,
+                "source_urls": {f: u for _s, f, u in DOCS},
+                "docs": docs_meta,
+            }
+            MANIFEST.write_text(json.dumps(new_manifest, indent=2), "utf-8")
+            log(f"refreshed cache; Claude Code version = {version}")
+        except OSError as e:
+            notes.append(f"cache write failed ({e.__class__.__name__}: {e}); "
+                         "live content used this run but not cached")
+            log(f"cache write FAILED ({e}); live content used anyway")
         emit({
             "status": "refreshed",
             "source": "live",
@@ -277,7 +290,7 @@ def main():
 
     log("FATAL: no live docs, no cache, no snapshot — cannot proceed")
     emit({
-        "status": "offline", "source": None, "claude_code_version": None,
+        "status": "no-docs", "source": None, "claude_code_version": None,
         "fetched_at": None, "cache_age_days": None, "docs": [],
         "notes": notes + ["no docs available by any path"],
     }, 1)
