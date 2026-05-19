@@ -10,6 +10,7 @@
 
 # ...except these explicitly opted-in paths:
 !/.gitignore
+!/README.md
 !/.env.example
 !/trendscan/
 
