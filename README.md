@@ -11,6 +11,7 @@ whitelist** so only deliberately published skills are committed.
 | Skill | What it does |
 |-------|--------------|
 | [`trendscan`](trendscan/) | Deep-research engine that scans a recent time window (default 30 days) across 6+ sources — Reddit, X/Twitter, YouTube, Hacker News, Polymarket, and the web — then synthesizes grounded, cited reports. |
+| [`skill-auditor`](skill-auditor/) | Audits a Claude skill against the canonical [`skill-architecture.md`](skill-architecture.md) spec — structure, reliability, secret hygiene, gates, preflight — and produces a severity-grouped findings report. |
 
 ## Setup
 
