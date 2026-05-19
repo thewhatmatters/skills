@@ -1,0 +1,35 @@
+# =============================================================================
+# Whitelist .gitignore: ignore EVERYTHING by default, opt-in per skill.
+#
+# To add a skill to the repo later, add a line:  !/<skill-name>/
+# then `git add <skill-name>`. Nothing is tracked unless explicitly listed.
+# =============================================================================
+
+# Ignore every top-level entry...
+/*
+
+# ...except these explicitly opted-in paths:
+!/.gitignore
+!/.env.example
+!/trendscan/
+
+# =============================================================================
+# Always-ignore — these win even inside opted-in skill folders above.
+# =============================================================================
+
+# Secrets — NEVER commit (.env holds Tavily/Exa keys + X auth_token).
+# .env.example is the committed template (re-included above).
+.env
+
+# Local, machine-specific Claude permission allowlists — not shared.
+**/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Generated per-run artifacts
+results.html
+
+# macOS
+.DS_Store
