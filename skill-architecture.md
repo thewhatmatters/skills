@@ -4,7 +4,7 @@ The single source of truth for how a "research/automation" skill in this family
 is built. **`skill-auditor` checks against this; a future `skill-generator`
 scaffolds to this.** Edit here once; both tools follow.
 
-Reference implementation: `trendscan`. Last updated: 2026-05-18.
+Reference implementation: `trendscan`. Last updated: 2026-05-19.
 
 ---
 
@@ -56,6 +56,10 @@ deviations should be deliberate, not accidental.
 12. **Honesty & memory discipline.** Distinguish code-verified vs live-verified;
     disclose partial/degraded runs; never write secret values to memory/logs;
     record non-obvious decisions so they are not re-litigated.
+13. **Plain-language README.** A `README.md` in the skill folder explains, for a
+    non-expert reader, what it is / what you get / how to run it / what it needs
+    / how it works — distinct from SKILL.md (model instructions) and the
+    decision record (handoff/DESIGN). Every skill has one.
 
 ## B. Audit rubric
 
@@ -64,6 +68,8 @@ Each item is PASS / FAIL / N/A with file:line evidence.
 **Structure**
 - [ ] SKILL.md has valid frontmatter; `name` == dir; description trigger-rich.
 - [ ] SKILL.md is lean; bulky detail is in `references/`.
+- [ ] `README.md` present and plain-language (what / what you get / how to run
+      / what it needs / how it works); distinct from SKILL.md.
 - [ ] Scripts: one concern each, docstring I/O contract, JSON-stdout /
       stderr-diagnostics, graceful failure.
 

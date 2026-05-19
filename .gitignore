@@ -13,6 +13,7 @@
 !/README.md
 !/.env.example
 !/skill-architecture.md
+!/skill-generator/
 !/trendscan/
 !/skill-auditor/
 
@@ -26,6 +27,9 @@
 
 # Local, machine-specific Claude permission allowlists — not shared.
 **/settings.local.json
+
+# Runtime caches — never committed (e.g. skill-generator/.cache/docs/).
+**/.cache/
 
 # Python
 __pycache__/
