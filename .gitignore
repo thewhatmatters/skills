@@ -12,7 +12,9 @@
 !/.gitignore
 !/README.md
 !/.env.example
+!/skill-architecture.md
 !/trendscan/
+!/skill-auditor/
 
 # =============================================================================
 # Always-ignore — these win even inside opted-in skill folders above.
