@@ -77,6 +77,12 @@ committed even after `skill-generator/` is opted in.
   `urllib.request`** — keyless, zero added dependency (consistent with the
   handoff's "no python-dotenv" minimalism). NATIVE mode uses the harness
   `WebFetch`. The `.env` Tavily/Exa keys are NOT used here.
+  - **SSL trust (found in build/testing):** macOS python.org Python builds
+    don't trust certs via the system keychain, so stdlib `urllib` hits
+    `CERTIFICATE_VERIFY_FAILED` while `curl` succeeds. `docs.py` builds its SSL
+    context from `certifi` when importable (it ships with `requests`, already
+    used by trendscan → still zero *added* dependency) and falls back to the
+    default context otherwise. Layered, no unguarded assumption — spec A11.
 - **Resolution order (dual-mode, mirrors trendscan SCRIPTS vs NATIVE):**
   1. live fetch of the pinned URLs (SCRIPTS: `urllib`; NATIVE: `WebFetch`),
   2. local `.cache/docs/` if fetch fails, or if cache is fresh and no `--refresh`,
@@ -175,14 +181,24 @@ listed as decision (5) below rather than made unilaterally.
    (§4); keyless, zero added dependency.
 4. ✅ **DESIGN.md long-term** — kept at `skill-generator/DESIGN.md`, committed
    with the skill like trendscan's `handoff.md`.
-5. ⏳ **Open:** add a "has a plain-language README.md" line to
-   `skill-architecture.md` §4 so `skill-auditor` enforces the §8a convention?
-   (Default if unanswered: do it — it makes the convention real, not advisory.)
+5. ✅ **README convention enforced** — added pattern A13 + a §B Structure
+   rubric line to `skill-architecture.md` (commit `cc1be62`); `skill-auditor`
+   now checks it. Not advisory.
 
 ## 10. What's next
 
-Decisions 1–4 are locked. Item 5 (one line in `skill-architecture.md`) is the
-only open call. On your go-ahead I build §3's tree in order: `docs.py` +
-`preflight.py` + the committed snapshot → the scaffold recipe → wire the
-self-audit. Nothing here is committed until you add the `!/skill-generator/`
-opt-in line.
+Decisions 1–5 locked. Build order: **(done)** `docs.py` + `preflight.py` +
+committed snapshot → **(next)** the scaffold recipe → wire the self-audit.
+
+## 11. Build status
+
+- **Phase 1 — DONE & tested.** `scripts/docs.py`, `scripts/preflight.py`, and
+  the committed `references/claude-docs-snapshot/` (5 docs, Claude Code
+  `2.1.144`). Smoke-tested: live→`refreshed`, cache→`fresh`,
+  `--refresh`→`refreshed`; degraded chain proven (stale-cache→`stale`,
+  no-cache→`snapshot`, nothing→exit 1); preflight 4-state board verified in
+  `ready`, `gated`, and `degraded`/offline states. `.cache/` confirmed
+  gitignored. SSL/certifi issue found and handled (see §4).
+- **Phase 2 — next.** `reconcile.py` (frontmatter drift vs `skill-architecture.md`),
+  `references/generation-recipe.md`, the scaffold flow (§6), and wiring the
+  `skill-auditor` self-audit (§6 step 5).
