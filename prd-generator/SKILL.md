@@ -92,6 +92,11 @@ Otherwise: pipe the JSON from Step 4 into `python3 scripts/report.py
 file (inline CSS, escaped content, light/dark friendly) recording the
 original product, the date, and every section — spec A10.
 
+> Branded alternative (opt-in): for the anthropic.com brand look instead of
+> this skill's default HTML, render the `prd-<slug>.md` file with the
+> `/html-output` skill. Optional and decoupled — this skill does not depend on
+> it.
+
 ## Step 7 — Emit
 
 Print, in this order:

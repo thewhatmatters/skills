@@ -160,6 +160,11 @@ Otherwise: pipe the JSON from Step 6 into `python3 scripts/report.py
 --out=<out>/research-<slug>.html`. Single self-contained HTML file, inline
 CSS, escaped content, citations rendered as clickable links — spec A10.
 
+> Branded alternative (opt-in): for the anthropic.com brand look instead of
+> this skill's default HTML, render the `research-<slug>.md` file with the
+> `/html-output` skill. Optional and decoupled — this skill does not depend on
+> it.
+
 ## Step 9 — Emit
 
 Print, in this order:
