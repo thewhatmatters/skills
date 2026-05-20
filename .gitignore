@@ -16,6 +16,7 @@
 !/skill-generator/
 !/trendscan/
 !/skill-auditor/
+!/prd-generator/
 
 # =============================================================================
 # Always-ignore — these win even inside opted-in skill folders above.
