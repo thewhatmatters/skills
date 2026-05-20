@@ -1,6 +1,6 @@
 ---
 name: deep-research
-description: Conduct deep, structured research on any topic — markets, products, features, competitors, problems, industries, regulations, or opportunities. Trigger whenever the user wants to research, explore, investigate, analyze, or understand something. This includes entering new markets, evaluating products or services, exploring features, solving business problems, competitive landscapes, regulatory research, or any "I need to understand X" scenario. Also trigger for "look into", "dig into", "explore whether", "map out the landscape", "what are the options for X", "how does Y work in practice". Trigger aggressively — if there's research intent, use this skill. Covers market research, competitive analysis, feature exploration, regulatory deep-dives, product evaluation, problem-solving, opportunity assessment, landscape mapping. Outputs a structured markdown report with inline citations (always) and a self-contained HTML version (optional). Composes with /trendscan when the question is about recent discussion specifically.
+description: Conduct deep, structured research on any topic — markets, products, features, competitors, problems, industries, regulations, or opportunities. Trigger whenever the user wants to research, explore, investigate, analyze, or understand something. This includes entering new markets, evaluating products or services, exploring features, solving business problems, competitive landscapes, regulatory research, or any "I need to understand X" scenario. Also trigger for "look into", "dig into", "explore whether", "map out the landscape", "what are the options for X", "how does Y work in practice". Trigger aggressively — if there's research intent, use this skill. Covers market research, competitive analysis, feature exploration, regulatory deep-dives, product evaluation, problem-solving, opportunity assessment, landscape mapping. Outputs a structured markdown report with inline citations (always) and a self-contained HTML version (optional). Composes with /scan-trends when the question is about recent discussion specifically.
 ---
 
 # deep-research
@@ -61,8 +61,8 @@ prompt — classify the question along three axes:
    product | problem | opportunity | landscape`. If `--type` was given, use
    it; otherwise infer from the question's keywords and structure.
 2. **Recency.** If the question is fundamentally about "what people are
-   saying lately" / "what's trending recently in X" — **suggest /trendscan
-   instead** (interactive: offer *Use trendscan / Stay here / Cancel*;
+   saying lately" / "what's trending recently in X" — **suggest /scan-trends
+   instead** (interactive: offer *Use scan-trends / Stay here / Cancel*;
    `--agent`: stay and note the recency angle in the report).
 3. **Single-fact lookup.** If the question is answerable in one sentence
    from general knowledge ("what year did Y ship?", "who founded Z?"), this
@@ -115,7 +115,7 @@ For each subquery in the plan, run search:
 Collect results across all subqueries into a working set. Deduplicate by URL.
 
 If recency is one of the angles (e.g. "recent regulatory changes"), **invoke
-`/trendscan`** for that subquery instead of search.py — this is normal skill
+`/scan-trends`** for that subquery instead of search.py — this is normal skill
 composition, not a cross-skill import.
 
 ## Step 5 — Focused follow-up (standard & exhaustive only)
@@ -162,7 +162,7 @@ CSS, escaped content, citations rendered as clickable links — spec A10.
 
 > Branded alternative (opt-in): for the anthropic.com brand look instead of
 > this skill's default HTML, render the `research-<slug>.md` file with the
-> `/html-output` skill. Optional and decoupled — this skill does not depend on
+> `/render-html` skill. Optional and decoupled — this skill does not depend on
 > it.
 
 ## Step 9 — Emit
@@ -190,7 +190,7 @@ open questions: 4 items
 
 ## Conventions this skill follows
 
-- **Composes with `/trendscan`** for recency-focused subqueries; otherwise
+- **Composes with `/scan-trends`** for recency-focused subqueries; otherwise
   uses bundled `search.py` (Tavily → Exa). No cross-skill imports.
 - Synthesis is model-driven; the script layer (`search.py`, `report.py`)
   does one concern each (spec A4).

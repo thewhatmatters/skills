@@ -1,10 +1,10 @@
 # Skill Architecture — Canonical Spec
 
 The single source of truth for how a "research/automation" skill in this family
-is built. **`skill-auditor` checks against this; a future `skill-generator`
+is built. **`audit-skill` checks against this; a future `generate-skill`
 scaffolds to this.** Edit here once; both tools follow.
 
-Reference implementation: `trendscan`. Last updated: 2026-05-19.
+Reference implementation: `scan-trends`. Last updated: 2026-05-20.
 
 ---
 

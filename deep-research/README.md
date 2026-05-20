@@ -58,12 +58,12 @@ and Exa's semantic search. The skill never blocks on missing keys.
 1. **Scope.** Classifies the question (research type + depth + recency
    axis). If it's secretly a single-fact lookup, the skill says so and gives
    you a one-line answer instead of a multi-pass research run. If it's
-   secretly about *recent discussion*, it suggests `/trendscan` instead.
+   secretly about *recent discussion*, it suggests `/scan-trends` instead.
 2. **Plan.** Picks the section template for the research type and generates
    the right number of subquery angles for the chosen depth.
 3. **Search.** Runs the subqueries through Tavily/Exa (SCRIPTS) or built-in
    WebSearch (NATIVE). When recency matters for one of the angles, it
-   invokes `/trendscan` instead of normal search — skill composition.
+   invokes `/scan-trends` instead of normal search — skill composition.
 4. **Follow up** (standard/exhaustive depths). Finds gaps and chases them
    with targeted queries; fetches full content for the most cited sources.
 5. **Synthesize.** Fills in the type template, citing every claim inline,

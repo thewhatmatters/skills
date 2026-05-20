@@ -8,7 +8,7 @@ script exists for SCRIPTS mode where Tavily/Exa keys give better ranking.
 Keys are loaded via the shared `_env.py` convention (spec A5):
   TAVILY_API_KEY — sent in `Authorization: Bearer <key>` header.
   EXA_API_KEY    — sent in `x-api-key: <key>` header.
-Neither key is ever logged or written to stdout (spec A5; trendscan handoff §3).
+Neither key is ever logged or written to stdout (spec A5; scan-trends handoff §3).
 
 USAGE
     python3 scripts/search.py "<query>" [--provider=tavily|exa|auto] \\
@@ -62,14 +62,14 @@ def log(msg):
 
 def _requests():
     """Lazy import of `requests` so the script can at least show --help
-    without it. trendscan uses `requests` widely; certifi ships with it."""
+    without it. scan-trends uses `requests` widely; certifi ships with it."""
     try:
         import requests  # noqa: PLC0415
         return requests
     except ImportError as e:
         raise SystemExit(
             "FATAL: `requests` not installed. deep-research relies on it "
-            "(also used by trendscan). Install: pip install requests."
+            "(also used by scan-trends). Install: pip install requests."
         ) from e
 
 

@@ -103,7 +103,7 @@ _SSL_CTX = "unset"
 def _ssl_context():
     """certifi-backed SSL context when available, else default verification.
 
-    Same layered pattern as skill-generator/scripts/docs.py — macOS
+    Same layered pattern as generate-skill/scripts/docs.py — macOS
     python.org builds don't trust via the system keychain, so stdlib
     urllib fails cert verification while the script's own actual search
     path (requests, which bundles certifi) succeeds. Without this fix,

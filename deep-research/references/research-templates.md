@@ -21,7 +21,7 @@ piped into `scripts/report.py` for the HTML render).
   "question": "<the question the user asked, verbatim>",
   "summary": "<one-paragraph TL;DR>",
   "sources": [
-    {"id": 1, "url": "...", "title": "...", "provider": "tavily|exa|websearch|webfetch|trendscan",
+    {"id": 1, "url": "...", "title": "...", "provider": "tavily|exa|websearch|webfetch|scan-trends",
      "accessed": "<YYYY-MM-DD>"},
     ...
   ],
@@ -137,7 +137,7 @@ Use when the user is evaluating ONE product (vs. competitive's many).
 
 **Starter subquery angles:** "<product> features", "<product> pricing",
 "<product> review", "<product> vs", "<product> limitations", "<product>
-complaints" (Reddit, HN — consider `/trendscan` for this angle).
+complaints" (Reddit, HN — consider `/scan-trends` for this angle).
 
 ### 2.6 `problem` — Problem-solving research
 
@@ -261,7 +261,7 @@ if any are missing.
 
 User-derived strings are HTML-escaped and brace-doubled (`{` → `{{`,
 `}` → `}}`) before passing through `.format()`, same brace-safety pattern
-as prd-generator's report.py — so research content containing literal
+as generate-prd's report.py — so research content containing literal
 `{...}` (pseudocode, JSON examples, regex) won't crash the renderer.
 
 ---
@@ -277,7 +277,7 @@ muted tag next to each source. The full set:
 | `exa` | Exa |
 | `websearch` | WebSearch |
 | `webfetch` | WebFetch (full page) |
-| `trendscan` | via /trendscan |
+| `scan-trends` | via /scan-trends |
 
 This is honesty discipline (spec A12): the reader sees where each citation
 came from, including the difference between a search-snippet citation and
@@ -306,11 +306,11 @@ answer: <one sentence with a citation>
 (if you want a deeper dive, say so explicitly.)
 ```
 
-**Recency-focused → /trendscan:**
+**Recency-focused → /scan-trends:**
 ```
 this question is fundamentally about recent discussion of <topic>.
-/trendscan is a better fit. invoke it with:
-  /trendscan <topic> --days=<N>
+/scan-trends is a better fit. invoke it with:
+  /scan-trends <topic> --days=<N>
 (re-run /deep-research if you want an evergreen treatment instead.)
 ```
 

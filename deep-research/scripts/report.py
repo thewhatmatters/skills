@@ -32,7 +32,7 @@ BRACE SAFETY
     literal `{` and `}` — pseudocode, JSON examples, regex. The TEMPLATE-
     level `.format()` call uses `safe()` to HTML-escape AND brace-double
     user content, so research content containing literal `{...}` doesn't
-    crash the renderer with a KeyError. Same pattern as prd-generator's
+    crash the renderer with a KeyError. Same pattern as generate-prd's
     report.py.
 """
 
@@ -119,7 +119,7 @@ PROVIDER_LABEL = {
     "exa": "Exa",
     "websearch": "WebSearch",
     "webfetch": "WebFetch (full page)",
-    "trendscan": "via /trendscan",
+    "scan-trends": "via /scan-trends",
 }
 
 

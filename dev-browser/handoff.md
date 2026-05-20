@@ -3,7 +3,7 @@
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).
 
-Rewritten: 2026-05-19  ·  Generator: skill-generator @ CC 2.1.145
+Rewritten: 2026-05-19  ·  Generator: generate-skill @ CC 2.1.145
 
 ## 1. Purpose
 Drive a real Chromium browser via Playwright with a persistent login profile —
@@ -84,5 +84,5 @@ See `skill-architecture.md` §B. Items expected to be N/A for this skill:
 Self-contained under `~/.claude/skills/dev-browser/`. Profile lives at
 `.cache/profile` (gitignored). Browsers resolved from the shared ms-playwright
 cache (per-OS path, `PLAYWRIGHT_BROWSERS_PATH` override). Composes naturally
-with `/trendscan` (which has its own authenticated-X browser path) and
+with `/scan-trends` (which has its own authenticated-X browser path) and
 `/deep-research` (which can hand off interactive fetches here).
