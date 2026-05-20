@@ -4,8 +4,7 @@ Personal [Claude Code](https://claude.com/claude-code) skills, version-controlle
 
 This repo lives at `~/.claude/skills/`. Each subdirectory is a skill Claude can
 invoke. **Everything here is committed except secrets and generated junk** —
-drop a new skill into the folder and it's tracked automatically (see
-[How tracking works](#how-tracking-works)).
+drop a new skill into the folder and it's tracked automatically.
 
 ## Tracked skills
 
@@ -31,21 +30,3 @@ chmod 600 ~/.claude/skills/.env
 
 Resolution order (first hit wins): real env var → `~/.claude/.env` →
 `~/.claude/skills/.env`. Empty values are skipped.
-
-## How tracking works
-
-[`.gitignore`](.gitignore) commits **everything** under `~/.claude/skills/`
-except secrets and generated junk. There's no opt-in step anymore — to add a
-skill, just put it in the folder and commit:
-
-```sh
-git add my-skill && git commit -m "Add my-skill"
-```
-
-**Never committed:** `.env` / `.env.*` (secrets — `.env.example` is the
-committed template), `**/settings.local.json` (machine-local permission
-allowlists), `**/.cache/` (docs caches, browser profiles), `__pycache__/`,
-`*.pyc`, `node_modules/`, `results.html`, `.DS_Store`.
-
-> Earlier this repo used an opt-in whitelist; it switched to commit-by-default
-> once all the in-repo skills were vetted as safe to publish.
