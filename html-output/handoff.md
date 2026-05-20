@@ -54,6 +54,15 @@ Follows `~/.claude/skills/skill-architecture.md` patterns A1–A13. Notable poin
   source-badge fidelity) is retained. trendscan was deliberately excluded — its
   HTML is the primary deliverable in a card/dashboard layout with no markdown
   intermediate, a poor fit for this article renderer.
+- 2026-05-20: **Bugfix — nested inline placeholders left NUL bytes.** `inline()`
+  stashes code spans and links as `\x00N\x00` placeholders. When a code span sat
+  inside link text (e.g. ``[`trendscan`](dir/)`` — pervasive in README.md
+  tables), the link's stashed fragment contained the code placeholder, and
+  `re.sub` does not re-scan its own replacement, so the inner `\x00N\x00`
+  survived as raw NUL bytes (browsers tolerated it; `grep` saw the file as
+  binary). Fix: restore iteratively until no placeholder remains. Side benefit:
+  code spans inside link text now render. Surfaced by the README.md end-to-end
+  test, not the initial smoke test.
 - 2026-05-19: **Audit follow-ups.** `render.py` now auto-derives `<input>.html`
   when `--out` is omitted (docs matched to reality), with `--stdout` to force
   stdout; `--agent` is accepted as a documented no-op for flag consistency

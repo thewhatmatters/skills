@@ -156,7 +156,15 @@ def inline(s):
     s = re.sub(r"__([^_]+)__", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<!\*)\*([^*\s][^*]*?)\*(?!\*)", r"<em>\1</em>", s)
     s = re.sub(r"(?<!_)_([^_\s][^_]*?)_(?!_)", r"<em>\1</em>", s)
-    s = re.sub(r"\x00(\d+)\x00", lambda m: tokens[int(m.group(1))], s)
+    # Restore iteratively: a stashed fragment may itself contain a placeholder
+    # (e.g. a code span inside link text), and re.sub does not re-scan its own
+    # replacements. Loop until no placeholder remains (depth is finite; the cap
+    # guards against any pathological self-reference).
+    for _ in range(len(tokens) + 1):
+        new = re.sub(r"\x00(\d+)\x00", lambda m: tokens[int(m.group(1))], s)
+        if new == s:
+            break
+        s = new
     return s
 
 

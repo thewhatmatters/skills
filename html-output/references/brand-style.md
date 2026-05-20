@@ -82,7 +82,9 @@ then YAML frontmatter `title:`, then the first H1, then the filename.
 
 - Lists are single-level (no nested list rendering).
 - No image (`![]()`) or raw-HTML pass-through — text is always escaped.
-- Emphasis inside link text is not rendered (link text is escaped literally).
+- Code spans inside link text render (e.g. ``[`name`](url)``), but **bold/italic
+  inside link text** are not applied (link text is escaped, not re-parsed for
+  emphasis).
 
 These cover the constructs the repo's own Markdown reports use; extend
 `render.py` if a source needs more.
