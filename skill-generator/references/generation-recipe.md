@@ -182,7 +182,9 @@ Empty file so the directory exists for future progressive-disclosure content.
 Copy verbatim from this skill's own scripts/ as templates:
 
 - `_env.py` — copy `skill-generator/scripts/_env.py` byte-for-byte
-  (trendscan handoff §5: flat name, do not rename).
+  (trendscan handoff §5: flat name, do not rename) **ONLY if `needs_secrets`**.
+  This file is purely a key-loader; shipping it in a keyless skill is dead
+  code that confuses the auditor and future readers.
 - `preflight.py` — write the minimal skeleton below, then the user extends
   it with per-source checks.
 - `report.py` — write the minimal skeleton below ONLY if the skill produces
