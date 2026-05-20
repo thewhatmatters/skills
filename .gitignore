@@ -1,41 +1,28 @@
 # =============================================================================
-# Whitelist .gitignore: ignore EVERYTHING by default, opt-in per skill.
-#
-# To add a skill to the repo later, add a line:  !/<skill-name>/
-# then `git add <skill-name>`. Nothing is tracked unless explicitly listed.
+# Commit everything under ~/.claude/skills EXCEPT secrets and generated junk.
+# (Switched from the earlier opt-in whitelist — all skills are now tracked.)
 # =============================================================================
 
-# Ignore every top-level entry...
-/*
-
-# ...except these explicitly opted-in paths:
-!/.gitignore
-!/README.md
-!/.env.example
-!/skill-architecture.md
-!/skill-generator/
-!/trendscan/
-!/skill-auditor/
-!/prd-generator/
-!/deep-research/
-
-# =============================================================================
-# Always-ignore — these win even inside opted-in skill folders above.
-# =============================================================================
-
-# Secrets — NEVER commit (.env holds Tavily/Exa keys + X auth_token).
-# .env.example is the committed template (re-included above).
+# --- Secrets — NEVER commit ---------------------------------------------------
+# .env holds Tavily/Exa keys + X auth_token. .env.* covers .env.local etc.
+# .env.example is the committed template (re-included below).
 .env
+.env.*
+!.env.example
 
 # Local, machine-specific Claude permission allowlists — not shared.
 **/settings.local.json
 
-# Runtime caches — never committed (e.g. skill-generator/.cache/docs/).
+# --- Generated / runtime junk -------------------------------------------------
+# Runtime caches (docs cache, browser profiles, etc.)
 **/.cache/
 
 # Python
 __pycache__/
 *.pyc
+
+# Node
+node_modules/
 
 # Generated per-run artifacts
 results.html

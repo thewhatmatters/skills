@@ -3,8 +3,9 @@
 Personal [Claude Code](https://claude.com/claude-code) skills, version-controlled.
 
 This repo lives at `~/.claude/skills/`. Each subdirectory is a skill Claude can
-invoke. Not every local skill is tracked here — the repo uses an **opt-in
-whitelist** so only deliberately published skills are committed.
+invoke. **Everything here is committed except secrets and generated junk** —
+drop a new skill into the folder and it's tracked automatically (see
+[How tracking works](#how-tracking-works)).
 
 ## Tracked skills
 
@@ -15,6 +16,7 @@ whitelist** so only deliberately published skills are committed.
 | [`skill-generator`](skill-generator/) | ✅ working | Counterpart to `skill-auditor`: scaffolds new skills against the same spec, consults the official Claude docs (with offline snapshot fallback), reports any upstream drift, and runs `skill-auditor` on what it produces. End-to-end exercised by generating [`prd-generator`](prd-generator/) (below). See [`DESIGN.md`](skill-generator/DESIGN.md). |
 | [`prd-generator`](prd-generator/) | ✅ working | Synthesizes a conversational product discussion into a structured PRD covering **problem, solution, UX flow, technical architecture, data model, pricing, roadmap, risks, open questions**. Outputs markdown (always) and self-contained HTML (optionally). Built by `skill-generator`; self-audited 0 critical / 0 important. |
 | [`deep-research`](deep-research/) | ✅ working | Multi-pass, structured research on any topic (markets, products, competitors, regulations, opportunities, …). Tavily/Exa search via the shared `.env` with a NATIVE `WebSearch` fallback; composes with `/trendscan` for recency. Outputs a cited markdown report (always) + self-contained HTML (optional). Built by `skill-generator`; self-audited 0 critical / 0 important. |
+| [`dev-browser`](dev-browser/) | ✅ working | Drives a real Chromium browser via Playwright with a persistent login profile — navigate, click, fill, extract, scrape, screenshot. Token-efficient page extraction; read-only `WebFetch` fallback when Playwright is absent. Rewritten from the Amp skill to house conventions via `skill-generator`; self-audited 0 critical / 0 important; live-verified. |
 
 ## Setup
 
@@ -30,22 +32,20 @@ chmod 600 ~/.claude/skills/.env
 Resolution order (first hit wins): real env var → `~/.claude/.env` →
 `~/.claude/skills/.env`. Empty values are skipped.
 
-## How the whitelist works
+## How tracking works
 
-[`.gitignore`](.gitignore) ignores **everything** by default, then re-includes
-specific paths. This keeps `git status` clean and prevents unfinished or
-machine-specific skills from being committed by accident.
-
-To publish another skill:
+[`.gitignore`](.gitignore) commits **everything** under `~/.claude/skills/`
+except secrets and generated junk. There's no opt-in step anymore — to add a
+skill, just put it in the folder and commit:
 
 ```sh
-# 1. add an opt-in line to .gitignore
-echo '!/my-skill/' >> .gitignore
-
-# 2. stage and commit
-git add my-skill .gitignore
-git commit -m "Add my-skill"
+git add my-skill && git commit -m "Add my-skill"
 ```
 
-Always-ignored even inside tracked skills: `.env`, `**/settings.local.json`,
-`__pycache__/`, `*.pyc`, `results.html`, `.DS_Store`.
+**Never committed:** `.env` / `.env.*` (secrets — `.env.example` is the
+committed template), `**/settings.local.json` (machine-local permission
+allowlists), `**/.cache/` (docs caches, browser profiles), `__pycache__/`,
+`*.pyc`, `node_modules/`, `results.html`, `.DS_Store`.
+
+> Earlier this repo used an opt-in whitelist; it switched to commit-by-default
+> once all the in-repo skills were vetted as safe to publish.
