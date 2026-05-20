@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Readiness check for dev-browser (spec A6).
+"""Readiness check for automate-browser (spec A6).
 
 One concern: confirm the browser-automation path is ready. Three checks:
 the `playwright` Python package is importable, its Chromium browser is
@@ -124,7 +124,7 @@ def main():
         if RANK[status] > RANK[overall]:
             overall = status
 
-    log("dev-browser readiness")
+    log("automate-browser readiness")
     for name, (status, gate, detail) in checks.items():
         g = f"  [{gate}]" if gate else ""
         log(f"  {MARK[status]} {name:<10} {detail}{g}")

@@ -1,4 +1,4 @@
-# dev-browser API reference
+# automate-browser API reference
 
 Loaded on demand by `SKILL.md` (spec A1). Covers the `scripts/browser.py`
 library and the slice of the Playwright Page API you'll use most.
@@ -15,7 +15,7 @@ library and the slice of the Playwright Page API you'll use most.
 ## 1. `browser.py` library
 
 Import in an inline script run from the skill dir
-(`cd ~/.claude/skills/dev-browser`).
+(`cd ~/.claude/skills/automate-browser`).
 
 ### `launch(headless=False, viewport=(1280, 800))`
 Context manager. Yields `(ctx, page)` where `ctx` is a Playwright

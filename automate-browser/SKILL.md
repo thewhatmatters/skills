@@ -1,9 +1,9 @@
 ---
-name: dev-browser
+name: automate-browser
 description: Browser automation with a persistent login profile. Use when the user wants to navigate websites, fill forms, click through flows, take screenshots, extract or scrape web data, or test/debug a web app. Trigger phrases include "go to [url]", "click on", "fill out the form", "log into", "take a screenshot", "scrape", "extract data from", "automate this site", "test the website", "check my dashboard", or any request that needs a real browser driving a page (not just fetching HTML). Drives Chromium via Playwright with cookies/sessions that persist across runs; falls back to read-only WebFetch when Playwright isn't installed.
 ---
 
-# dev-browser
+# automate-browser
 
 Drive a real Chromium browser via Playwright, with a **persistent profile** so
 logins/cookies survive across runs. Work the way the original Amp skill taught:
@@ -65,7 +65,7 @@ a *live page* does not survive between separate processes. Implications:
 **One-shot (CLI)** — navigate + discover what's on the page:
 
 ```bash
-cd ~/.claude/skills/dev-browser && python3 scripts/browser.py \
+cd ~/.claude/skills/automate-browser && python3 scripts/browser.py \
   goto "https://example.com" --mode interactive
 ```
 
@@ -78,7 +78,7 @@ output only).
 **Multi-step (inline library script)** — interaction on one live page:
 
 ```bash
-cd ~/.claude/skills/dev-browser && python3 <<'EOF'
+cd ~/.claude/skills/automate-browser && python3 <<'EOF'
 from scripts.browser import launch, wait_for_load, interactive_outline
 
 with launch(headless=False) as (ctx, page):
@@ -132,4 +132,4 @@ just need to *understand* a page — screenshots cost vision tokens.
 - No unguarded paths (A11): browser cache + profile resolved per-OS with an
   env override; no hard-coded external install path.
 - No secrets: browser automation needs none here; no `_env.py`.
-- Self-contained: everything lives under `~/.claude/skills/dev-browser/`.
+- Self-contained: everything lives under `~/.claude/skills/automate-browser/`.

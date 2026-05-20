@@ -1,4 +1,4 @@
-# dev-browser — Handoff & decisions
+# automate-browser — Handoff & decisions
 
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).
@@ -53,7 +53,7 @@ Two problems motivated the rewrite:
 - **Setup gates never block (A7d).** `PLAYWRIGHT_MISSING` /
   `BROWSERS_MISSING` are recoverable with a one-line install; if the user
   declines, NATIVE read-only is the automatic dead-end.
-- **Headed by default.** It's a *dev* browser — you usually want to watch.
+- **Headed by default.** You usually want to watch the automation run.
   `--headless` / `launch(headless=True)` for no-display servers.
 
 ## 4. Known limitations / environment caveats
@@ -81,7 +81,7 @@ See `skill-architecture.md` §B. Items expected to be N/A for this skill:
   and extracted JSON are the artifacts.
 
 ## 6. Notes
-Self-contained under `~/.claude/skills/dev-browser/`. Profile lives at
+Self-contained under `~/.claude/skills/automate-browser/`. Profile lives at
 `.cache/profile` (gitignored). Browsers resolved from the shared ms-playwright
 cache (per-OS path, `PLAYWRIGHT_BROWSERS_PATH` override). Composes naturally
 with `/scan-trends` (which has its own authenticated-X browser path) and

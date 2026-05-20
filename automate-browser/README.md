@@ -1,4 +1,4 @@
-# dev-browser
+# automate-browser
 
 **What it is:** a way for Claude to drive a real Chromium browser — navigate,
 click, fill forms, log in, take screenshots, and extract or scrape data — with
@@ -42,7 +42,7 @@ just can't click or fill. It never hard-fails on a missing browser.
    workspace is writable; if not, it offers the one-line install or falls
    back to read-only.
 2. **Persistent profile.** Chromium runs against a saved profile under
-   `~/.claude/skills/dev-browser/.cache/profile`, so cookies and logins
+   `~/.claude/skills/automate-browser/.cache/profile`, so cookies and logins
    survive across runs. (This folder is never committed.)
 3. **Small-scripts loop.** Claude writes a short script to do one thing
    (navigate, discover, click, fill), looks at the result, and decides the
