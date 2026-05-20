@@ -14,6 +14,7 @@ whitelist** so only deliberately published skills are committed.
 | [`skill-auditor`](skill-auditor/) | ✅ working | Audits a Claude skill against the canonical [`skill-architecture.md`](skill-architecture.md) spec — structure, reliability, secret hygiene, gates, preflight — and produces a severity-grouped findings report. |
 | [`skill-generator`](skill-generator/) | ✅ working | Counterpart to `skill-auditor`: scaffolds new skills against the same spec, consults the official Claude docs (with offline snapshot fallback), reports any upstream drift, and runs `skill-auditor` on what it produces. End-to-end exercised by generating [`prd-generator`](prd-generator/) (below). See [`DESIGN.md`](skill-generator/DESIGN.md). |
 | [`prd-generator`](prd-generator/) | ✅ working | Synthesizes a conversational product discussion into a structured PRD covering **problem, solution, UX flow, technical architecture, data model, pricing, roadmap, risks, open questions**. Outputs markdown (always) and self-contained HTML (optionally). Built by `skill-generator`; self-audited 0 critical / 0 important. |
+| [`deep-research`](deep-research/) | ✅ working | Multi-pass, structured research on any topic (markets, products, competitors, regulations, opportunities, …). Tavily/Exa search via the shared `.env` with a NATIVE `WebSearch` fallback; composes with `/trendscan` for recency. Outputs a cited markdown report (always) + self-contained HTML (optional). Built by `skill-generator`; self-audited 0 critical / 0 important. |
 
 ## Setup
 
