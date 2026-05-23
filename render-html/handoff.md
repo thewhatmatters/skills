@@ -10,8 +10,9 @@ Render a Markdown file into one self-contained, on-brand (anthropic.com) HTML pa
 
 ## 2. Reusable patterns (link to spec A1..A13)
 Follows `~/.claude/skills/skill-architecture.md` patterns A1–A13. Notable points:
-- **A1** progressive disclosure: the full brand system + CSS shell live in
-  `references/brand-style.md`, not SKILL.md.
+- **A1** progressive disclosure: the brand identity lives in `DESIGN.md` (the
+  Google-Labs DESIGN.md format) and rendering behavior in
+  `references/rendering.md`, not SKILL.md.
 - **A3** mode probe: SCRIPTS (python3 + `render.py`) with a real NATIVE
   fallback — Claude hand-converts the Markdown and wraps it in the documented
   shell.
@@ -37,6 +38,15 @@ Follows `~/.claude/skills/skill-architecture.md` patterns A1–A13. Notable poin
   document by concatenation and keeps `CSS` out of any `.format()`/f-string, so
   the large stylesheet needs no brace-doubling — less error-prone than the
   `.format()` TEMPLATE approach used by the older report.py scripts.
+- 2026-05-21: **Semantic HTML + anchors/TOC + accordions (no JS).** To make the
+  `.html` stand alone: output now wraps in `<header>`/`<nav>`/`<main>`/
+  `<footer>`; every heading gets a deduped slug `id`; a jump-link TOC (H2 +
+  nested H3) is emitted under the title, **auto when ≥3 H2s** (`--toc`/`--no-toc`
+  override). Accordions use a `::: details Summary … :::` container compiling to
+  a **native `<details>`/`<summary>`** — chosen over the W3Schools JS accordion
+  on purpose (zero scripts, built-in a11y, prints/degrades open), preserving the
+  "no network, no JS, stands alone" property. Slugs come from a shared slugger
+  threaded through the recursive parser so ids stay unique across nested blocks.
 - 2026-05-19: **Web fonts ON by default (conscious A10 waiver).** The output's
   one external reference is the Google Fonts `<link>`. Spec A10 favors fully
   inline assets, but the user chose the brand look as the default over literal
@@ -63,6 +73,18 @@ Follows `~/.claude/skills/skill-architecture.md` patterns A1–A13. Notable poin
   binary). Fix: restore iteratively until no placeholder remains. Side benefit:
   code spans inside link text now render. Surfaced by the README.md end-to-end
   test, not the initial smoke test.
+- 2026-05-21: **Adopted the DESIGN.md format for the brand.** Replaced the
+  bespoke `references/brand-style.md` with `DESIGN.md` (Google-Labs
+  design.md format — YAML design tokens + rationale), and split the
+  non-brand content (NATIVE shell, semantic/TOC/accordion behavior, markdown
+  coverage, limits) into `references/rendering.md`. Scope: render-html-local per
+  the user (not house-level shared), so `draw-diagram`'s palette stays its own
+  copy for now. `DESIGN.md` is the canonical brand reference; the scripts still
+  hard-code the values (no YAML parser — pure stdlib). Known wrinkle accepted:
+  `generate-skill/DESIGN.md` is an *architecture* doc, so "DESIGN.md" now has
+  two meanings in the repo. Possible future: have `generate-skill` scaffold a
+  DESIGN.md, but only for skills that emit styled artifacts (conditional, not
+  default).
 - 2026-05-19: **Audit follow-ups.** `render.py` now auto-derives `<input>.html`
   when `--out` is omitted (docs matched to reality), with `--stdout` to force
   stdout; `--agent` is accepted as a documented no-op for flag consistency

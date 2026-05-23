@@ -7,34 +7,39 @@ accent, serif headings, grotesque-sans body, light/dark aware. The Markdown
 parser is a small stdlib-only converter (no pip install, no network at run time).
 
 USAGE
-    python3 scripts/render.py [INPUT.md] [--out=PATH] [--title=STR] [--no-webfonts]
+    python3 scripts/render.py [INPUT.md] [--out=PATH] [--title=STR]
+        [--no-webfonts] [--toc | --no-toc] [--stdout]
 
     INPUT.md       path to a Markdown file; if omitted, Markdown is read from stdin
     --out=PATH     write the HTML to PATH and print "wrote PATH"; otherwise HTML
-                   is written to stdout
+                   is written to stdout (default for a file input: <input>.html)
+    --stdout       write HTML to stdout even for a file input
     --title=STR    document title (overrides the first H1 / the filename)
     --no-webfonts  omit the Google Fonts <link> so the file is fully offline
-                   (falls back to the system serif/sans stack)
+    --toc          force a table-of-contents nav (default: auto when ≥3 H2s)
+    --no-toc       suppress the table-of-contents
 
-I/O CONTRACT
-    stdin  : Markdown (when no INPUT given)
-    stdout : HTML (default) or "wrote <path>" line (with --out)
-    stderr : human diagnostics
-    exit   : 0 on success; 1 on unreadable input or write failure
+SEMANTIC HTML / NAVIGATION (so the .html stands alone)
+    Output uses <header>/<nav>/<main>/<footer>; every heading gets a slug id so
+    it's individually deep-linkable; a jump-link table of contents (H2 + nested
+    H3) appears under the title for longer docs. Pure HTML/CSS — no JavaScript.
+
+ACCORDIONS
+    A container directive compiles to a native <details>/<summary> (no JS):
+        ::: details Optional summary
+        …collapsible markdown…
+        :::
 
 FONTS / LICENSING
     Anthropic's real brand fonts (Styrene, Tiempos) are licensed and are NOT
-    bundled. The CSS names them first so they render for anyone who has them
-    installed, then falls back to close free substitutes pulled from Google
-    Fonts (Source Serif 4 for headings, Hanken Grotesk for body), then to the
-    system serif/sans stack when offline or when --no-webfonts is set. See
-    references/brand-style.md for the rationale and the full token list.
+    bundled. The CSS names them first, then falls back to free Google-Fonts
+    substitutes, then to the system serif/sans stack (offline / --no-webfonts).
+    Brand tokens + licensing live in DESIGN.md; behavior in references/rendering.md.
 
 ESCAPING
     All text is HTML-escaped inside the inline pass; inline code spans and link
-    targets are stashed before escaping and restored after, so emphasis markers
-    inside code (`a*b*c`) are never mis-parsed and link URLs are not double
-    formatted. Only markup this script itself emits is ever unescaped.
+    targets are stashed before escaping and restored after. Only markup this
+    script itself emits is ever unescaped.
 """
 
 import argparse
@@ -46,7 +51,7 @@ from pathlib import Path
 
 # --- Brand stylesheet -------------------------------------------------------
 # Plain string: never fed to .format()/f-strings, so literal { } need no
-# escaping. The full rationale + tokens live in references/brand-style.md.
+# escaping. The full rationale + tokens live in DESIGN.md (the brand spec).
 CSS = """
 :root {
   color-scheme: light dark;
@@ -60,6 +65,7 @@ CSS = """
   }
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 html, body { background: var(--bg); color: var(--fg); }
 body {
   font-family: "Styrene B", "Hanken Grotesk", ui-sans-serif, system-ui,
@@ -70,7 +76,7 @@ body {
 h1, h2, h3, h4 {
   font-family: "Tiempos Headline", "Source Serif 4", Georgia,
     "Times New Roman", serif;
-  font-weight: 600; line-height: 1.2; color: var(--fg);
+  font-weight: 600; line-height: 1.2; color: var(--fg); scroll-margin-top: 1.25rem;
 }
 h1 { font-size: 2.4rem; margin: 0 0 1.5rem; letter-spacing: -0.01em; }
 h2 { font-size: 1.6rem; margin: 2.75rem 0 0.75rem; }
@@ -108,6 +114,35 @@ th, td {
 }
 th { background: var(--surface); font-weight: 600; }
 .doc-meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 2.5rem; }
+.doc-toc {
+  margin: 0 0 2.75rem; padding: 0.9rem 1.1rem; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; font-size: 0.95rem;
+}
+.doc-toc-title {
+  font-weight: 600; color: var(--muted); font-size: 0.78rem;
+  text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 0.5rem;
+}
+.doc-toc ul { margin: 0; padding-left: 1.1rem; list-style: none; }
+.doc-toc > ul { padding-left: 0; }
+.doc-toc li { margin: 0.2rem 0; }
+.doc-toc a { color: var(--fg); text-decoration: none; }
+.doc-toc a:hover { color: var(--accent-ink); text-decoration: underline; }
+details {
+  margin: 0 0 1.1rem; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); padding: 0 1.1rem;
+}
+details[open] { padding-bottom: 0.4rem; }
+summary {
+  cursor: pointer; padding: 0.7rem 0; font-weight: 600; color: var(--fg);
+  list-style: none;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: "\\25B8"; color: var(--accent); margin-right: 0.5rem;
+  display: inline-block; transition: transform 0.15s;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+main > :first-child { margin-top: 0; }
 .doc-footer {
   margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--line);
   color: var(--muted); font-size: 0.85rem;
@@ -134,7 +169,8 @@ def inline(s):
 
     Code spans and links are stashed as NUL-delimited tokens *before* escaping
     so their contents are never re-parsed for emphasis and their tags survive
-    html.escape(); they are restored last.
+    html.escape(); they are restored last (iteratively, to resolve a code span
+    nested inside link text).
     """
     tokens = []
 
@@ -156,10 +192,6 @@ def inline(s):
     s = re.sub(r"__([^_]+)__", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<!\*)\*([^*\s][^*]*?)\*(?!\*)", r"<em>\1</em>", s)
     s = re.sub(r"(?<!_)_([^_\s][^_]*?)_(?!_)", r"<em>\1</em>", s)
-    # Restore iteratively: a stashed fragment may itself contain a placeholder
-    # (e.g. a code span inside link text), and re.sub does not re-scan its own
-    # replacements. Loop until no placeholder remains (depth is finite; the cap
-    # guards against any pathological self-reference).
     for _ in range(len(tokens) + 1):
         new = re.sub(r"\x00(\d+)\x00", lambda m: tokens[int(m.group(1))], s)
         if new == s:
@@ -175,13 +207,14 @@ _QUOTE = re.compile(r"^\s*>")
 _UL = re.compile(r"^\s*[-*+]\s+(.*)$")
 _OL = re.compile(r"^\s*\d+\.\s+(.*)$")
 _FENCE = re.compile(r"^\s*```")
+_DETAILS = re.compile(r"^:::\s*details\b(.*)$")
 
 
 def _is_block_start(line):
     return bool(
         _FENCE.match(line) or _HR.match(line) or _HEADING.match(line)
         or _QUOTE.match(line) or _UL.match(line) or _OL.match(line)
-        or _is_table_header(line)
+        or _is_table_header(line) or line.lstrip().startswith(":::")
     )
 
 
@@ -217,8 +250,76 @@ def _aligns(delim_cells):
     return out
 
 
-def md_to_html(text):
-    """Convert a Markdown block to HTML. Recursive for blockquotes."""
+# --- Headings / TOC ---------------------------------------------------------
+def _plain(text):
+    """Strip inline markdown for slugs and TOC labels."""
+    t = re.sub(r"`([^`]+)`", r"\1", text)
+    t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)
+    t = re.sub(r"[*_]+", "", t)
+    return t.strip()
+
+
+def _slugify(text):
+    t = re.sub(r"[^a-z0-9\s-]", "", _plain(text).lower())
+    t = re.sub(r"\s+", "-", t).strip("-")
+    return t or "section"
+
+
+def make_slugger():
+    """Return a function assigning unique slugs (deduped with -2, -3, …)."""
+    seen = {}
+
+    def slug(text):
+        base = _slugify(text)
+        if base in seen:
+            seen[base] += 1
+            return f"{base}-{seen[base]}"
+        seen[base] = 1
+        return base
+    return slug
+
+
+def build_toc(headings):
+    """Build a <nav> jump list from collected (level, text, slug) — H2 + H3."""
+    items = [h for h in headings if h[0] in (2, 3)]
+    if not items:
+        return ""
+    parts = ['<nav class="doc-toc" aria-label="Contents">',
+             '<p class="doc-toc-title">Contents</p>', "<ul>"]
+    open_sub = started = False
+    for lvl, text, slug in items:
+        label = html.escape(_plain(text))
+        if lvl == 2:
+            if open_sub:
+                parts.append("</ul></li>")
+                open_sub = False
+            elif started:
+                parts.append("</li>")
+            parts.append(f'<li><a href="#{slug}">{label}</a>')
+            started = True
+        else:  # h3
+            if not started:
+                parts.append(f'<li><a href="#{slug}">{label}</a></li>')
+                continue
+            if not open_sub:
+                parts.append("<ul>")
+                open_sub = True
+            parts.append(f'<li><a href="#{slug}">{label}</a></li>')
+    parts.append("</ul></li>" if open_sub else ("</li>" if started else ""))
+    parts.append("</ul></nav>")
+    return "".join(parts)
+
+
+def md_to_html(text, slugger=None, headings=None):
+    """Convert Markdown to HTML. Recursive for blockquotes and ::: details.
+
+    `slugger` + `headings` are shared across the whole document (incl. nested
+    blocks) so heading ids stay unique and the TOC reflects every heading.
+    """
+    if slugger is None:
+        slugger = make_slugger()
+    if headings is None:
+        headings = []
     lines = text.split("\n")
     out, i, n = [], 0, len(lines)
     while i < n:
@@ -242,8 +343,25 @@ def md_to_html(text):
         m = _HEADING.match(line)
         if m:
             lvl = min(len(m.group(1)), 4)
-            out.append(f"<h{lvl}>{inline(m.group(2).strip())}</h{lvl}>")
+            htext = m.group(2).strip()
+            slug = slugger(htext)
+            headings.append((lvl, htext, slug))
+            out.append(f'<h{lvl} id="{slug}">{inline(htext)}</h{lvl}>')
             i += 1
+            continue
+
+        dm = _DETAILS.match(line)
+        if dm:
+            summary = dm.group(1).strip()
+            i += 1
+            buf = []
+            while i < n and lines[i].strip() != ":::":
+                buf.append(lines[i])
+                i += 1
+            i += 1  # closing :::
+            inner = md_to_html(chr(10).join(buf), slugger, headings)
+            sm = inline(summary) if summary else "Details"
+            out.append(f"<details><summary>{sm}</summary>{inner}</details>")
             continue
 
         if _QUOTE.match(line):
@@ -251,7 +369,9 @@ def md_to_html(text):
             while i < n and _QUOTE.match(lines[i]):
                 buf.append(re.sub(r"^\s*>\s?", "", lines[i]))
                 i += 1
-            out.append(f"<blockquote>{md_to_html(chr(10).join(buf))}</blockquote>")
+            out.append("<blockquote>"
+                       + md_to_html(chr(10).join(buf), slugger, headings)
+                       + "</blockquote>")
             continue
 
         # GFM pipe table: header row + delimiter row
@@ -340,8 +460,9 @@ def extract_h1(text):
     return None, text
 
 
-def build_document(title, body_html, meta_line, footer_line, webfonts):
+def build_document(title, body_html, meta_line, footer_line, webfonts, toc_html=""):
     fonts = (FONTS_LINK + "\n") if webfonts else ""
+    toc = (toc_html + "\n") if toc_html else ""
     return (
         "<!doctype html>\n"
         '<html lang="en">\n'
@@ -350,10 +471,14 @@ def build_document(title, body_html, meta_line, footer_line, webfonts):
         f"<title>{title}</title>\n"
         f"{fonts}"
         f"<style>{CSS}</style>\n"
-        f"<h1>{title}</h1>\n"
+        "<header>\n"
+        f'<h1 id="top">{title}</h1>\n'
         f'<p class="doc-meta">{meta_line}</p>\n'
-        f"{body_html}\n"
-        f'<div class="doc-footer">{footer_line}</div>\n'
+        "</header>\n"
+        f"{toc}"
+        f"<main>\n{body_html}\n</main>\n"
+        f'<footer class="doc-footer">{footer_line}</footer>\n'
+        "</html>\n"
     )
 
 
@@ -366,6 +491,10 @@ def main():
                     help="write HTML to stdout even for a file input")
     ap.add_argument("--title")
     ap.add_argument("--no-webfonts", action="store_true")
+    ap.add_argument("--toc", action="store_true",
+                    help="force a table of contents (default: auto when ≥3 H2s)")
+    ap.add_argument("--no-toc", action="store_true",
+                    help="suppress the table of contents")
     ap.add_argument("--agent", action="store_true",
                     help="accepted for flag consistency; this renderer never "
                     "prompts, so it is a no-op")
@@ -391,14 +520,26 @@ def main():
         h1, text = extract_h1(text)
         title = h1 or (Path(args.input).stem if args.input else "Document")
 
-    body_html = md_to_html(text)
+    slugger = make_slugger()
+    headings = []
+    body_html = md_to_html(text, slugger, headings)
+
+    h2_count = sum(1 for h in headings if h[0] == 2)
+    if args.no_toc:
+        show_toc = False
+    elif args.toc:
+        show_toc = True
+    else:
+        show_toc = h2_count >= 3
+    toc_html = build_toc(headings) if show_toc else ""
+
     today = date.today().isoformat()
     meta_line = f"Rendered {html.escape(today)} &middot; from {html.escape(source)}"
     footer_line = "Rendered by render-html."
 
     doc = build_document(
         html.escape(str(title)), body_html, meta_line, footer_line,
-        webfonts=not args.no_webfonts,
+        webfonts=not args.no_webfonts, toc_html=toc_html,
     )
 
     # Resolve destination: explicit --out wins; otherwise a file input defaults

@@ -6,10 +6,11 @@
 
 - A single `.html` file with all CSS inline — open it in any browser, attach it, or host it as-is.
 - The anthropic.com aesthetic: ivory page, clay accent, serif headings, clean sans body, automatic light/dark mode.
+- Semantic HTML with deep-linkable headings, an automatic jump-link table of contents for longer docs, and collapsible `::: details` accordions — all with **no JavaScript**, so it truly stands alone.
 
 ## How to run
 
-Say something like "make an HTML version of `report.md`" or run `/render-html report.md`. By default the HTML lands next to the input as `report.html`. You can add a custom title (`--title="Q2 Review"`), print to stdout instead (`--stdout`), or force fully-offline output with `--no-webfonts`.
+Say something like "make an HTML version of `report.md`" or run `/render-html report.md`. By default the HTML lands next to the input as `report.html`. You can add a custom title (`--title="Q2 Review"`), print to stdout instead (`--stdout`), force fully-offline output with `--no-webfonts`, or control the table of contents with `--toc` / `--no-toc`.
 
 ## What it needs
 
@@ -28,4 +29,5 @@ A note on fonts: Anthropic's real brand fonts (Styrene, Tiempos) are licensed an
 
 - `SKILL.md` — operating instructions Claude follows.
 - `handoff.md` — design decisions and the "why".
-- `references/brand-style.md` — the full color/typography system, font-licensing caveat, and the NATIVE-mode HTML shell.
+- `DESIGN.md` — the brand spec (color/typography tokens + font-licensing caveat) in the [DESIGN.md](https://github.com/google-labs-code/design.md) format.
+- `references/rendering.md` — rendering behavior: the NATIVE-mode HTML shell, semantic structure / TOC / accordion syntax, and parser limitations.

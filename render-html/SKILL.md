@@ -13,9 +13,14 @@ Converts Markdown (a file or stdin) into a single dependency-free HTML
 document in the anthropic.com brand look. All CSS is inline; the only optional
 external reference is a Google Fonts `<link>` for the heading/body substitute
 fonts, which degrades to the system serif/sans stack offline. The Markdown
-parser is stdlib-only — no `pip install`, no network. Bulk detail (the full
-brand palette, font choices, licensing caveat) lives in
-`references/brand-style.md`.
+parser is stdlib-only — no `pip install`, no network. The output uses
+**semantic HTML** (`<header>`/`<nav>`/`<main>`/`<footer>`), gives every heading
+a slug `id` (deep-linkable), and adds a jump-link **table of contents** for
+longer docs — **no JavaScript**. A `::: details` container compiles to a native
+`<details>`/`<summary>` **accordion**. The brand (palette, fonts, licensing) is
+the DESIGN.md spec at [`DESIGN.md`](DESIGN.md); rendering behavior (NATIVE shell,
+TOC/accordion syntax, markdown coverage) lives in
+[`references/rendering.md`](references/rendering.md).
 
 ## How to run
 
@@ -33,13 +38,14 @@ doc as HTML", or `/render-html report.md`. With a file input and no `--out`,
 | `--stdout` | print HTML to stdout even for a file input |
 | `--title=STR` | document title (overrides first H1 / filename) |
 | `--no-webfonts` | omit the Google Fonts link → fully offline, system fonts |
+| `--toc` / `--no-toc` | force / suppress the table of contents (default: auto when ≥3 H2s) |
 
 ## Step 0 — Mode probe
 
 Run `python3 --version`. If python3 is available, mode = **SCRIPTS** (use
-`scripts/render.py`). If not, mode = **NATIVE**: read
-`references/brand-style.md`, convert the Markdown to HTML yourself, and wrap it
-in the documented brand shell. Announce the mode in one line.
+`scripts/render.py`). If not, mode = **NATIVE**: read the brand spec `DESIGN.md`
+and the shell template in `references/rendering.md`, convert the Markdown to HTML
+yourself, and wrap it in that documented shell. Announce the mode in one line.
 
 ## Steps (SCRIPTS mode)
 
