@@ -76,6 +76,8 @@ Required (any not supplied via flags):
 Optional:
 - needs **scripts**? (if no → `--no-scripts`)
 - needs **secrets**? (drives whether to copy `_env.py` and add a key block)
+- emits **styled visual output**? (drives `needs_design` → scaffold a `DESIGN.md`;
+  see the recipe's "When to scaffold a DESIGN.md" criterion — default No)
 - external deps / sources / dual-mode considerations.
 
 `--agent` uses the supplied flags + the recipe's documented defaults; never
@@ -93,6 +95,9 @@ Files created under `<out>/<name>/`:
 - `README.md` — plain-language (spec A13 — audited, required).
 - `handoff.md` — decision-log seed (rubric checklist + decision log placeholder).
 - `references/` — empty dir, ready for progressive disclosure (spec A1).
+- `DESIGN.md` — visual-identity spec (google-labs design.md format) — written
+  **only** when the skill emits styled visual output (`needs_design`); most
+  skills skip it. Referenced from the new skill's `SKILL.md`.
 - `scripts/_env.py`, `scripts/preflight.py`, `scripts/report.py` — written
   only when "needs scripts" was true (omit the whole dir otherwise).
 

@@ -41,11 +41,33 @@ must be emitted verbatim into the generated script.
 | `description` | interactive | trigger-rich; combined with `when_to_use` ≤ 1536 chars (live skills.md) |
 | `needs_scripts` | flag / inferred | bool |
 | `needs_secrets` | interactive | bool (false if `needs_scripts` false) |
+| `needs_design` | inferred / interactive | bool — true iff the skill emits **styled visual output** (see criterion below) |
 | `deps_notes` | interactive (optional) | free text — used in handoff seed |
 | `out_dir` | `--out=` (default `~/.claude/skills`) | parent for `<name>/` |
 | `live_fields` | docs.py JSON Step 2 | set of valid frontmatter field names |
 | `cc_version` | docs.py JSON Step 2 | string (e.g. `2.1.144`) |
 | `dry_run` | flag | bool |
+
+### When to scaffold a `DESIGN.md` (`needs_design`)
+
+A `DESIGN.md` (the [google-labs design.md](https://github.com/google-labs-code/design.md)
+format — a visual-identity spec for agents) is **only** for skills that emit
+**styled visual output**. Decide `needs_design` like this:
+
+- **Yes** if the skill produces HTML pages, branded documents, slides/posters,
+  UI, themed images, or anything with an intentional **look** (color palette,
+  typography). Examples in this repo: `render-html`. A skill that *only* emits a
+  raw artifact for another tool to style (e.g. `draw-diagram` emits Mermaid;
+  `render-html` styles it) does **not** get its own DESIGN.md — it defers to the
+  styling skill's.
+- **No** (the default for most skills) for research/automation/data/CLI skills
+  with no visual identity (`deep-research`, `scan-trends`, `audit-skill`,
+  `automate-browser`, …). Do not scaffold an empty/placeholder DESIGN.md.
+
+When unsure, default to **No** and note it — a DESIGN.md is easy to add later,
+but a stray one is noise. (NB: this is distinct from a skill's own
+architecture-decisions `DESIGN.md` like `generate-skill/DESIGN.md`; that is not
+what this flag scaffolds.)
 
 ## Pre-write validation (fail fast — do NOT write any file if any item fails)
 
@@ -278,6 +300,54 @@ if __name__ == "__main__":
     main()
 ```
 
+### 6. `<out_dir>/<name>/DESIGN.md` (ONLY if `needs_design`)
+
+Scaffold the brand/visual identity in the google-labs `design.md` format: YAML
+design tokens (front matter) + a markdown body of rationale. Sections in
+canonical order (include the ones that apply): Overview, Colors, Typography,
+Layout, Shapes, Components, Do's and Don'ts. Then **reference it from the new
+skill's `SKILL.md`** ("the brand/visual identity lives in `DESIGN.md`") so the
+generator-emitted skill actually points at it.
+
+Seed template (Claude fills tokens to the skill's intended look — do NOT copy
+render-html's palette unless that's the intended brand):
+
+```
+---
+version: alpha
+name: <<NAME>> brand
+description: <one line on the visual identity>
+colors:
+  background: "#RRGGBB"
+  foreground: "#RRGGBB"
+  accent: "#RRGGBB"
+  # … add light tokens + *-dark counterparts as needed
+typography:
+  h1: { fontFamily: "<stack>", fontSize: 2.4rem, fontWeight: 600, lineHeight: 1.2 }
+  body-md: { fontFamily: "<stack>", fontSize: 17px, fontWeight: 400, lineHeight: 1.6 }
+rounded: { sm: 4px, md: 8px }
+spacing: { sm: 8px, md: 16px, lg: 24px }
+components:
+  page: { backgroundColor: "{colors.background}", textColor: "{colors.foreground}" }
+---
+
+## Overview
+<what the look is and the feeling it evokes>
+
+## Colors
+<token-by-token rationale; note any light/dark pairing>
+
+## Typography
+<font stacks; flag any LICENSED fonts that cannot be bundled + the free fallback>
+
+## Do's and Don'ts
+<keep-it-consistent guidance>
+```
+
+Reference implementation to mirror: `render-html/DESIGN.md`. Keep the canonical
+tokens here; if the skill's scripts are pure-stdlib they may hard-code the
+values to match (no YAML parser) — note that in the skill's handoff.
+
 ## Secrets — shared `.env` convention (when `needs_secrets`)
 
 Do NOT create a per-skill `.env.example`. The convention (scan-trends handoff
@@ -306,6 +376,7 @@ created tree:
     README.md
     handoff.md
     references/.gitkeep
+    [DESIGN.md if needs_design]
     [scripts/ if needs_scripts]
 
 verdict: <line from Step 6 self-audit>
