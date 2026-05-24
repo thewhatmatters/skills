@@ -6,15 +6,15 @@
 
 - A single `.html` file with all CSS inline — open it in any browser, attach it, or host it as-is.
 - The anthropic.com aesthetic: ivory page, clay accent, serif headings, clean sans body, automatic light/dark mode.
-- Semantic HTML with deep-linkable headings, an automatic jump-link table of contents for longer docs, and collapsible `::: details` accordions — all with **no JavaScript**, so it truly stands alone.
+- Semantic HTML with deep-linkable headings, an automatic jump-link table of contents for longer docs, collapsible `::: details` accordions, and `::: tabs` tab groups — all with **no JavaScript**, so it truly stands alone.
 
 ## How to run
 
-Say something like "make an HTML version of `report.md`" or run `/render-html report.md`. By default the HTML lands next to the input as `report.html`. You can add a custom title (`--title="Q2 Review"`), print to stdout instead (`--stdout`), force fully-offline output with `--no-webfonts`, or control the table of contents with `--toc` / `--no-toc`.
+Say something like "make an HTML version of `report.md`" or run `/render-html report.md`. By default the HTML lands next to the input as `report.html`. You can add a custom title (`--title="Q2 Review"`), print to stdout instead (`--stdout`), embed images into the file with `--inline-images`, force fully-offline output with `--no-webfonts`, or control the table of contents with `--toc` / `--no-toc`.
 
 ## What it needs
 
-Nothing to set up. It uses only the Python standard library — no packages, no API keys, no network at render time. (The output page links to Google Fonts when viewed online; offline it falls back to system fonts. Use `--no-webfonts` to drop that link entirely.)
+Nothing to set up. It uses only the Python standard library — no packages, no API keys, and no network at render time *unless* you pass `--inline-images` (which fetches remote images to embed them, and quietly keeps the remote link if a fetch fails). Markdown images render either way. (The output page also links to Google Fonts when viewed online; offline it falls back to system fonts — use `--no-webfonts` to drop that link. For a fully standalone file, combine `--no-webfonts --inline-images`.)
 
 ## How it works (high level)
 

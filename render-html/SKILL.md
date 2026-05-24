@@ -1,6 +1,6 @@
 ---
 name: render-html
-description: Render a Markdown file (or piped Markdown) into a polished, self-contained HTML page styled in Anthropic's anthropic.com brand look — ivory background, clay accent, serif headings, grotesque-sans body, light/dark aware. Use when the user wants to turn a Markdown report, doc, spec, or notes file into a branded, shareable HTML page — "make an HTML version of this report", "turn this markdown into a styled web page", "brand this doc as HTML", "export X.md to HTML", "give me a nice HTML version of this", "render this as an Anthropic-styled page". Pairs with the HTML companions emitted by deep-research, generate-prd, and scan-trends when a single on-brand visual style is wanted. Pure local file transform: no network and no secrets at run time.
+description: Render a Markdown file (or piped Markdown) into a polished, self-contained HTML page styled in Anthropic's anthropic.com brand look — ivory background, clay accent, serif headings, grotesque-sans body, light/dark aware. Use when the user wants to turn a Markdown report, doc, spec, or notes file into a branded, shareable HTML page — "make an HTML version of this report", "turn this markdown into a styled web page", "brand this doc as HTML", "export X.md to HTML", "give me a nice HTML version of this", "render this as an Anthropic-styled page". Pairs with the HTML companions emitted by deep-research, generate-prd, and scan-trends when a single on-brand visual style is wanted. Renders Markdown images too. Pure local file transform with no secrets and no network by default; an opt-in --inline-images flag fetches remote images to embed them as base64 (true offline self-containment).
 ---
 
 # render-html
@@ -17,7 +17,8 @@ parser is stdlib-only — no `pip install`, no network. The output uses
 **semantic HTML** (`<header>`/`<nav>`/`<main>`/`<footer>`), gives every heading
 a slug `id` (deep-linkable), and adds a jump-link **table of contents** for
 longer docs — **no JavaScript**. A `::: details` container compiles to a native
-`<details>`/`<summary>` **accordion**. The brand (palette, fonts, licensing) is
+`<details>`/`<summary>` **accordion**, and a `::: tabs` container (panels split
+by `=== Label` lines) compiles to CSS-only **tabs**. The brand (palette, fonts, licensing) is
 the DESIGN.md spec at [`DESIGN.md`](DESIGN.md); rendering behavior (NATIVE shell,
 TOC/accordion syntax, markdown coverage) lives in
 [`references/rendering.md`](references/rendering.md).
@@ -39,6 +40,7 @@ doc as HTML", or `/render-html report.md`. With a file input and no `--out`,
 | `--title=STR` | document title (overrides first H1 / filename) |
 | `--no-webfonts` | omit the Google Fonts link → fully offline, system fonts |
 | `--toc` / `--no-toc` | force / suppress the table of contents (default: auto when ≥3 H2s) |
+| `--inline-images` | embed images as base64 data-URIs — **opt-in network** for remote URLs; without it `![](url)` renders as a remote `<img>` (no network) |
 
 ## Step 0 — Mode probe
 
@@ -53,14 +55,19 @@ yourself, and wrap it in that documented shell. Announce the mode in one line.
    Read the JSON. `down` (e.g. `INPUT_MISSING`, `OUT_UNWRITABLE`) → stop and
    report the gate; otherwise proceed.
 2. **Render** — `python3 scripts/render.py <input>` (it writes `<input>.html`;
-   add `--out`/`--title`/`--no-webfonts` if requested). The script prints
-   `wrote <path>`.
-3. **Report** — give the user the output path. Note if web fonts are in use
-   (online-only) versus `--no-webfonts` (fully offline).
+   add `--out`/`--title`/`--no-webfonts`/`--inline-images` if requested). The
+   script prints `wrote <path>`. Markdown images (`![alt](url)`) render as
+   `<img>`; `--inline-images` fetches remote ones and embeds them as base64
+   (and degrades to the remote reference on any fetch failure, logging a WARN).
+3. **Report** — give the user the output path. Note the offline status: web
+   fonts (online-only) vs `--no-webfonts`; remote `<img>` references (online-only)
+   vs `--inline-images` (embedded). For a fully offline file, pass both
+   `--no-webfonts --inline-images`.
 
 ## Conventions this skill follows
 
 - Spec is `~/.claude/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Self-contained artifact records the source file + render date (spec A10).
-- Keyless: no secrets, no `_env.py`, no network at run time.
+- Keyless: no secrets, no `_env.py`. No network by default; network only when
+  `--inline-images` is passed, and it degrades gracefully if a fetch fails.

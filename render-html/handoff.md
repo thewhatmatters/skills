@@ -89,19 +89,40 @@ Follows `~/.claude/skills/skill-architecture.md` patterns A1–A13. Notable poin
   when `--out` is omitted (docs matched to reality), with `--stdout` to force
   stdout; `--agent` is accepted as a documented no-op for flag consistency
   (the renderer never prompts).
+- 2026-05-24: **Markdown images + opt-in inlining.** Added `![alt](url)` →
+  `<img loading="lazy">` (was previously dropped to a literal `!` + link).
+  Default keeps the `src` as the remote URL → **no network at render time**.
+  New `--inline-images` flag fetches remote images (and reads local files) and
+  embeds them as base64 data-URIs for true offline self-containment. This is the
+  skill's *only* network path; it is opt-in and degrades gracefully (timeout
+  10 s, 10 MB cap, WARN + remote fallback on any failure) so a render never
+  breaks or hangs. Prompted by the source-ui → render-html chain test, where a
+  design-reference page needs its thumbnails to actually appear.
+
+- 2026-05-24: **CSS-only tabs (`::: tabs`).** Added a no-JS tab container (panels
+  split by `=== Label`), built on hidden radio inputs + `:checked` sibling
+  selectors + flexbox `order` — same "stands alone, no JS" philosophy as the
+  `::: details` accordion. Single-level (no nested `:::` inside a tab), unique
+  radio-group per block, keyboard-navigable. Prompted by source-ui wanting to
+  tab Mobbin vs Refero results in one rendered page.
 
 ## 4. Known limitations / environment caveats
-- Markdown converter is intentionally small: single-level lists only; no image
-  or raw-HTML pass-through; no emphasis inside link text. Covers the constructs
-  the repo's own reports use. Extend `render.py` if a source needs more.
+- Markdown converter is intentionally small: single-level lists only; no
+  raw-HTML pass-through; no emphasis inside link text. Images are supported
+  (see the image decision above). Covers the constructs the repo's own reports
+  use. Extend `render.py` if a source needs more.
+- `--inline-images` needs network for remote URLs and respects no proxy/cert
+  config beyond the system default; on failure it keeps the remote `<img>`.
 - Output is a brand *approximation* — not pixel-identical to anthropic.com,
   by font license and by design.
 
 ## 5. Audit rubric coverage
 See `skill-architecture.md` §B; this skill targets every PASS that applies.
-Secrets rows are N/A (keyless, no network).
+Secrets rows are N/A (keyless). Network is N/A by default; opt-in only via
+`--inline-images`, which degrades gracefully.
 
 ## 6. Notes
-Pure local file transform: no network, no secrets at run time. Pairs with the
-HTML companions emitted by deep-research / generate-prd / scan-trends when a
-single on-brand visual style is wanted.
+Local file transform: no secrets, and no network unless `--inline-images` is
+passed. Pairs with the HTML companions emitted by deep-research / generate-prd /
+scan-trends, and with source-ui (design references) when a single on-brand
+visual style is wanted.

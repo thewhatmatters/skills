@@ -61,18 +61,59 @@ Native `<details>` is chosen over a JS accordion deliberately: zero scripts,
 built-in keyboard/screen-reader support, and it degrades/prints with the
 content visible — which is what "stands alone" requires.
 
+## Tabs (`::: tabs`)
+
+A container directive compiles to **CSS-only radio tabs** (no JS). Panels are
+split by `=== Label` lines; the first tab is open by default:
+
+```
+::: tabs
+=== Mobbin
+…markdown…
+=== Refero
+…markdown…
+:::
+```
+
+Implementation: one hidden `<input type="radio">` per tab (same `name`, so they
+are mutually exclusive), each followed by its `<label>` and a `<section
+class="tab-panel">`. A `.tab-radio:checked + .tab-label + .tab-panel` rule shows
+the active panel; flexbox `order` lifts the labels into a tab bar above the
+panels. The radios stay in the DOM (1px, transparent) so the tab strip is
+keyboard-navigable (arrow keys). Each `::: tabs` block gets a unique radio-group
+name, so multiple tab sets on one page don't interfere.
+
+**Single-level only:** a tab panel's markdown is parsed normally (headings flow
+into the TOC, images/tables/lists all work), but do **not** nest another `:::`
+block (tabs or details) inside a tab — the parser closes on the first bare
+`:::` line. Lines before the first `=== ` are ignored; a block with no `=== `
+markers falls back to plain rendering.
+
 ## Markdown coverage
 
 Headings (`#`–`####`, each slug-id'd), paragraphs, **bold**, *italic*, `inline
-code`, fenced code blocks, links, blockquotes, horizontal rules,
-unordered/ordered lists, GFM pipe tables (with `:--`/`--:` alignment), and
-`::: details` accordion containers. Title is taken from `--title`, then YAML
-frontmatter `title:`, then the first H1, then the filename.
+code`, fenced code blocks, links, images (`![alt](url)` → `<img loading="lazy">`),
+blockquotes, horizontal rules, unordered/ordered lists, GFM pipe tables (with
+`:--`/`--:` alignment), `::: details` accordion containers, and `::: tabs`
+containers. Title is taken
+from `--title`, then YAML frontmatter `title:`, then the first H1, then the
+filename.
+
+### Images
+
+`![alt](url)` becomes an `<img>` styled to fit the column. By default the `src`
+is left as-is — a remote URL renders online with **no network at render time**.
+Pass `--inline-images` to fetch remote images (and read local files) and embed
+them as base64 data-URIs for a truly offline-self-contained file; this is the
+*only* path that touches the network, it is opt-in, and any failed fetch
+(timeout, SSL, 404, >10 MB) logs a WARN and falls back to the remote reference
+so the page always renders. For a fully standalone file: `--no-webfonts
+--inline-images`.
 
 ### Known limitations (recorded so they are not re-litigated)
 
 - Lists are single-level (no nested list rendering).
-- No image (`![]()`) or raw-HTML pass-through — text is always escaped.
+- Raw-HTML is not passed through — non-image text is always escaped.
 - Code spans inside link text render (e.g. ``[`name`](url)``), but **bold/italic
   inside link text** are not applied (link text is escaped, not re-parsed for
   emphasis).

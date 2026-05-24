@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Readiness check for render-html (spec A6).
 
-This skill is a pure local file transform: no network, no secrets, stdlib only.
+This skill is a local file transform: no secrets, stdlib only, and no network
+by default. (render.py's --inline-images is the one opt-in network path; it
+degrades gracefully and is not exercised here, so preflight stays offline.)
 The only things that can actually fail are (a) the Markdown input not being
 readable and (b) the output target directory not being writable. Preflight
 verifies exactly those for real (it does not guess from file extensions).

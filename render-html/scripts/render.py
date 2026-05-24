@@ -4,7 +4,8 @@
 One concern: convert Markdown (a file or stdin) into a single dependency-free
 HTML document styled in the anthropic.com brand look — ivory background, clay
 accent, serif headings, grotesque-sans body, light/dark aware. The Markdown
-parser is a small stdlib-only converter (no pip install, no network at run time).
+parser is a small stdlib-only converter (no pip install; the parser itself does
+no network — only the opt-in --inline-images path fetches remote images).
 
 USAGE
     python3 scripts/render.py [INPUT.md] [--out=PATH] [--title=STR]
@@ -18,6 +19,9 @@ USAGE
     --no-webfonts  omit the Google Fonts <link> so the file is fully offline
     --toc          force a table-of-contents nav (default: auto when ≥3 H2s)
     --no-toc       suppress the table-of-contents
+    --inline-images  fetch remote (and read local) images and embed them as
+                   base64 data-URIs — opt-in NETWORK at render time; without it
+                   ![](url) renders as a remote <img> (no network)
 
 SEMANTIC HTML / NAVIGATION (so the .html stands alone)
     Output uses <header>/<nav>/<main>/<footer>; every heading gets a slug id so
@@ -29,6 +33,17 @@ ACCORDIONS
         ::: details Optional summary
         …collapsible markdown…
         :::
+
+TABS
+    A container directive compiles to CSS-only radio tabs (no JS); panels are
+    split by `=== Label` lines, first tab open by default:
+        ::: tabs
+        === Mobbin
+        …markdown…
+        === Refero
+        …markdown…
+        :::
+    Single-level only — do not nest another ::: block inside a tab.
 
 FONTS / LICENSING
     Anthropic's real brand fonts (Styrene, Tiempos) are licensed and are NOT
@@ -43,9 +58,12 @@ ESCAPING
 """
 
 import argparse
+import base64
 import html
+import mimetypes
 import re
 import sys
+import urllib.request
 from datetime import date
 from pathlib import Path
 
@@ -142,6 +160,30 @@ summary::before {
   display: inline-block; transition: transform 0.15s;
 }
 details[open] > summary::before { transform: rotate(90deg); }
+img {
+  max-width: 100%; height: auto; display: block; margin: 0.4rem 0 1.3rem;
+  border: 1px solid var(--line); border-radius: 8px;
+}
+.tabs { display: flex; flex-wrap: wrap; margin: 0 0 1.3rem; }
+.tabs > .tab-radio { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.tabs > .tab-label {
+  order: 1; cursor: pointer; padding: 0.55rem 0.95rem; font-weight: 600;
+  color: var(--muted); border: 1px solid transparent; border-bottom: none;
+  border-radius: 8px 8px 0 0; margin-right: 0.2rem;
+}
+.tabs > .tab-label:hover { color: var(--fg); }
+.tabs > .tab-panel {
+  order: 2; width: 100%; display: none;
+  border: 1px solid var(--line); border-radius: 0 8px 8px 8px; padding: 1rem 1.1rem;
+}
+.tabs > .tab-panel > :first-child { margin-top: 0; }
+.tabs > .tab-radio:checked + .tab-label {
+  color: var(--accent-ink); background: var(--surface); border-color: var(--line);
+}
+.tabs > .tab-radio:checked + .tab-label + .tab-panel { display: block; }
+.tabs > .tab-radio:focus-visible + .tab-label {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
 main > :first-child { margin-top: 0; }
 .doc-footer {
   margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--line);
@@ -163,6 +205,56 @@ def log(msg):
     print(msg, file=sys.stderr)
 
 
+# --- Images -----------------------------------------------------------------
+# Off by default so the renderer stays a pure, no-network local transform.
+# --inline-images flips it on: remote http(s) images are fetched and embedded
+# as base64 data-URIs (true offline self-containment); local files are read
+# from disk. Any failure degrades to the original remote reference (spec A4/A7d).
+_INLINE_IMAGES = False
+_FETCH_TIMEOUT = 10        # seconds — never hang the render
+_MAX_IMG_BYTES = 10_000_000  # 10 MB cap; larger images stay remote
+
+
+def _fetch_remote(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "render-html"})
+    with urllib.request.urlopen(req, timeout=_FETCH_TIMEOUT) as resp:
+        data = resp.read(_MAX_IMG_BYTES + 1)
+        if len(data) > _MAX_IMG_BYTES:
+            raise ValueError(f"exceeds {_MAX_IMG_BYTES}-byte inline cap")
+        mime = resp.headers.get_content_type() or ""
+    return data, mime
+
+
+def resolve_image_src(url):
+    """Return the src for an <img>: the URL as-is, or a base64 data-URI.
+
+    Only inlines when --inline-images is set. data: URIs pass through. On any
+    error (network, missing file, oversize) we log to stderr and keep the
+    original reference so the page still renders.
+    """
+    if not _INLINE_IMAGES or url.startswith("data:"):
+        return url
+    try:
+        if re.match(r"^https?://", url, re.I):
+            data, mime = _fetch_remote(url)
+        else:
+            path = Path(url).expanduser()
+            data, mime = path.read_bytes(), ""
+        mime = mime or mimetypes.guess_type(url)[0] or "image/png"
+        b64 = base64.b64encode(data).decode("ascii")
+        return f"data:{mime};base64,{b64}"
+    except Exception as e:  # noqa: BLE001 — degrade on any failure
+        log(f"WARN: could not inline image {url!r} "
+            f"({e.__class__.__name__}: {e}); keeping remote reference")
+        return url
+
+
+def _img_tag(alt, url):
+    src = resolve_image_src(url.strip())
+    return (f'<img src="{html.escape(src, quote=True)}" '
+            f'alt="{html.escape(alt, quote=True)}" loading="lazy">')
+
+
 # --- Inline (span-level) markdown ------------------------------------------
 def inline(s):
     """Render inline markdown to safe HTML.
@@ -180,6 +272,11 @@ def inline(s):
 
     s = re.sub(r"`([^`]+)`",
                lambda m: stash(f"<code>{html.escape(m.group(1))}</code>"), s)
+    s = re.sub(
+        r"!\[([^\]]*)\]\(([^)\s]+)\)",
+        lambda m: stash(_img_tag(m.group(1), m.group(2))),
+        s,
+    )
     s = re.sub(
         r"\[([^\]]+)\]\(([^)\s]+)\)",
         lambda m: stash(
@@ -208,6 +305,9 @@ _UL = re.compile(r"^\s*[-*+]\s+(.*)$")
 _OL = re.compile(r"^\s*\d+\.\s+(.*)$")
 _FENCE = re.compile(r"^\s*```")
 _DETAILS = re.compile(r"^:::\s*details\b(.*)$")
+_TABS = re.compile(r"^:::\s*tabs\s*$")
+_TAB_LABEL = re.compile(r"^===\s+(.*\S)\s*$")
+_tabset_counter = [0]  # unique radio-group names across the document
 
 
 def _is_block_start(line):
@@ -310,8 +410,44 @@ def build_toc(headings):
     return "".join(parts)
 
 
+def render_tabs(buf, slugger, headings):
+    """Render a `::: tabs` block (panels split by `=== Label` lines) to a
+    no-JS, CSS-only radio-tab group. Falls back to plain rendering if the block
+    has no `=== ` markers. Each panel's markdown is rendered recursively so its
+    headings still flow into the shared slugger/TOC.
+    """
+    tabs, label, body = [], None, []
+    for ln in buf:
+        m = _TAB_LABEL.match(ln)
+        if m:
+            if label is not None:
+                tabs.append((label, body))
+            label, body = m.group(1).strip(), []
+        elif label is not None:
+            body.append(ln)
+    if label is not None:
+        tabs.append((label, body))
+    if not tabs:
+        return md_to_html(chr(10).join(buf), slugger, headings)
+    _tabset_counter[0] += 1
+    gid = _tabset_counter[0]
+    parts = ['<div class="tabs">']
+    for idx, (lab, body_lines) in enumerate(tabs):
+        rid = f"tab-{gid}-{idx}"
+        checked = " checked" if idx == 0 else ""
+        inner = md_to_html(chr(10).join(body_lines), slugger, headings)
+        parts.append(
+            f'<input type="radio" class="tab-radio" name="tabset-{gid}" '
+            f'id="{rid}"{checked}>'
+            f'<label class="tab-label" for="{rid}">{inline(lab)}</label>'
+            f'<section class="tab-panel">{inner}</section>'
+        )
+    parts.append("</div>")
+    return "".join(parts)
+
+
 def md_to_html(text, slugger=None, headings=None):
-    """Convert Markdown to HTML. Recursive for blockquotes and ::: details.
+    """Convert Markdown to HTML. Recursive for blockquotes, ::: details, ::: tabs.
 
     `slugger` + `headings` are shared across the whole document (incl. nested
     blocks) so heading ids stay unique and the TOC reflects every heading.
@@ -348,6 +484,16 @@ def md_to_html(text, slugger=None, headings=None):
             headings.append((lvl, htext, slug))
             out.append(f'<h{lvl} id="{slug}">{inline(htext)}</h{lvl}>')
             i += 1
+            continue
+
+        if _TABS.match(line):
+            i += 1
+            buf = []
+            while i < n and lines[i].strip() != ":::":
+                buf.append(lines[i])
+                i += 1
+            i += 1  # closing :::
+            out.append(render_tabs(buf, slugger, headings))
             continue
 
         dm = _DETAILS.match(line)
@@ -495,10 +641,16 @@ def main():
                     help="force a table of contents (default: auto when ≥3 H2s)")
     ap.add_argument("--no-toc", action="store_true",
                     help="suppress the table of contents")
+    ap.add_argument("--inline-images", action="store_true",
+                    help="embed images as base64 data-URIs (opt-in network "
+                    "for remote URLs); default keeps ![](url) as a remote <img>")
     ap.add_argument("--agent", action="store_true",
                     help="accepted for flag consistency; this renderer never "
                     "prompts, so it is a no-op")
     args = ap.parse_args()
+
+    global _INLINE_IMAGES
+    _INLINE_IMAGES = args.inline_images
 
     source = "stdin"
     if args.input:
