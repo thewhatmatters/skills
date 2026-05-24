@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A personal collection of Claude Code **skills**, version-controlled. Each top-level
 directory (except dotfiles) is one skill Claude can invoke. There is no app to build
 or deploy — the "product" is the skills themselves. `README.md` is the user-facing
-index of the nine skills; `skill-architecture.md` is the canonical spec they're all
+index of the ten skills; `skill-architecture.md` is the canonical spec they're all
 built to.
 
 ## Single source of truth
