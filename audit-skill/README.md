@@ -22,6 +22,13 @@ Just ask, e.g.:
 - "review skill X"
 - "is this skill well-built?"
 - "QA the skill in ./my-skill"
+- "audit all skills" — sweeps the whole suite and gives you one summary table.
+
+There's also an **opt-in triggering check** ("check triggering for X"): it
+measures whether a skill's description actually routes real prompts to it, and
+whether overlapping skills steal each other's queries. It costs money (it runs
+real model calls), needs the `claude` CLI, and is best run only after you change
+a description — so it asks before spending.
 
 ## What it needs
 
