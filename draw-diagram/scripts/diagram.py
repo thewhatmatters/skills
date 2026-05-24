@@ -168,9 +168,10 @@ def render_kroki(text, fmt, no_network):
     if no_network:
         raise RuntimeError("network rendering disabled (--no-network)")
     url = KROKI_URL.format(fmt=fmt)
+    accept = "image/png" if fmt == "png" else "image/svg+xml"
     req = urllib.request.Request(
         url, data=text.encode("utf-8"),
-        headers={"Content-Type": "text/plain", "Accept": "image/svg+xml"},
+        headers={"Content-Type": "text/plain", "Accept": accept},
         method="POST",
     )
     try:

@@ -40,5 +40,5 @@ preflight, conventions). The two ship together for this reason.
 ## Related
 
 - `skill-architecture.md` (repo root) — the standard it checks against.
-- `generate-skill` (planned) — the counterpart that *creates* skills meeting
-  this same standard, then runs this auditor on its own output.
+- `generate-skill` — the counterpart that *creates* skills meeting this same
+  standard, then runs this auditor on its own output.

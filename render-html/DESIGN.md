@@ -100,7 +100,8 @@ counterpart used under `@media (prefers-color-scheme: dark)`.
 ## Typography
 
 - **Headings (h1–h4):** `Tiempos Headline` → `Source Serif 4` → `Georgia` →
-  serif, weight 600.
+  serif, weight 600. (h4 is the same stack but recolored `--muted` for a quieter
+  sub-heading, per `render.py`.)
 - **Body:** `Styrene B` → `Hanken Grotesk` → system sans, 17px / line-height 1.65.
 - **Mono:** `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`.
 

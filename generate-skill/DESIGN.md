@@ -1,9 +1,10 @@
-# generate-skill — Design (for review; no code yet)
+# generate-skill — Design (decision record)
 
-Status: **proposal**, awaiting sign-off. Last updated 2026-05-18.
-Decisions locked with the user are marked ✅. Open items in §9.
+Status: **built** — living record. Last updated 2026-05-24.
+Decisions locked with the user are marked ✅. Open items in §9; see §11 for the
+as-built record and self-audit result.
 
-This is the not-yet-built counterpart named in `scan-trends/handoff.md` §intro:
+This is the counterpart named in `scan-trends/handoff.md` §intro:
 *"a rubric usable by a future generate-skill and audit-skill."* `audit-skill`
 exists; this completes the pair.
 
