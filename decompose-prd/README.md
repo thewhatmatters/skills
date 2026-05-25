@@ -1,6 +1,6 @@
 # decompose-prd
 
-**What it is:** turns a PRD into `prd.json` — a list of small, ordered tasks an autonomous agent loop (the "Ralph" technique) can execute one at a time.
+**What it is:** turns a PRD into `prd.json` — a list of small, ordered tasks an autonomous agent loop can execute one at a time, each in a fresh context.
 
 ## What you get
 
@@ -9,7 +9,7 @@
 
 ## How to run
 
-Point it at a PRD: "convert this PRD to prd.json", "decompose this spec into Ralph tasks", or `/decompose-prd path/to/prd.md`. It pairs naturally with `generate-prd`, which produces the PRD in the first place.
+Point it at a PRD: "convert this PRD to prd.json", "decompose this spec into agent-loop tasks", or `/decompose-prd path/to/prd.md`. It pairs naturally with `generate-prd`, which produces the PRD in the first place.
 
 ## What it needs
 

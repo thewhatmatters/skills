@@ -4,12 +4,12 @@ Loaded by `SKILL.md` Step 3 (progressive disclosure, spec A1). This is the craft
 of the skill: how to size, order, and write stories, and how to make them
 skill-aware.
 
-## Output schema (Ralph-compatible)
+## Output schema
 
 ```json
 {
   "project": "[Project Name]",
-  "branchName": "ralph/[feature-name-kebab-case]",
+  "branchName": "loop/[feature-name-kebab-case]",
   "description": "[Feature description from PRD title/intro]",
   "generatedAt": "[YYYY-MM-DD]",
   "sourcePrd": "[path or short identifier of the input PRD]",
@@ -36,7 +36,7 @@ top-level keys. Skill references (below) go inside `acceptanceCriteria` and
 
 ## Rule #1 — story size: one iteration each
 
-Ralph spawns a **fresh agent instance per iteration with no memory of prior
+The loop spawns a **fresh agent instance per iteration with no memory of prior
 work**. If a story is too big, the agent runs out of context before finishing
 and ships broken code. So every story must be completable in ONE iteration.
 
@@ -95,18 +95,18 @@ Each is one focused, independently verifiable change.
 1. One user story → one JSON entry. IDs sequential (`US-001`, `US-002`, …).
 2. `priority` follows dependency order, then document order.
 3. Every story starts `"passes": false` with empty `"notes"` (before skill hints).
-4. `branchName` = `ralph/` + feature name in kebab-case.
+4. `branchName` = `loop/` + feature name in kebab-case.
 5. Set `generatedAt` to today's date (ISO `YYYY-MM-DD`) and `sourcePrd` to the
    input PRD's path (or a short identifier if it was pasted text).
 
-## Archiving a previous run (Ralph convention)
+## Archiving a previous run (runner convention)
 
 Before writing a new `prd.json`, if one already exists for a **different**
 `branchName` with real progress (a `progress.txt` with content beyond its
 header): copy the current `prd.json` + `progress.txt` into
-`archive/YYYY-MM-DD-feature-name/`, then reset `progress.txt`. (A Ralph runner's
-`ralph.sh` typically does this automatically; do it manually only when editing
-`prd.json` between runs.) These are runner-side conventions — the runner, not
+`archive/YYYY-MM-DD-feature-name/`, then reset `progress.txt`. (An agent-loop
+runner like `run-tasks.sh` typically does this automatically; do it manually only
+when editing `prd.json` between runs.) These are runner-side conventions — the runner, not
 this skill, owns execution.
 
 ## Pre-save checklist
@@ -130,7 +130,7 @@ by status; status badge per task; persist in DB."
 ```json
 {
   "project": "TaskApp",
-  "branchName": "ralph/task-status",
+  "branchName": "loop/task-status",
   "description": "Task Status Feature - track task progress with status indicators",
   "generatedAt": "2026-05-24",
   "sourcePrd": "docs/task-status-prd.md",

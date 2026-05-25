@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Validate a prd.json against the Ralph-compatible schema + house rules (spec A4).
+"""Validate a prd.json against the schema + house rules (spec A4).
 
 One concern: deterministically check the structure that decompose-prd must
-always produce, so the NATIVE reasoning step can't quietly emit something a
-Ralph runner will choke on. Catches the mechanical mistakes; the *quality* of
-the decomposition (sizing, real dependency order) stays human/model judgment.
+always produce, so the NATIVE reasoning step can't quietly emit something an
+agent-loop runner will choke on. Catches the mechanical mistakes; the *quality*
+of the decomposition (sizing, real dependency order) stays human/model judgment.
 
 Checks (errors → invalid):
-  - file parses as JSON; has project, branchName (starts "ralph/"), description,
+  - file parses as JSON; has project, branchName (starts "loop/"), description,
     non-empty userStories list
   - warns if generatedAt / sourcePrd metadata is missing (A10 self-containment)
   - each story: id, title, description, acceptanceCriteria (non-empty list),
@@ -38,8 +38,8 @@ def validate(doc):
     for key in ("project", "branchName", "description", "userStories"):
         if key not in doc:
             errors.append(f"missing top-level key: {key}")
-    if isinstance(doc.get("branchName"), str) and not doc["branchName"].startswith("ralph/"):
-        warnings.append(f"branchName should start with 'ralph/': {doc['branchName']!r}")
+    if isinstance(doc.get("branchName"), str) and not doc["branchName"].startswith("loop/"):
+        warnings.append(f"branchName should start with 'loop/': {doc['branchName']!r}")
     # A10: the artifact should record what it was built from and when.
     for meta in ("generatedAt", "sourcePrd"):
         if not doc.get(meta):

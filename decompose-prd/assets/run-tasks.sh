@@ -50,6 +50,11 @@ all_pass() {
   python3 -c "import json,sys;d=json.load(open('$PRD'));sys.exit(0 if d.get('userStories') and all(s.get('passes') for s in d['userStories']) else 1)"
 }
 
+# id + title of the lowest-priority story still failing (the next target).
+target() {
+  python3 -c "import json;s=sorted((x for x in json.load(open('$PRD')).get('userStories',[]) if not x.get('passes')),key=lambda x:x.get('priority',0));print(f\"{s[0].get('id','?')}: {s[0].get('title','?')}\" if s else '')"
+}
+
 read -r -d '' PROMPT <<'EOF' || true
 You are ONE iteration of an autonomous build loop with no memory of prior runs.
 The source of truth is prd.json and progress.txt in the current directory.
@@ -76,6 +81,7 @@ for ((i = 1; i <= MAX_ITER; i++)); do
       || { echo "⛔ $PRD failed validation — fix it before running" >&2; exit 1; }
   fi
   echo "── iteration $i ──────────────────────────────" >&2
+  printf '[%s] iteration %d → %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$i" "$(target)" >> "$PROGRESS"
   printf '%s\n' "$PROMPT" | $AGENT_CMD
 done
 
