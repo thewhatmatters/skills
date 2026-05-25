@@ -68,9 +68,32 @@ def _run(cmd, timeout):
         return ("", False)
 
 
+def _new_text(prev, body):
+    """Incremental text in `body` not already covered by `prev`.
+
+    YouTube auto-captions roll: each cue is a sliding window that overlaps the
+    previous one (".. Thanks for" / ">> .. Thanks for coming." / "coming. My .."),
+    so an exact-equality check leaves ~all lines redundant. Emit only the new
+    suffix: '' if fully contained, the non-overlapping tail otherwise, the whole
+    body (space-prefixed) when there's no overlap (manual/non-rolling subs).
+    """
+    if not prev:
+        return body
+    if body in prev:
+        return ""
+    for k in range(min(len(prev), len(body)), 0, -1):
+        if prev[-k:] == body[:k]:
+            return body[k:]
+    return " " + body
+
+
 def parse_srt(text):
-    """SRT → [{t, text}], dropping rolling-duplicate auto-caption lines."""
-    out, last = [], None
+    """SRT → [{t, text}], merging rolling-duplicate auto-caption windows.
+
+    Each kept entry holds only the text new to its cue (with that cue's
+    timestamp), so timestamps stay granular while redundant overlap is removed.
+    """
+    out, prev = [], ""
     for block in re.split(r"\n\s*\n", text):
         mt = _SRT_TIME.search(block)
         if not mt:
@@ -80,10 +103,12 @@ def parse_srt(text):
         # text = everything after the timing line
         body = " ".join(l.strip() for l in lines[2:] if l.strip())
         body = re.sub(r"<[^>]+>", "", body).strip()
-        if not body or body == last:
+        if not body:
             continue
-        out.append({"t": _hms(h * 3600 + m * 60 + s), "text": body})
-        last = body
+        new = _new_text(prev, body).strip()
+        prev = body
+        if new:
+            out.append({"t": _hms(h * 3600 + m * 60 + s), "text": new})
     return out
 
 
