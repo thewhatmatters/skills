@@ -31,6 +31,11 @@ half-written in src/api/orders.ts".>
 <Paths, branches, the build/test/run commands, any URLs or IDs. So the next
 session doesn't have to rediscover the workspace.>
 
+## Git state
+<Current branch + `git status --short` (or "clean"). So a refresh never loses
+track of uncommitted work. If anything is uncommitted, note whether it was
+committed during handoff or deliberately left.>
+
 ## Don't redo
 <Dead ends already tried, so the next session doesn't repeat them.>
 ```

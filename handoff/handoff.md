@@ -44,6 +44,15 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   `additionalContext` to resurface it (with a CLAUDE.md `@import` fallback if a
   CC version doesn't honor it).
 
+- 2026-05-24: **Git state: record + offer, never a pipeline.** handoff records
+  branch + uncommitted files in HANDOFF.md (zero-risk awareness) and, if dirty +
+  interactive, *offers* to commit before a refresh — deferring to the project's
+  git workflow, user-confirmed, **commit only (no push)**. Considered baking a
+  commit+push pipeline in; rejected it: handoff is global (project git
+  conventions vary), push is outward/risky, and the house rule is "skills never
+  run git." So the skill bundles no git script — Claude runs git the normal way
+  on confirmation. `--agent` records git state but never offers.
+
 ## 4. Known limitations / environment caveats
 - No magic threshold: defaults (compact 65%, status line yellow 50 / red 75) are
   starting points, tune per workload.
