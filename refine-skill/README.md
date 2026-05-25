@@ -20,10 +20,24 @@ proposes the fix.
 
 ## What it needs
 
-Nothing to set up — it is keyless and reads only local files: your session
-transcripts under `~/.claude/projects/<project>/` and the target skill's own
-directory. `audit-skill` should be present so proposed code changes can be checked
-for spec compliance; without it, that one validation step is skipped (and said so).
+Nothing to set up for the manual command — it is keyless and reads only local
+files: your session transcripts under `~/.claude/projects/<project>/` and the
+target skill's own directory. `audit-skill` should be present so proposed code
+changes can be checked for spec compliance; without it, that one validation step
+is skipped (and said so).
+
+**To enable the optional Stop-hook offer** (e.g. after cloning to a new machine):
+
+```
+python3 refine-skill/scripts/install_hook.py        # wire it
+python3 refine-skill/scripts/install_hook.py --remove   # unwire it
+```
+
+This edits `~/.claude/settings.json` — user-global config that lives *outside* this
+repo, so it does not travel with a clone. The installer is idempotent, preserves
+your other settings, backs up before writing, and computes the handler's absolute
+path from its own location (portable across machines/users — no hardcoded home
+dir). `preflight.py` reports `HOOK_NOT_INSTALLED` when it isn't wired.
 
 ## How it works (high level)
 

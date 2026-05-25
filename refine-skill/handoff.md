@@ -50,6 +50,15 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable:
   disrupt a session. Registered in `~/.claude/settings.json` (user scope, so it fires
   wherever skills are used); the handler script is versioned here, the wiring just
   points at its absolute path.
+- 2026-05-24: **portability — `scripts/install_hook.py` owns the wiring.**
+  `~/.claude/settings.json` is user-global and outside this repo, so it does NOT
+  travel with a clone; the docs alone wouldn't reliably tell a fresh machine to wire
+  the hook, and a hardcoded path would break under a different username. The
+  idempotent installer computes the handler's absolute path from its own `__file__`
+  (portable), merges into settings.json without clobbering other keys, backs up
+  first, refuses to touch unparseable JSON, and supports `--remove`. `preflight.py`
+  surfaces `HOOK_NOT_INSTALLED` so the gap is discoverable. Setup on a new machine:
+  `python3 refine-skill/scripts/install_hook.py`.
 
 ## 4. Known limitations / environment caveats
 - One session is weak evidence; the guard in §reflection-model is what keeps this

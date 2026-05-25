@@ -65,6 +65,23 @@ def check_audit_skill():
             "audit-skill missing — spec-compliance validation step skipped")
 
 
+def check_hook():
+    """Is the opt-in Stop hook wired in user settings? Informational only —
+    the manual command works without it (so this never blocks)."""
+    settings = os.path.expanduser("~/.claude/settings.json")
+    try:
+        with open(settings, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, json.JSONDecodeError, ValueError):
+        data = {}
+    stop = (data.get("hooks") or {}).get("Stop") or []
+    text = json.dumps(stop)
+    if "stop_hook.py" in text:
+        return ("ready", None, "Stop hook wired")
+    return ("degraded", "HOOK_NOT_INSTALLED",
+            "Stop hook not wired — run scripts/install_hook.py (manual /refine-skill still works)")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--transcript")
@@ -75,6 +92,7 @@ def main():
         "python": check_python(),
         "transcript": check_transcript(args.transcript),
         "audit_skill": check_audit_skill(),
+        "hook": check_hook(),
     }
     overall = "ready"
     for s, _g, _d in checks.values():

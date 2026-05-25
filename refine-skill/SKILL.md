@@ -30,9 +30,12 @@ With no skill named, infer the most-recently-invoked skill from the transcript a
 confirm. Output is a markdown findings report; pass it to `render-html` for a
 branded page.
 
-An opt-in **Stop hook** (`scripts/stop_hook.py`, registered in
-`~/.claude/settings.json`) surfaces a one-line, once-per-session offer to run
-`/refine-skill <skill>` when a session used a skill — it only offers; you decide.
+An opt-in **Stop hook** (`scripts/stop_hook.py`) surfaces a one-line,
+once-per-session offer to run `/refine-skill <skill>` when a session used a skill —
+it only offers; you decide. Wire it (e.g. after cloning to a new machine) with
+`python3 scripts/install_hook.py`; it edits the user-global `~/.claude/settings.json`
+(which is outside this repo, so it doesn't travel with a clone). `preflight.py`
+reports `HOOK_NOT_INSTALLED` until it's wired; the manual command works regardless.
 
 ## Flags
 
