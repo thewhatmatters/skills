@@ -27,5 +27,8 @@ node_modules/
 # Generated per-run artifacts
 results.html
 
+# automate-browser scratch output (screenshots, scraped pages, etc.)
+automate-browser/tmp/
+
 # macOS
 .DS_Store
