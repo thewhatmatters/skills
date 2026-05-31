@@ -41,6 +41,11 @@ automate-browser/tmp/
 # deterministically. The install artifacts live here and stay local:
 /.agents/
 /.claude/skills/
+# Plus a top-level symlink we add by hand so the skill is discoverable as a
+# *user-global* skill (the installer drops it under .claude/skills/ which only
+# works when cwd is here; the symlink at top-level resolves the same install
+# from any project). Same pattern as /conan-change-radio above.
+/shadcn
 
 # macOS
 .DS_Store
