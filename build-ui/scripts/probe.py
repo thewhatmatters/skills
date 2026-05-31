@@ -141,6 +141,20 @@ def shadcn_info(root):
             "ui_alias": aliases.get("ui")}
 
 
+def detect_shadcn_skill_installed():
+    """True iff a user-global shadcn skill is discoverable at ~/.claude/skills/shadcn.
+
+    `Path.is_file()` follows the symlink the installer creates, so a
+    symlinked install resolves the same as a real dir.
+    """
+    sk = Path.home() / ".claude" / "skills" / "shadcn" / "SKILL.md"
+    try:
+        text = sk.read_text("utf-8", errors="replace")
+    except OSError:
+        return False
+    return bool(re.search(r"^name:\s*shadcn\s*$", text, re.MULTILINE))
+
+
 def tailwind_info(root):
     found = next((p for p in CONFIG_GLOBS if (root / p).is_file()), None)
     if not found:
@@ -171,6 +185,9 @@ def main():
         "package_manager": detect_pkg_manager(root),
         "tailwind":     tailwind_info(root) if detect_css(deps) == "tailwind" else None,
         "shadcn":       shadcn_info(root)   if detect_components(deps, root) == "shadcn" else None,
+        # External skills build-ui defers to. False here means SKILL.md takes the
+        # degraded path (surface the install command + fall back to general knowledge).
+        "external_skills": {"shadcn": detect_shadcn_skill_installed()},
     }
 
     print(f"build-ui probe @ {root}", file=sys.stderr)
@@ -178,6 +195,9 @@ def main():
         print(f"  {k:12} {out[k]}", file=sys.stderr)
     if out["aliases"]:
         print(f"  aliases      {out['aliases']}", file=sys.stderr)
+    if out["components"] == "shadcn":
+        status = "installed" if out["external_skills"]["shadcn"] else "MISSING (see SKILL.md fallback)"
+        print(f"  shadcn skill {status}", file=sys.stderr)
 
     print(json.dumps(out, indent=2))
 

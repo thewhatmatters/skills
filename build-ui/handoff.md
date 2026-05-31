@@ -52,6 +52,17 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   `automate-browser`'s handoff §5 records. The "request + date + results" trio
   is captured by the project's own git history; build-ui defers to that rather
   than duplicating it.
+- 2026-05-31: **Probe gates the shadcn deferral (spec A3 — degraded path).**
+  Without this, a fresh clone of the skills repo would have `skills-lock.json`
+  + this repo's references but no installed shadcn skill, and build-ui's
+  "defer to shadcn" pointer would silently break. `probe.py` now reports
+  `external_skills.shadcn` (boolean: is `~/.claude/skills/shadcn/SKILL.md`
+  discoverable with `name: shadcn`?). SKILL.md Step 3 branches on it:
+  installed → defer; not installed → surface the install command
+  (`npx skills add https://github.com/shadcn/ui --skill shadcn` from
+  [skills.sh](https://www.skills.sh)) and fall back to general knowledge with
+  a clear caveat about training-cutoff-vs-current primitives. Verified both
+  states via `HOME` override.
 - 2026-05-31: **Trimmed `references/shadcn.md` further** to drop bullets the
   official skill already owns ("compose, don't reinvent" is its Principle #2)
   and the enumeration of what it knows (which drifts as upstream adds

@@ -6,6 +6,16 @@ execution surface: `add`, presets, registry search, `npx shadcn@latest info
 --json`, current primitives, smart-merge. **Defer to it.** This file is kept
 intentionally small so it doesn't drift from upstream.
 
+> **Install gate.** The probe reports `external_skills.shadcn` — `true` if
+> `~/.claude/skills/shadcn/SKILL.md` is discoverable, `false` otherwise.
+> If it's `false` (a fresh clone, a new machine), install it before deferring:
+> ```
+> npx skills add https://github.com/shadcn/ui --skill shadcn
+> ```
+> From [skills.sh](https://www.skills.sh); the version + hash live in this
+> repo's `skills-lock.json`. Until installed, SKILL.md falls back to general
+> knowledge with a caveat about training-cutoff-vs-current-primitives.
+
 ## What build-ui owns here
 
 - **No-monoculture rule.** Refuse to introduce shadcn into a project that
