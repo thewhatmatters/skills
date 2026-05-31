@@ -52,6 +52,12 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   `automate-browser`'s handoff §5 records. The "request + date + results" trio
   is captured by the project's own git history; build-ui defers to that rather
   than duplicating it.
+- 2026-05-31: **Trimmed `references/shadcn.md` further** to drop bullets the
+  official skill already owns ("compose, don't reinvent" is its Principle #2)
+  and the enumeration of what it knows (which drifts as upstream adds
+  capabilities). Kept only build-ui's coordination concerns: the no-monoculture
+  rule, the probe-then-`info` sequencing, the routing table, and a one-paragraph
+  composition stance. ~70 → ~30 lines.
 - 2026-05-31: **Compose with the official `shadcn` skill; don't replicate it.**
   When the upstream shadcn-ui team published a comprehensive skill (live CLI
   context via `info --json`, preset system, smart-merge `--diff`, registry
