@@ -52,6 +52,15 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   `automate-browser`'s handoff §5 records. The "request + date + results" trio
   is captured by the project's own git history; build-ui defers to that rather
   than duplicating it.
+- 2026-05-31: **Added `references/javascript-patterns.md` as an always-loaded
+  reference** (sibling to a11y.md). Covers stack-agnostic JS/TS hygiene that a
+  per-library reference shouldn't own: async/effects cleanup (AbortController,
+  last-write-wins), state derivation (vs. `useEffect`-as-sync), TS narrowing at
+  the boundary (no inline `as`), DOM perf gotchas (layout thrash, rAF,
+  observers), forms, and an anti-pattern list. Operating principle: match the
+  project's lint + tsconfig + library choices over generic best-practice. The
+  description was updated to include "JavaScript/TypeScript hygiene" so the
+  coverage is discoverable.
 - 2026-05-31: **Adopted a comprehensive a11y checklist.** The initial slim
   `a11y.md` (~80 lines, principles + anti-patterns) was upgraded to a full
   component-pattern checklist: Universal Pre-Flight + per-pattern (Forms,
