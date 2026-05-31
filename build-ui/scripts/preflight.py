@@ -39,8 +39,10 @@ def check_project(start):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--agent", action="store_true")
     ap.add_argument("--project", default=".")
+    # --agent is a no-op here (preflight is non-interactive by nature); accepted
+    # so the harness can pass SKILL.md's standard flag through without an error.
+    ap.add_argument("--agent", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args()
 
     checks = {"python": check_python(), "project": check_project(args.project)}

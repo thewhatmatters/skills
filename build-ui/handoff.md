@@ -23,6 +23,25 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   boundary is explicit so the descriptions don't cross-fire.
 
 ## 3. Decision log
+- 2026-05-31: **Probe the project for `DESIGN.md`; reference the file, not a
+  skill.** Initial wiring of `web-design-guidelines` (Vercel Labs' UI reviewer)
+  was reverted — making it an auto Step-5 review of every build was over-wired
+  (no probe signal said "this project wants Vercel's ruleset applied"; user-direct
+  invocation already works via the skill's own description). Replaced with the
+  durable signal: a `DESIGN.md` at the project root. `probe.py` now emits
+  `design_md: <path | null>`. When present, SKILL.md Step 3 reads it and treats
+  it as override for visual language (color tokens + semantic names, geometry,
+  atmosphere, component stylings) — same shape as detecting `tailwind.config.*`.
+  Format-agnostic: handles both the [google-labs `design.md`](https://github.com/google-labs-code/design.md)
+  YAML-token flavor and the Stitch natural-language-with-hex flavor.
+  `references/design-md.md` is the thin coordination layer; the sibling
+  `/design-md` skill (Google Labs / `stitch-skills`, pinned in `skills-lock.json`)
+  is *named but not deferred to* — it's a niche Stitch-only generator
+  (build-ui consumes DESIGN.md, doesn't generate it). Composition by reference.
+  Rationale: project-checked-in DESIGN.md is the durable signal — it follows
+  `git clone` to a new machine; a skill install does not. Build-ui's discipline
+  is "match project conventions"; DESIGN.md *is* the project's visual
+  conventions when it exists.
 - 2026-05-31: scaffolded against the spec. **Split by job, not stack.**
   Frontend has many libraries (Tailwind, shadcn, GSAP, Motion, …); making a
   skill per library would balkanize and age badly. Instead one workflow skill

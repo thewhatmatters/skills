@@ -47,6 +47,7 @@ automate-browser/tmp/
 # install from any project). Same pattern as /conan-change-radio above.
 /shadcn
 /next-best-practices
+/design-md
 
 # --- Session handoff (per-machine; rebuilt each session via /handoff) --------
 # HANDOFF.md is the resume-ready session-state file the handoff skill writes;

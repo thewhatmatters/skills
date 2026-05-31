@@ -16,6 +16,7 @@ What it detects (each may be `null` if absent):
     dirs         : { "components": "src/components", "app": "app", "pages": null, ... }
     tailwind     : { config_path, version_hint }   (when css=tailwind)
     shadcn       : { style, baseColor, rsc, components_alias }   (when components=shadcn)
+    design_md    : project-root DESIGN.md path if present, else null
     package_manager : npm | pnpm | yarn | bun | null
 
 I/O:
@@ -161,6 +162,18 @@ def detect_user_skill(name):
     return bool(re.search(rf"^name:\s*{re.escape(name)}\s*$", text, re.MULTILINE))
 
 
+def detect_design_md(root):
+    """Project-root DESIGN.md path if present, else None.
+
+    The file is a portable visual-language source-of-truth — google-labs
+    `design.md` (YAML tokens + rationale) or Stitch flavor (natural-language
+    + hex). build-ui reads whichever is there as override for taste/tokens
+    during a build. Sibling generator: the `design-md` skill (Stitch → file).
+    """
+    p = root / "DESIGN.md"
+    return str(p) if p.is_file() else None
+
+
 def tailwind_info(root):
     found = next((p for p in CONFIG_GLOBS if (root / p).is_file()), None)
     if not found:
@@ -173,7 +186,9 @@ def tailwind_info(root):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--project", default=".", help="project root (default: cwd; walks up)")
-    ap.add_argument("--agent", action="store_true")
+    # --agent is a no-op here (probe is non-interactive by nature); accepted so
+    # the harness can pass SKILL.md's standard flag through without an error.
+    ap.add_argument("--agent", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args()
 
     root = find_project_root(args.project)
@@ -191,6 +206,7 @@ def main():
         "package_manager": detect_pkg_manager(root),
         "tailwind":     tailwind_info(root) if detect_css(deps) == "tailwind" else None,
         "shadcn":       shadcn_info(root)   if detect_components(deps, root) == "shadcn" else None,
+        "design_md":    detect_design_md(root),
         # External skills build-ui defers to. False here means SKILL.md takes the
         # degraded path (surface the install command + fall back to general knowledge).
         "external_skills": {n: detect_user_skill(n) for n in DEFERRAL_TARGETS},
@@ -201,6 +217,8 @@ def main():
         print(f"  {k:12} {out[k]}", file=sys.stderr)
     if out["aliases"]:
         print(f"  aliases      {out['aliases']}", file=sys.stderr)
+    if out["design_md"]:
+        print(f"  design_md    {out['design_md']}", file=sys.stderr)
     # Surface install-state ONLY for skills the project would actually use,
     # so a non-shadcn / non-Next project doesn't get noise.
     relevant = []

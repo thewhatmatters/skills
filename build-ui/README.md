@@ -20,7 +20,7 @@ Nothing to set up — Python standard library only. It reads your project's `pac
 
 1. Walks up to find your project root.
 2. Reads `package.json` + a few configs to detect the stack (framework, styling, components, motion, path aliases).
-3. Loads only the references that match (Tailwind / shadcn / vanilla-CSS / a11y) — nothing irrelevant.
+3. Loads only the references the probe found relevant — per-stack guidance (Tailwind / shadcn / Next / vanilla-CSS / project DESIGN.md when present) plus always-on accessibility and JS/TS hygiene. Nothing irrelevant.
 4. Plans briefly, then writes the code following the conventions it found.
 5. Runs typecheck if applicable, and points at `automate-browser` or `webapp-testing` for browser verification.
 
