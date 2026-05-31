@@ -52,6 +52,17 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   `automate-browser`'s handoff §5 records. The "request + date + results" trio
   is captured by the project's own git history; build-ui defers to that rather
   than duplicating it.
+- 2026-05-31: **Compose with the official `shadcn` skill; don't replicate it.**
+  When the upstream shadcn-ui team published a comprehensive skill (live CLI
+  context via `info --json`, preset system, smart-merge `--diff`, registry
+  search, current primitives like `FieldGroup`/`InputGroup`), the spec A8
+  stance applied externally: compose by reference. `references/shadcn.md` was
+  trimmed from a full guidance file to a build-ui *complement* (no-monoculture
+  rule, project-probe alignment, compose-don't-fork, a routing table for shadcn
+  skill vs. build-ui). SKILL.md Step 3 now defers the shadcn execution surface
+  to the official skill explicitly. Install artifacts (`.agents/`,
+  `.claude/skills/`) are gitignored; `skills-lock.json` is committed for
+  reproducibility (same posture as `package-lock.json` over `node_modules`).
 - 2026-05-31: **Added `references/javascript-patterns.md` as an always-loaded
   reference** (sibling to a11y.md). Covers stack-agnostic JS/TS hygiene that a
   per-library reference shouldn't own: async/effects cleanup (AbortController,

@@ -1,73 +1,77 @@
-# shadcn/ui — working in this project's setup
+# shadcn — the build-ui complement to the official skill
 
-Loaded by `SKILL.md` Step 3 when `probe.components == "shadcn"`. shadcn is not
-a component *library* — it's a CLI that copies source into your repo, so the
-components are *yours*. That changes how you reason about them.
+Loaded by `SKILL.md` Step 3 when `probe.components == "shadcn"`.
 
-## Read the probe first
+## Defer execution to the official `shadcn` skill
 
-`probe.shadcn`:
-- `style` — `default` or `new-york`. Affects the copied source (border radius,
-  density, sometimes a different shape entirely). Don't mix styles.
-- `baseColor` — `slate | gray | zinc | neutral | stone`. Drives the CSS variable
-  palette (`--background`, `--foreground`, `--primary`, …) the components read.
-- `rsc` — `true` if React Server Components are honored. Affects when you must
-  add `"use client"`.
-- `components_alias` / `ui_alias` — usually `@/components` and
-  `@/components/ui`. Imports look like `@/components/ui/button`.
+If a project has `components.json`, the **official `shadcn` skill** (from
+shadcn-ui, version-pinned in our `skills-lock.json`) auto-triggers and owns the
+*execution* surface: `add`, `--diff`/`--dry-run` smart-merge, presets
+(`apply`/`decode`/`resolve`), registry search (incl. community: `@magicui`,
+`@tailark`, etc.), live project context via `npx shadcn@latest info --json`
+(returns `aliases`, `isRSC`, `tailwindVersion`, `tailwindCssFile`, `style`,
+`base`, `iconLibrary`, `preset`, `packageManager`, `framework`,
+`resolvedPaths`), and the current primitive set (which evolves — `Field` /
+`FieldGroup` / `InputGroup` / `ToggleGroup` are recent and your training cutoff
+may not have them).
 
-## Conventions worth matching
+**Don't replicate any of that here.** When you need a component added,
+documented, or updated, run the shadcn CLI through that skill. This file is the
+*complement* — what build-ui adds on top.
 
-- **Edit the copies, don't fork.** Components live under `components/ui/` (or
-  the configured alias). They're yours — change them directly when you need a
-  variant or behavior. Don't add a wrapper that re-implements styling.
-- **Composition over forking.** Prefer building a *new* component that *uses*
-  the primitive (e.g. a `StatCard` that uses `Card`/`CardHeader`/`CardContent`)
-  over copying-and-renaming.
-- **Variants.** shadcn components use `cva` (`class-variance-authority`) for
-  variants — read the existing `variants` definition before adding a new size
-  or intent. Add to the same `cva` block; don't define a parallel system.
-- **`cn()`** is in `lib/utils.ts`. Use it for any conditional className.
-- **Importing.** Always go through the alias: `import { Button } from
-  "@/components/ui/button"`. Relative paths defeat the convention.
-- **Server vs client.** With `rsc: true`, default to server. Reach for `"use
-  client"` only when a component needs interactivity, refs, or browser APIs.
-  Most shadcn primitives that use Radix (Dialog, Popover, Tooltip, …) are
-  already client.
-- **Theming.** Theme is CSS variables (`--background`, `--primary`, etc.) in
-  `globals.css`. To change the palette, edit those variables — don't override
-  Tailwind utilities per-component.
+## What build-ui's perspective adds
 
-## When to `shadcn add ...` vs hand-write
+- **No-monoculture rule.** Refuse to introduce shadcn into a project that
+  doesn't already use it. Adding it writes a `components.json`, copies sources,
+  and changes the project's posture — a separate, explicit user decision.
+- **Project-probe alignment.** `scripts/probe.py` reports the shadcn
+  `style` / `baseColor` / `rsc` / `components_alias` / `ui_alias` from
+  `components.json` *before* any work — use it directly, don't ask the model
+  to guess. (The official skill also runs `info --json` for live state; the
+  probe gives you a deterministic snapshot to plan with.)
+- **Compose, don't fork.** When building a `StatCard`, `PricingTable`,
+  `EmptyDashboard` etc., compose the existing shadcn primitives — don't copy
+  them and rename. The shadcn skill's "Compose, don't reinvent" is the same
+  rule we apply at the project layer.
+- **The shadcn skill's Critical Rules pair with our `a11y.md` and
+  `javascript-patterns.md`.** Its `styling.md` / `forms.md` / `composition.md`
+  / `icons.md` / `base-vs-radix.md` cover shadcn-specific rules
+  (`size-*` over `w-* h-*`, `gap-*` over `space-y-*`, `data-icon`, `FieldGroup`
+  + `Field` validation patterns). Our references cover the project-agnostic
+  layer (a11y patterns, async/effects, state derivation).
 
-- Adding a **primitive** the project doesn't have (Toast, Dialog, Command,
-  DropdownMenu) → run `pnpm dlx shadcn@latest add toast` (use the project's
-  package manager from the probe). This is an explicit dep change — surface it
-  in your plan.
-- A **composition** of existing primitives (a custom card pattern, a layout
-  shell) → hand-write it under the project's components dir, importing from
-  `@/components/ui/...`.
+## When NOT to invoke the shadcn skill from a build-ui task
 
-## Pitfalls
+- The task is **inside a project that already uses shadcn** and is purely about
+  writing *code that uses installed components* — that's normal build-ui work.
+  Read the relevant primitives' files (`components/ui/<name>.tsx`) and use them.
+  The shadcn skill is for *adding / updating / inspecting* components, not for
+  every line of JSX that references one.
+- The task explicitly opts out (e.g. "build this WITHOUT adding new shadcn
+  components — work with what's installed").
 
-- **Don't introduce shadcn** in a project that doesn't already use it. The
-  install is invasive (writes config + copies sources). If `probe.components !=
-  "shadcn"`, this reference shouldn't be loaded.
-- **Don't ship a duplicate `cn()`** — there is exactly one in `lib/utils.ts`.
-- **`asChild` slot.** Many shadcn primitives accept `asChild` (Radix Slot) so
-  consumers can pass their own element. Use it instead of wrapping/cloning.
-- **Forms.** If `react-hook-form` is present, shadcn's Form components
-  (`Form`, `FormField`, `FormItem`, …) wrap it idiomatically. Don't build a
-  parallel forms abstraction.
+## Composition with frontend-design
 
-## Composition with Tailwind + frontend-design
+`frontend-design` may push toward distinctive typography, dramatic color, or a
+maximalist treatment. Implement that by:
+1. Editing the CSS variables in the project's `tailwindCssFile` (palette,
+   radius) — never override per-component.
+2. Adjusting the `cva` `variants` on the affected primitive (sizes, intents).
+3. Keep the *structure* (Radix/base primitives, slots, ARIA) — only the
+   surface changes.
 
-shadcn copies use the project's Tailwind theme. To re-skin the look:
-1. Adjust the CSS variables in `globals.css` (palette, radius).
-2. Adjust the `cva` `variants` in the affected primitive (default sizes,
-   intents).
-3. Keep the *structure* (Radix primitives, slots, ARIA) — only the surface
-   should change.
+The shadcn skill knows how to surface live `tailwindCssFile` for you.
 
-`frontend-design` may push toward distinctive type/color; honor that by editing
-tokens + variants, not by spraying utilities at call sites.
+## TL;DR routing
+
+| Need | Where |
+|---|---|
+| Add a component (`Button`, `Dialog`, `Empty`, …) | **shadcn skill** (CLI: `add`) |
+| Update / smart-merge existing components | **shadcn skill** (`--diff` / `--dry-run`) |
+| Switch / apply a preset | **shadcn skill** (`apply` / `init --preset`) |
+| Component docs and examples | **shadcn skill** (`docs <name>`) |
+| Use an *installed* primitive correctly (`FieldGroup`/`Field`, `data-icon`, `size-*`, etc.) | **shadcn skill rules** (`rules/*.md`) |
+| Compose a custom component from installed primitives | build-ui (this skill) |
+| Project conventions (aliases, dir layout, `cn()` location) | build-ui + the probe |
+| Accessibility checklist (Universal + per-pattern) | [`a11y.md`](a11y.md) |
+| JS/TS hygiene (async, state, types) | [`javascript-patterns.md`](javascript-patterns.md) |

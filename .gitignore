@@ -35,5 +35,12 @@ automate-browser/tmp/
 # ~/.claude/skills. Their source lives elsewhere; just ignore the symlink here.
 /conan-change-radio
 
+# --- External skill installer (shadcn/ui official skill, etc.) ---------------
+# Compose with external skills; don't vendor their source. `skills-lock.json`
+# (committed) pins the version + hash so a fresh checkout can re-install
+# deterministically. The install artifacts live here and stay local:
+/.agents/
+/.claude/skills/
+
 # macOS
 .DS_Store
