@@ -48,5 +48,12 @@ automate-browser/tmp/
 /shadcn
 /next-best-practices
 
+# --- Session handoff (per-machine; rebuilt each session via /handoff) --------
+# HANDOFF.md is the resume-ready session-state file the handoff skill writes;
+# .claude/current-task.txt is the one-line label the status line reads.
+# Both are session-local and don't belong in the shared repo.
+/HANDOFF.md
+/.claude/current-task.txt
+
 # macOS
 .DS_Store
