@@ -141,18 +141,24 @@ def shadcn_info(root):
             "ui_alias": aliases.get("ui")}
 
 
-def detect_shadcn_skill_installed():
-    """True iff a user-global shadcn skill is discoverable at ~/.claude/skills/shadcn.
+# Deferral targets — external skills build-ui hands execution off to. SKILL.md
+# Step 3 surfaces an install command from the fallback path when one is False.
+DEFERRAL_TARGETS = ("shadcn", "next-best-practices")
 
-    `Path.is_file()` follows the symlink the installer creates, so a
-    symlinked install resolves the same as a real dir.
+
+def detect_user_skill(name):
+    """True iff ~/.claude/skills/<name>/SKILL.md is discoverable with that name.
+
+    Follows symlinks (the installer drops a symlink at ~/.claude/skills/<name>
+    pointing into .agents/skills/<name>), so a symlinked install resolves the
+    same as a real directory.
     """
-    sk = Path.home() / ".claude" / "skills" / "shadcn" / "SKILL.md"
+    sk = Path.home() / ".claude" / "skills" / name / "SKILL.md"
     try:
         text = sk.read_text("utf-8", errors="replace")
     except OSError:
         return False
-    return bool(re.search(r"^name:\s*shadcn\s*$", text, re.MULTILINE))
+    return bool(re.search(rf"^name:\s*{re.escape(name)}\s*$", text, re.MULTILINE))
 
 
 def tailwind_info(root):
@@ -187,7 +193,7 @@ def main():
         "shadcn":       shadcn_info(root)   if detect_components(deps, root) == "shadcn" else None,
         # External skills build-ui defers to. False here means SKILL.md takes the
         # degraded path (surface the install command + fall back to general knowledge).
-        "external_skills": {"shadcn": detect_shadcn_skill_installed()},
+        "external_skills": {n: detect_user_skill(n) for n in DEFERRAL_TARGETS},
     }
 
     print(f"build-ui probe @ {root}", file=sys.stderr)
@@ -195,9 +201,16 @@ def main():
         print(f"  {k:12} {out[k]}", file=sys.stderr)
     if out["aliases"]:
         print(f"  aliases      {out['aliases']}", file=sys.stderr)
+    # Surface install-state ONLY for skills the project would actually use,
+    # so a non-shadcn / non-Next project doesn't get noise.
+    relevant = []
     if out["components"] == "shadcn":
-        status = "installed" if out["external_skills"]["shadcn"] else "MISSING (see SKILL.md fallback)"
-        print(f"  shadcn skill {status}", file=sys.stderr)
+        relevant.append("shadcn")
+    if out["framework"] == "next":
+        relevant.append("next-best-practices")
+    for n in relevant:
+        status = "installed" if out["external_skills"][n] else "MISSING (see SKILL.md fallback)"
+        print(f"  {n:20} skill: {status}", file=sys.stderr)
 
     print(json.dumps(out, indent=2))
 

@@ -84,6 +84,23 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
   install is ever needed, commit a `package.json` and keep `node_modules` gitignored.
 - **Generated artifacts stay out of the repo.** Skills write reports / rendered HTML to
   the user's home dir or `/tmp`, never into `~/.claude/skills/` (it's commit-by-default).
+- **Compose with external skills; don't vendor them.** When a well-maintained upstream
+  skill (e.g. `shadcn` from `shadcn/ui`, `next-best-practices` from `vercel-labs/next-skills`)
+  is installed via [skills.sh](https://www.skills.sh) — `npx skills add <repo> --skill <name>` —
+  treat it like `node_modules`:
+  1. **Commit `skills-lock.json`** at the repo root (version + hash pin; reproducible install).
+  2. **Gitignore the install artifacts**: `/.agents/`, `/.claude/skills/`, and the top-level
+     symlink each skill needs (see `.gitignore` for the pattern).
+  3. **Add a user-global symlink** at `~/.claude/skills/<name> → .agents/skills/<name>` so the
+     skill is discovered from any project, not just when cwd is here. The installer's
+     `.claude/skills/<name>` is project-scoped and won't surface elsewhere.
+  4. **Probe-gate the deferral.** `build-ui/scripts/probe.py` reports
+     `external_skills[<name>]` (boolean). A skill's `SKILL.md` branches on the gate: defer
+     when installed; surface the install command + fall back to general knowledge with a
+     "training-cutoff-vs-current" caveat when not.
+  5. **Keep our local `references/<name>.md` thin.** Only build-ui's coordination layer
+     (no-monoculture rule, routing table, install gate) — never enumerate what the
+     external skill knows, because that drifts every release.
 
 ## Commands
 

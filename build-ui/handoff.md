@@ -52,6 +52,17 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   `automate-browser`'s handoff §5 records. The "request + date + results" trio
   is captured by the project's own git history; build-ui defers to that rather
   than duplicating it.
+- 2026-05-31: **Second deferral target wired: `next-best-practices`** (Vercel
+  Labs' official Next.js skill from `vercel-labs/next-skills` on skills.sh,
+  pinned in `skills-lock.json`). Refactored `probe.py` to a generic
+  `detect_user_skill(name)` helper driven by a `DEFERRAL_TARGETS` tuple — adding
+  a third target is now one line. `external_skills` is reported as a dict
+  `{shadcn, next-best-practices}`. SKILL.md Step 3 grew a parallel `framework
+  == "next"` branch matching the shadcn pattern. references/next-best-practices.md
+  is the build-ui complement (~70 lines: install gate, no-monoculture rule,
+  routing table for Next-specific vs. general work, composition stance).
+  CLAUDE.md gained a new "Compose with external skills" house convention so the
+  pattern survives a fresh session.
 - 2026-05-31: **Probe gates the shadcn deferral (spec A3 — degraded path).**
   Without this, a fresh clone of the skills repo would have `skills-lock.json`
   + this repo's references but no installed shadcn skill, and build-ui's
