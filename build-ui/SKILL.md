@@ -38,7 +38,7 @@ Run `python3 --version`. If python3 + `scripts/` are present → **SCRIPTS** (us
    - `css == "tailwind"` → [`references/tailwind.md`](references/tailwind.md)
    - `components == "shadcn"` → [`references/shadcn.md`](references/shadcn.md)
    - `css == "vanilla"` (no tailwind/CSS-in-JS) → [`references/vanilla-css.md`](references/vanilla-css.md)
-   - Always read [`references/a11y.md`](references/a11y.md) — accessibility is not opt-in.
+   - Always read [`references/a11y.md`](references/a11y.md) — work its **Universal Pre-Flight** for every component, then the matching **component-specific** section (Modal Dialog, Tabs, Combobox, Forms & Inputs, Menu, Disclosure/Accordion, Live Regions, Tables, Cards, Carousels). On shadcn/Radix-using projects, most keyboard/ARIA mechanics are handled by the primitive — use the checklist to verify you didn't break them with custom markup and to cover what primitives can't solve (labels, alt, contrast, copy, errors, focus restoration). Accessibility is not opt-in.
    If a stack key isn't covered in references, **say so** and fall back to the model's general knowledge; do not pretend coverage.
 4. **Plan briefly, then implement** — restate the ask in one sentence, name the files you'll touch and the conventions you'll follow (from probe + references), then write the code. Use the project's existing path aliases (`@/components/...`), file naming, and component patterns. Match what's already in the repo over what's "best in general".
 5. **Verify** — run typecheck (if TS) and any tests the criteria specify. For UI changes, if the user has `automate-browser` or `webapp-testing`, hand off the browser-verify step to them; otherwise note that visual verification is the user's call.

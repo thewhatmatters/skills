@@ -52,6 +52,18 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   `automate-browser`'s handoff §5 records. The "request + date + results" trio
   is captured by the project's own git history; build-ui defers to that rather
   than duplicating it.
+- 2026-05-31: **Adopted a comprehensive a11y checklist.** The initial slim
+  `a11y.md` (~80 lines, principles + anti-patterns) was upgraded to a full
+  component-pattern checklist: Universal Pre-Flight + per-pattern (Forms,
+  Button, Link, Modal, Disclosure/Accordion, Tabs, Menu, Combobox, Tooltip,
+  Live Regions, Tables, Cards, Carousels) + WCAG 2.2 deltas + verification
+  protocol. The structure lets build-ui pull *only* the section matching the
+  component being built — and pairs cleanly with `shadcn.md`'s note that Radix
+  primitives already implement most keyboard/ARIA mechanics (checklist then
+  shifts to "verify you didn't break it + cover what primitives can't:
+  labels, alt, contrast, copy, errors, focus targets"). Source: a vetted
+  standards doc the user supplied; preserved verbatim with light framing for
+  the references/ idiom.
 
 ## 4. Known limitations / environment caveats
 - **Library coverage** in `references/` is intentionally lean — Tailwind,
