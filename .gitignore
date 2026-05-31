@@ -51,10 +51,14 @@ automate-browser/tmp/
 
 # --- Session handoff (per-machine; rebuilt each session via /handoff) --------
 # HANDOFF.md is the resume-ready session-state file the handoff skill writes;
-# .claude/current-task.txt is the one-line label the status line reads.
-# Both are session-local and don't belong in the shared repo.
+# .claude/current-task.txt is the one-line label the status line reads;
+# .claude/handoff-archive/ is the PreCompact hook's rolling snapshot history
+# (machine-local debug history, not curated memory — that lives in
+# ~/.claude/projects/<encoded>/memory/ via the typed-memory system).
+# All session-local and don't belong in the shared repo.
 /HANDOFF.md
 /.claude/current-task.txt
+/.claude/handoff-archive/
 
 # macOS
 .DS_Store
