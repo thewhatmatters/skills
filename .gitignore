@@ -30,5 +30,10 @@ results.html
 # automate-browser scratch output (screenshots, scraped pages, etc.)
 automate-browser/tmp/
 
+# --- Symlinked third-party skills (not ours to commit) -----------------------
+# Skills installed by other apps (Conan, etc.) sometimes drop a symlink into
+# ~/.claude/skills. Their source lives elsewhere; just ignore the symlink here.
+/conan-change-radio
+
 # macOS
 .DS_Store
