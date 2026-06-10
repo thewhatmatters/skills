@@ -172,8 +172,6 @@ searches. Only write prompts if explicitly asked.
 | Flag | Behavior |
 |---|---|
 | `--days=N` | Look back N days (default: 30) |
-| `--quick` | _(reserved — not yet implemented)_ Fewer results per source |
-| `--deep` | _(reserved — not yet implemented)_ More results per source |
 | `--agent` | Non-interactive: skip pauses & the source picker, output full report, stop |
 | `--sources=a,b,c` | Run exactly these sources (no picker). Names: `reddit`, `x`, `youtube`, `hackernews`, `polymarket`, `web` |
 | `--all` | Run all 6 sources, no picker (fires gates for any not ready) |
