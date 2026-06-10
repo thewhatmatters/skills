@@ -12,9 +12,13 @@ Keys are loaded by scripts/_env.py from: real env -> ~/.claude/.env ->
 so they cannot leak into the stderr lines this script prints.
 
 Usage: python3 web.py "<topic>" [QUERY_TYPE] [--days=N]   (N defaults to 30)
-QUERY_TYPE: RECOMMENDATIONS | NEWS | PROMPTING | COMPARISON | GENERAL | XFALLBACK
+QUERY_TYPE: RECOMMENDATIONS | NEWS | PROMPTING | COMPARISON | GENERAL | XFALLBACK | REDDITFALLBACK
   XFALLBACK = the X/Twitter fallback: restricts results to x.com/twitter.com
   (used when scripts/x.py has no session). Tag those results as X/Twitter.
+  REDDITFALLBACK = the Reddit fallback: restricts results to reddit.com
+  (used when scripts/reddit.py is 403-blocked). Tag those results as Reddit.
+  Note: GENERAL and the other types EXCLUDE reddit.com, so the only way to
+  recover Reddit content via web is REDDITFALLBACK.
 Output: JSON array of {title, source, url, snippet, text}
 """
 import sys, os, json, urllib.parse, time
@@ -36,11 +40,13 @@ QUERY_TEMPLATES = {
     "COMPARISON":      ["{topic} comparison review " + YEAR],
     "GENERAL":         ["{topic} " + YEAR, "{topic} discussion guide"],
     "XFALLBACK":       ["{topic}"],
+    "REDDITFALLBACK":  ["{topic}"],
 }
 
 # Dedicated-source domains + low-value socials — excluded from normal web results.
 SKIP_DOMAINS = {"reddit.com", "x.com", "twitter.com", "tiktok.com"}
 X_DOMAINS = ["x.com", "twitter.com"]
+REDDIT_DOMAINS = ["reddit.com"]
 
 
 def parse_args(argv):
@@ -82,6 +88,7 @@ def source_name(url):
 
 def tavily_search(query, days, query_type, key):
     is_x = query_type == "XFALLBACK"
+    is_reddit = query_type == "REDDITFALLBACK"
     is_news = query_type == "NEWS"
     body = {
         "query": query,
@@ -98,6 +105,8 @@ def tavily_search(query, days, query_type, key):
             body["time_range"] = tr
     if is_x:
         body["include_domains"] = X_DOMAINS
+    elif is_reddit:
+        body["include_domains"] = REDDIT_DOMAINS
     else:
         body["exclude_domains"] = sorted(SKIP_DOMAINS)
     try:
@@ -129,6 +138,7 @@ def tavily_search(query, days, query_type, key):
 
 def exa_search(query, days, query_type, key):
     is_x = query_type == "XFALLBACK"
+    is_reddit = query_type == "REDDITFALLBACK"
     end = datetime.now(UTC)
     start = end - timedelta(days=days)
     body = {
@@ -141,6 +151,8 @@ def exa_search(query, days, query_type, key):
     }
     if is_x:
         body["includeDomains"] = X_DOMAINS
+    elif is_reddit:
+        body["includeDomains"] = REDDIT_DOMAINS
     else:
         body["excludeDomains"] = sorted(SKIP_DOMAINS)
     try:
@@ -196,8 +208,14 @@ def _fetch_page_text(url):
 
 def ddg_search(query, days, query_type, _key=None):
     is_x = query_type == "XFALLBACK"
-    skip = set() if is_x else SKIP_DOMAINS
-    q = ("site:x.com OR site:twitter.com " + query) if is_x else query
+    is_reddit = query_type == "REDDITFALLBACK"
+    skip = set() if (is_x or is_reddit) else SKIP_DOMAINS
+    if is_x:
+        q = "site:x.com OR site:twitter.com " + query
+    elif is_reddit:
+        q = "site:reddit.com " + query
+    else:
+        q = query
     try:
         r = requests.get(
             f"https://html.duckduckgo.com/html/?q={urllib.parse.quote(q)}",

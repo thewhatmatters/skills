@@ -148,6 +148,12 @@ python3 scripts/web.py "{TOPIC}" "{QUERY_TYPE}" --days={DAYS}
 ```
 
 Notes:
+- **Keep the query SHORT — these scrapers are keyword matchers, not semantic
+  search.** Pass a tight 2–5 keyword distillation of `{TOPIC}`, not a long
+  natural-language sentence. A long query returns `[]` from reddit/x/hackernews
+  even when the topic is well-covered (e.g. a paragraph-long query returns nothing;
+  `"Claude Code"` returns dozens). If a source comes back empty, retry once with a
+  shorter/broader keyword set before treating it as genuinely empty.
 - `x.py` (X/Twitter) honors `--days` via X's native `since:` operator. Interpret its
   result per the **Recoverable Setup Gates** section:
   - non-empty JSON → use it
@@ -155,8 +161,17 @@ Notes:
     unless `--agent`)
   - `[]` + stderr `TIMEOUT`, or `[]` with no marker → skip X and take the web fallback
     silently: `python3 scripts/web.py "{TOPIC}" XFALLBACK --days={DAYS}`
+- `reddit.py` — if it prints `[]` **and** its stderr contains `403` (Reddit blocking
+  this IP/UA — common, not user-fixable, NOT rate-limiting), take the web fallback
+  silently: `python3 scripts/web.py "{TOPIC}" REDDITFALLBACK --days={DAYS}`, tag the
+  results as Reddit, and render the stats line as `|- Reddit (via web): {N} pages`.
+  (REDDITFALLBACK is the ONLY web path that returns Reddit — every other query type
+  excludes reddit.com, so a plain `GENERAL` retry recovers nothing.) This is a silent
+  fallback, not a gate: the user can't fix Reddit's block, so don't prompt.
 - `polymarket.py` accepts `--days` for consistency but cannot date-filter
-  (no usable date API); it returns best-effort active markets.
+  (no usable date API); it returns best-effort active markets. **Omit Polymarket
+  entirely if no returned market is topically relevant** — for off-domain topics it
+  returns unrelated active markets (e.g. novelty bets), not an empty list.
 
 See individual script docstrings for output schemas.
 
@@ -264,6 +279,7 @@ KEY PATTERNS:
 ```
 ---
 All sources reported back!
+{use "Most sources reported back!" if any source was down, omitted, or fell to a web fallback}
 |- Reddit: {N} threads | {N} upvotes | {N} comments
 |- X/Twitter: {N} posts | {N} likes | {N} reposts
 |- YouTube: {N} videos | {N} views | {N} with transcripts
@@ -276,7 +292,9 @@ All sources reported back!
 
 Omit any source line with 0 results entirely. If X/Twitter came from the web
 fallback (x.py had no session), render it as `|- X/Twitter (via web): {N} pages`
-instead — it has no like/repost counts.
+instead — it has no like/repost counts. Likewise, if Reddit came from the web
+fallback (reddit.py was 403-blocked), render it as `|- Reddit (via web): {N} pages`
+— it has no upvote/comment counts.
 
 ### Write results.html
 
@@ -397,7 +415,8 @@ A gate has four required parts:
 
 | Source | Failure | Action |
 |---|---|---|
-| Reddit | Rate limited | Retry once after 3s, then skip |
+| Reddit | `[]` + stderr `403` (IP/UA blocked) | Skip the scraper — `web.py REDDITFALLBACK`, mark "(via web)". No prompt (not user-fixable) |
+| Reddit | Rate limited (429) | Retry once after 3s, then `web.py REDDITFALLBACK`, mark "(via web)" |
 | X/Twitter (x.py) | `[]` + stderr `NO_SESSION` | **Recoverable Setup Gate** — ask the user (unless `--agent`); on skip/fail/agent → `web.py XFALLBACK`, mark "(via web)" |
 | X/Twitter (x.py) | `[]` + `TIMEOUT` / no marker | Skip — `web.py XFALLBACK`, mark "(via web)". No prompt |
 | YouTube | Playwright timeout | Skip (returns `[]`; no retry) |
