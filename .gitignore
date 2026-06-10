@@ -62,3 +62,4 @@ automate-browser/tmp/
 
 # macOS
 .DS_Store
+/remotion-best-practices
