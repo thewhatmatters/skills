@@ -31,10 +31,9 @@ drop a new skill into the folder and it's tracked automatically.
 Well-maintained upstream skills are installed via [skills.sh](https://www.skills.sh),
 pinned in [`skills-lock.json`](skills-lock.json), and gitignored — the same posture
 as `node_modules` + a lockfile. Pinned: **`shadcn`** (shadcn/ui),
-**`next-best-practices`** (vercel-labs/next-skills), and **`design-md`**
-(google-labs-code/stitch-skills). **`remotion-best-practices`**
-(remotion-dev/skills) is currently a user-global install (`~/.agents/skills/`)
-and not yet pinned here. Our skills defer to them through probe gates; the full
+**`next-best-practices`** (vercel-labs/next-skills), **`design-md`**
+(google-labs-code/stitch-skills), and **`remotion-best-practices`**
+(remotion-dev/skills). Our skills defer to them through probe gates; the full
 5-step convention is in [`CLAUDE.md`](CLAUDE.md).
 
 ## Setup
