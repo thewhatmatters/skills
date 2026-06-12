@@ -9,6 +9,7 @@ library and the slice of the Playwright Page API you'll use most.
 3. Extraction modes
 4. Playwright Page API — navigation, interaction, content, waits, screenshots
 5. Browser evaluation (JS in page)
+6. Hostile DOM tactics (Angular Material / Google consoles)
 
 ---
 
@@ -168,3 +169,37 @@ page.evaluate("() => window.scrollTo(0, document.body.scrollHeight)")
 
 For large datasets, don't scroll-and-scrape the DOM — intercept the network
 requests the page itself makes. See [`scraping.md`](scraping.md).
+
+---
+
+## 6. Hostile DOM tactics (Angular Material / Google consoles)
+
+Patterns for component-framework UIs (GA4, Google admin, Material/MDC apps)
+where naive locators miss.
+
+- **ALL-CAPS labels are usually CSS `text-transform`.** The DOM text may be
+  ` Steps ` when you see "STEPS". Match case-insensitively; if `get_by_text`
+  still misses, probe for the real element from JS:
+  ```python
+  page.evaluate("""() => [...document.querySelectorAll('*')]
+      .filter(e => /^steps$/i.test(e.textContent?.trim()) && !e.children.length)
+      .map(e => e.outerHTML.slice(0, 300))""")
+  ```
+- **Material radios/checkboxes ignore label clicks.** Clicking the label text
+  often doesn't toggle the control. Click the control itself:
+  `dlg.get_by_role("radio").nth(i).click(force=True)`. A still-disabled
+  Save/Apply button is your signal the selection didn't register.
+- **Read strict-mode violation errors — they're a map.** The error lists every
+  matching candidate with its classes and ids (it can disclose a stable id
+  like `#breakdown` you didn't know existed). Narrow to the real control
+  (`button[aria-label='…']` beats a wrapper `div[role=button]`) or use the
+  disclosed id.
+- **Manual-login handoff:** launch headed, `goto` the target, then poll until
+  the user signs in (run as a background task; the persistent profile keeps
+  the session for every later run):
+  ```python
+  for _ in range(60):                      # up to 5 minutes
+      page.wait_for_timeout(5000)
+      if "accounts.google.com" not in page.url:
+          break
+  ```

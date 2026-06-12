@@ -121,6 +121,13 @@ just need to *understand* a page — screenshots cost vision tokens.
   but your login isn't — just navigate again.
 - **Bounded waits:** `wait_for_load(page)` settles the page but never hangs
   past the timeout. For specifics use `page.wait_for_selector(...)`.
+- **Unsaved dialog state dies with the script:** when the script exits, the
+  browser closes and anything staged in an open dialog/wizard (an unclicked
+  Apply/Save) is discarded — only committed state persists. Always finish
+  open → edit → **Apply → verify** inside one script.
+- **Heavy SPAs amortize badly:** each script re-pays launch + full app load
+  (a GA4/console-class SPA costs ~10s before the first action). Batch
+  discover→act→verify into fewer, larger scripts instead of one action per run.
 
 ## Conventions this skill follows
 
