@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Keyless caption + metadata fetch for summarize-yt (Tiers 2–3, spec A4).
+"""Keyless caption + metadata fetch for ingest-source (Tiers 2–3, spec A4).
 
 One concern: get a YouTube video's timestamped captions and basic metadata
 without any API key, normalised to JSON the NATIVE summariser consumes.
@@ -193,7 +193,7 @@ def main():
               "chapters": [], "captions": [], "source": None, "error": None}
 
     ytdlp, src = _tools.resolve_ytdlp()
-    print(f"summarize-yt fetch_transcript ({'yt-dlp:'+src if ytdlp else 'no yt-dlp'})",
+    print(f"ingest-source fetch_transcript ({'yt-dlp:'+src if ytdlp else 'no yt-dlp'})",
           file=sys.stderr)
 
     caps = []

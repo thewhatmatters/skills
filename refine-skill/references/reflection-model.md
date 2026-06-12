@@ -7,7 +7,8 @@ signals; the reasoning here decides what (if anything) to do about them.
 
 ## Reference example — this loop, done by hand
 
-The motivating case: a session used `summarize-yt`, the caption fetcher returned
+The motivating case: a session used `summarize-yt` (since absorbed into
+`ingest-source`), the caption fetcher returned
 1252 rolling/overlapping auto-caption cues, Claude wrote a one-off `python3 -c`
 merge to make them readable, then fixed `parse_srt` to do the merge itself and
 re-ran it on the real video to prove it. That is exactly one pass of this skill:
@@ -68,7 +69,7 @@ One session is a single, possibly unrepresentative, data point. Bias hard toward
 A proposed code change is not surfaced until it survives, in order:
 
 1. **Capture the failing input as a fixture** under the **target skill's
-   `tests/fixtures/`** (e.g. `summarize-yt/tests/fixtures/rolling-captions.srt`).
+   `tests/fixtures/`** (e.g. `ingest-source/tests/fixtures/rolling-captions.srt`).
    It lives with the skill it protects and is committed alongside the fix, seeding
    a regression suite for a codebase that has none — so accrued fixtures are a real
    asset. (This is a committed test asset, not a generated report, so it belongs in

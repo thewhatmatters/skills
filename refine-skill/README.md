@@ -14,8 +14,8 @@ propose an evidence-grounded, validated diff for the user to approve.
 ## How to run
 
 Say "refine the `<skill>` skill", "reflect on this session and improve `<skill>`",
-or `/refine-skill <skill>`. Example: right after a `summarize-yt` run, `/refine-skill
-summarize-yt` reads the session, finds where you had to fix things by hand, and
+or `/refine-skill <skill>`. Example: right after an `ingest-source` run, `/refine-skill
+ingest-source` reads the session, finds where you had to fix things by hand, and
 proposes the fix.
 
 ## What it needs

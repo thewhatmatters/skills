@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Watch tier for summarize-yt: hand a YouTube URL to the Gemini API (Tier 1, spec A4/A7).
+"""Watch tier for ingest-source: hand a YouTube URL to the Gemini API (Tier 1, spec A4/A7).
 
 One concern: ask Gemini to *watch* a public YouTube video (audio + visuals, ~1
 fps) and return timestamped notes, using only the stdlib. Gemini accepts the URL
@@ -78,7 +78,7 @@ def main():
         method="POST",
         headers={"Content-Type": "application/json", "x-goog-api-key": key},
     )
-    print(f"summarize-yt gemini_watch (model={model})", file=sys.stderr)
+    print(f"ingest-source gemini_watch (model={model})", file=sys.stderr)
     try:
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
             payload = json.loads(resp.read().decode("utf-8"))

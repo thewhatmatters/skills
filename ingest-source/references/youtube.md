@@ -1,8 +1,8 @@
-# Capability ladder, commands & summary templates
+# YouTube acquisition — capability ladder & commands
 
-Loaded by `SKILL.md` Steps 2–4 (progressive disclosure, spec A1). This is the
-craft of the skill: which tier to use, the exact commands, and how to shape the
-summary to the content type.
+Loaded by `SKILL.md` Step 3 when the source is a YouTube URL (progressive
+disclosure, spec A1). Absorbed from the retired `summarize-yt` skill — the
+ladder, decisions, and caveats carry over unchanged.
 
 ## The capability ladder (best → worst)
 
@@ -15,7 +15,8 @@ summary to the content type.
 | 5 | **metadata only** | yt-dlp `-J` or WebFetch | title/desc/chapters | last resort; clearly labelled as not-watched |
 
 Pick the highest available tier unless `--watch` / `--transcript-only` forces
-one. Always record the tier used in the summary header so the reader knows
+one. Always record the tier used — it goes in the summary header **and** the
+persistence frontmatter (`--tier` on `persist.py`), so the reader knows
 whether the video was *watched* or *transcribed*.
 
 ## Binary resolution (spec A11)
@@ -88,61 +89,13 @@ label the summary accordingly.
 `<yt-dlp> -J --skip-download <url>` (or WebFetch the watch page) → use title,
 description, and chapter list. State plainly that the video was **not watched**.
 
-## Content-type templates (Step 4)
+## Caveats (carried over from summarize-yt)
 
-Classify the video, then apply the matching shape. Every bullet carries a real
-`MM:SS` from the source. Lead every summary with this header — it records the
-request (URL), the date, and how the content was obtained (spec A10, A12):
-
-```
-# <Title>
-**Source:** <video URL> · **Channel:** <name> · **Length:** <H:MM:SS>
-**Summarized:** <YYYY-MM-DD> via <tier — "watched (Gemini)" | "transcript (yt-dlp)" | "transcript (youtube-transcript-api)" | "metadata only — NOT watched">
-[one-sentence tl;dr]
-```
-
-**Tutorial / how-to** — ordered, reproducible:
-```
-## Steps
-1. **[00:42] <action>** — <detail>; `command if shown`
-2. **[02:15] <action>** — …
-## Gotchas / notes
-- [05:30] <caveat the presenter called out>
-```
-
-**Ranked / top-N list:**
-```
-## The list
-- **#1 — <item> [01:10]** — <why; one line>
-- **#2 — <item> [02:45]** — …
-[honor the video's own ordering; note if it counts down]
-```
-
-**Review / comparison — pros/cons:**
-```
-## Verdict — [tl;dr + the timestamp it's stated]
-| Pros | Cons |
-|------|------|
-| <point> [03:10] | <point> [06:20] |
-## Notable moments
-- [08:05] <benchmark / demo / price>
-```
-
-**Talk / interview / explainer — key points:**
-```
-## Key points
-- **[00:30] <claim/idea>** — <supporting detail>
-- **[04:10] <claim/idea>** — …
-## Quotable
-> "<short quote>" — [12:40]
-```
-
-**Unknown / mixed:** default to the talk template (timestamped key points) and
-note the type was ambiguous.
-
-## Rules
-
+- **Pure-visual + no-captions + no-key videos** are the genuine gap — only the
+  frame-sampling tier (needs `ffmpeg`) partially fills it, coarsely.
+- YouTube actively blocks scraping IPs: `youtube-transcript-api` gets IP-blocked
+  (esp. datacenter IPs), and `yt-dlp` needs periodic updates. Gemini sidesteps
+  this (Google fetching its own platform).
+- Gemini watch tier: **public videos only**, one URL per request, free-tier
+  daily cap ~8h of video.
 - Never invent a timestamp; only use times present in captions / Gemini output.
-- Keep the source-tier line honest — if you transcribed, don't imply you watched.
-- Long videos: summarize section-by-section using chapter marks as anchors.
-- Offer the `render-html <out>` step after writing, for a branded page.
