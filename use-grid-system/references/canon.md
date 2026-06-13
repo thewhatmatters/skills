@@ -2,8 +2,8 @@
 
 Source: Josef Müller-Brockmann, *Grid Systems in Graphic Design / Raster systeme
 für die visuelle Gestaltung* (Niggli, 1981). Locators are the book's **printed
-page numbers** (`p. N`). Distilled from the 162-page scan; the full ingested
-summary lives in `../../mueller-brockmann/grid-system-summary.md`.
+page numbers** (`p. N`). Distilled from the 162-page scan of the book; the design
+rationale that builds on it is in `research-rationale.md` (same dir).
 
 > **"The grid system is an aid, not a guarantee. It permits a number of possible
 > uses and each designer can look for a solution appropriate to his personal

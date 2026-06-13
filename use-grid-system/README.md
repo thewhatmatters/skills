@@ -56,6 +56,6 @@ This skill is the *grid spine*: execution lives in `build-ui`, aesthetic taste i
 - `handoff.md` — design decisions and the "why".
 - `references/` — the canon (`canon.md`), the Tailwind token/utility layer
   (`tailwind.md`), the two profiles (`profiles.md`), optical alignment
-  (`optical-alignment.md`), verification (`verification.md`), and the
-  non-Tailwind fallback (`non-tailwind.md`). Background: the ingested book
-  summary and the build proposal live in `../mueller-brockmann/`.
+  (`optical-alignment.md`), verification (`verification.md`), the non-Tailwind
+  fallback (`non-tailwind.md`), and the design rationale / build proposal
+  (`research-rationale.md`).

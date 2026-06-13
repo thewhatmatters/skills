@@ -63,6 +63,3 @@ automate-browser/tmp/
 # macOS
 .DS_Store
 /remotion-best-practices
-
-# 18MB scanned source book — keep binary out of the repo
-mueller-brockmann/grid-system.pdf

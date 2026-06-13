@@ -3,8 +3,10 @@
 > **Deep-research report** · type: feature/landscape · depth: standard→exhaustive ·
 > mode: **NATIVE** (built-in WebSearch/WebFetch; no Tavily/Exa key) · date: 2026-06-13 ·
 > sources: 14 (WebSearch ×12, WebFetch ×2) + 1 live-browser validation (Playwright)
-> Companion to [`grid-system-summary.md`](grid-system-summary.md) (the ingested canon) and
-> the prior [`müller-brockmann.json`](müller-brockmann.json) skill export.
+> Companion to [`canon.md`](canon.md) (the ingested book, distilled). The original
+> scratch ingest (full summary + the prior `müller-brockmann.json` skill export +
+> the 162-pp scan) was reference-only and has been removed; recoverable from git
+> history @ commit 3515745.
 
 ---
 
@@ -235,8 +237,7 @@ generalization to app UI**, not the core grid engineering.
 existing DESIGN.md `## Grid`, baseline of current `--spacing`.
 
 **`references/` split (progressive disclosure, A1):**
-- `references/canon.md` ← fold in [`grid-system-summary.md`](grid-system-summary.md) (the
-  book's method + locators).
+- `references/canon.md` ← the ingested book's method + page locators (done).
 - `references/tailwind.md` — the `@theme` token block, `@utility .band/.guides`, subgrid +
   `@supports` fallback, container-query profiles, the `--spacing` caveat.
 - `references/profiles.md` — `editorial` vs `app` grid profiles (Finding 5).

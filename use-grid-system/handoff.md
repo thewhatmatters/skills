@@ -26,10 +26,11 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable applications:
 ## 3. Decision log
 - 2026-06-13: scaffolded by generate-skill.
 - **Built from research, not from scratch.** Architecture is the proposal in
-  `../mueller-brockmann/deep-research-use-grid-system.md`; canon is
-  `../mueller-brockmann/grid-system-summary.md` (folded into `references/canon.md`).
-  Both grounded against the canonical book (162-pp scan, OCR'd) and a live working
-  example (`hyperagent.com/s/koRV0F0BWOD12os3U2L74w`, validated via Playwright).
+  `references/research-rationale.md`; the canon is `references/canon.md`. Both
+  grounded against the canonical book (162-pp scan, OCR'd — the scratch ingest
+  folder was reference-only and removed; recoverable from git history @ 3515745)
+  and a live working example (`hyperagent.com/s/koRV0F0BWOD12os3U2L74w`,
+  validated via Playwright).
 - **In Tailwind v4 the grid IS tokens.** v4's spacing scale is
   `calc(var(--spacing) * n)` off one base, so the 8px baseline tokenizes directly;
   the prior skill's hand-rolled `--bl/--lh` source of truth becomes one `@theme`
