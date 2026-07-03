@@ -27,6 +27,17 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   (requests → urllib → curl) for webpages.
 
 ## 3. Decision log
+- 2026-07-02: vault targets are **topic directories** (e.g. `claude/…`), not
+  `<vault>/reference/` — the vault went topic-first the same day; the path
+  recommendation is owned by curate-knowledge's curation guide.
+- 2026-07-02: **Added the destination gate (step 5) — project / vault / both.**
+  Vault persistence is delegated by reference to `curate-knowledge` (its HITL
+  gate, OKF wiring, and verification apply); this skill never writes the vault
+  directly. `--dest=` skips the question; phrasing is inferred when
+  unambiguous; `--agent` defaults to `project`. `--no-save` still bypasses
+  everything. Rationale: one acquisition/distillation pipeline, two knowledge
+  scopes — project-local (docs/sources/ + CLAUDE.md import) vs cross-project
+  (OKF vault).
 - 2026-06-11: **Absorb-and-replace summarize-yt** (user's explicit choice over
   a router that delegates). `_env.py`/`_tools.py` copied verbatim;
   `fetch_transcript.py`/`gemini_watch.py` verbatim except diagnostics labels;
