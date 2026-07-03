@@ -4,8 +4,8 @@ This file is loaded by `SKILL.md` Step 5 — progressive disclosure (spec A1).
 It is the only place that holds scaffold templates; everything else stays
 lean.
 
-The 13 architecture patterns are NOT duplicated here. They live in
-`~/.claude/skills/skill-architecture.md` (A1–A13). The recipe references them
+The 14 architecture patterns are NOT duplicated here. They live in
+`~/.claude/skills/skill-architecture.md` (A1–A14). The recipe references them
 by id (e.g. "spec A6 = preflight") so a future spec edit changes both the
 generator and the auditor automatically.
 
@@ -26,6 +26,7 @@ must be emitted verbatim into the generated script.
 | `<<CC_VERSION>>` | input `cc_version` from `docs.py` |
 | `<<DEPS_NOTES_OR_EMPTY>>` | input `deps_notes` or empty |
 | `<<EXTRA_FLAG_ROWS_OR_BLANK>>` | extra rows in SKILL.md flags table (or empty) |
+| `<<DISABLE_MODEL_INVOCATION_LINE_OR_BLANK>>` | `disable-model-invocation: true` when `trigger_mode` is `user`; blank (no line) when `model` |
 | `<<SECRETS_NOTE_OR_BLANK>>` | secrets convention bullets (only when `needs_secrets`) |
 | `<<REFERENCES_LINK_OR_BLANK>>` | README "Where to look next" bullet for `references/` (only when used) |
 | `<<KEY_NAME>>` / `<<PURPOSE>>` / `<<KEY_URL_OR_BLANK>>` | one per secret key, in the Step-7 paste block |
@@ -38,7 +39,8 @@ must be emitted verbatim into the generated script.
 |---|---|---|
 | `name` | `--name=` or interactive | `^[a-z][a-z0-9-]*$`, ≤ 64 chars (live skills.md) |
 | `one_liner` | interactive | one sentence, ≤ ~140 chars |
-| `description` | interactive | trigger-rich; combined with `when_to_use` ≤ 1536 chars (live skills.md) |
+| `description` | interactive | trigger-rich if model-invoked, human-oriented if user-invoked; combined with `when_to_use` ≤ 1536 chars (live skills.md) |
+| `trigger_mode` | interactive / inferred | `model` (default) or `user` (spec A14); side-effectful / manual-timing skills default to `user` |
 | `needs_scripts` | flag / inferred | bool |
 | `needs_secrets` | interactive | bool (false if `needs_scripts` false) |
 | `needs_design` | inferred / interactive | bool — true iff the skill emits **styled visual output** (see criterion below) |
@@ -76,8 +78,10 @@ what this flag scaffolds.)
 2. Every frontmatter key you intend to write is in `live_fields`. The
    conservative minimum is **`name` + `description`** — these are documented
    in every Claude Code version we've seen. Optional adds (only if useful and
-   present in `live_fields`): `when_to_use`, `allowed-tools`, `argument-hint`.
-   **Never** invent a key.
+   present in `live_fields`): `when_to_use`, `allowed-tools`, `argument-hint`,
+   and — when `trigger_mode` is `user` — `disable-model-invocation: true`
+   (substitute the `<<DISABLE_MODEL_INVOCATION_LINE_OR_BLANK>>` slot; blank
+   for model-invoked skills). **Never** invent a key.
 3. `len(description + when_to_use_if_any)` ≤ 1536.
 4. If `needs_secrets` and not `needs_scripts` → contradiction; ask once or
    set `needs_scripts = true`.
@@ -90,6 +94,7 @@ what this flag scaffolds.)
 ---
 name: <<NAME>>
 description: <<DESCRIPTION>>
+<<DISABLE_MODEL_INVOCATION_LINE_OR_BLANK>>
 ---
 
 # <<NAME>>
@@ -122,7 +127,12 @@ docs-only skill; no probe needed".)
 ## Steps 1..N — (skill-specific flow)
 
 (A short numbered list. Each step that calls a script: one line + the script
-name. Bulky logic goes into the script's own docstring, not here.)
+name. Bulky logic goes into the script's own docstring, not here. Steering
+prose uses **leading words** — pick 1–3 meaning-dense terms for the skill's
+core behaviors, use them consistently across steps, and prefer them to
+paragraphs of instruction; their adoption is verifiable in reasoning traces
+(spec A14). Reference material only one branch consults goes to
+`references/`, not here — the A1 branch test.)
 
 ## Conventions this skill follows
 
@@ -178,8 +188,8 @@ Created: <<TODAY>>  ·  Generator: generate-skill @ CC <<CC_VERSION>>
 ## 1. Purpose
 <<ONE_LINER>>
 
-## 2. Reusable patterns (link to spec A1..A13)
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A13;
+## 2. Reusable patterns (link to spec A1..A14)
+This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A14;
 note here any deliberate deviations.
 
 ## 3. Decision log
@@ -382,8 +392,7 @@ created tree:
 verdict: <line from Step 6 self-audit>
 
 to publish this skill, run:
-  echo '!/<<NAME>>/' >> ~/.claude/skills/.gitignore
-  git -C ~/.claude/skills add <<NAME>> .gitignore
+  git -C ~/.claude/skills add <<NAME>>
   git -C ~/.claude/skills commit -m "Add <<NAME>>"
 ```
 

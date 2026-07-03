@@ -49,6 +49,12 @@ For each checkbox in spec §B, decide **PASS / FAIL / N/A** with concrete
 - A documented flag that isn't implemented and isn't marked reserved = FAIL.
 - A secret value found in code/logs/committed files = FAIL (Critical).
 - Docs referencing removed features/sources = FAIL (Hygiene).
+- Steering text that fails the **deletion test** — a paragraph whose removal
+  would not change agent behavior — = FAIL (Hygiene). Agent-written skills
+  are the usual source; judge each instruction block by what would actually
+  differ without it.
+- Reference material inline in SKILL.md that only one branch of the skill
+  consults = FAIL (spec A1 branch test).
 N/A is valid (e.g. no external deps → preflight items N/A) — say why.
 
 ## Step 4: Report findings
@@ -90,12 +96,19 @@ counts + the Name & Description verdict), then list the findings worth acting on
 Fan-out keeps each skill's evidence in isolated context; you keep the conclusions.
 Do not re-implement the rubric in the agents — point them at the spec.
 
+The sweep table also reports **context load**: each skill's `description`
+length (chars) and trigger mode. Every model-invoked description rides in
+every session's context — flag the heaviest ones and any side-effectful
+skills that look like `disable-model-invocation` candidates (spec A14).
+
 ## Triggering check (`--triggers`, opt-in, gated)
 
 Measures whether descriptions actually route real prompts to the right skill, and
 whether overlapping skills cross-trigger. **This is the only mode that costs
 money/time** (it fires `claude -p` per query) — run it on description *changes*,
-not routinely. Full method, the run_eval gotcha, and eval-set design are in
+not routinely. Skills with `disable-model-invocation: true` are excluded from
+the eval set: their descriptions never enter the model's context, so there is
+no routing to measure and they cannot cross-trigger (spec A14). Full method, the run_eval gotcha, and eval-set design are in
 [`references/triggering-eval.md`](references/triggering-eval.md). Flow:
 
 1. **Preflight** — `python3 scripts/preflight.py`. Gate `CLAUDE_CLI_MISSING` →

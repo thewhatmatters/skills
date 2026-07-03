@@ -4,7 +4,8 @@ The single source of truth for how a "research/automation" skill in this family
 is built. **`audit-skill` checks against this; a future `generate-skill`
 scaffolds to this.** Edit here once; both tools follow.
 
-Reference implementation: `scan-trends`. Last updated: 2026-05-20.
+Reference implementation: `scan-trends`. Last updated: 2026-07-03 (added A14
+trigger mode, the A1 branch test, and the deletion-test rubric item).
 
 ---
 
@@ -15,7 +16,10 @@ deviations should be deliberate, not accidental.
 
 1. **Lean SKILL.md + progressive disclosure.** SKILL.md (loaded every run) holds
    only core flow. Bulky/occasional detail (output templates, long tables) lives
-   in `references/` and is pulled in only when relevant.
+   in `references/` and is pulled in only when relevant. The inline-vs-references
+   test is **branch analysis**: material every run consults stays in SKILL.md;
+   material only some branches of the skill consult moves behind a reference
+   pointer.
 2. **YAML frontmatter.** `name` matches the directory; `description` is
    trigger-rich (verbs + example phrases the model will see) and accurate to
    current capability.
@@ -60,6 +64,21 @@ deviations should be deliberate, not accidental.
     non-expert reader, what it is / what you get / how to run it / what it needs
     / how it works — distinct from SKILL.md (model instructions) and the
     decision record (handoff/DESIGN). Every skill has one.
+14. **Deliberate trigger mode.** Model-invoked vs user-invoked is a design
+    decision, not a default. Model-invoked (the default) puts the description
+    in every session's context — pay that **context load** only when Claude
+    should fire the skill itself, keep the description trigger-rich (A2), and
+    accept that routing needs measurement (audit-skill `--triggers`).
+    User-invoked (`disable-model-invocation: true`, live-docs field) keeps the
+    description out of context entirely — right for side-effectful or
+    timing-sensitive workflows (deploy / announce / send) where the user
+    controls the trigger; the trade is **cognitive load** (the user must know
+    the skill exists). A2's trigger-rich requirement applies only to
+    model-invoked skills; a user-invoked description is written for the human
+    skill list. Steering text in either mode favors **leading words** — a few
+    meaning-dense terms used consistently (e.g. "vertical slice", "meaning-
+    preserving") whose adoption is observable in reasoning traces — over
+    paragraphs of instruction.
 
 ## B. Audit rubric
 
@@ -68,6 +87,8 @@ Each item is PASS / FAIL / N/A with file:line evidence.
 **Structure**
 - [ ] SKILL.md has valid frontmatter; `name` == dir; description trigger-rich.
 - [ ] SKILL.md is lean; bulky detail is in `references/`.
+- [ ] Inline content passes the branch test — no reference material that only
+      one branch of the skill consults (A1).
 - [ ] `README.md` present and plain-language (what / what you get / how to run
       / what it needs / how it works); distinct from SKILL.md.
 - [ ] Scripts: one concern each, docstring I/O contract, JSON-stdout /
@@ -89,6 +110,9 @@ Each item is PASS / FAIL / N/A with file:line evidence.
 
 **UX & output**
 - [ ] Standard flags present, consistent, and implemented (or marked reserved).
+- [ ] Trigger mode is deliberate (A14): side-effectful / manual-timing skills
+      set `disable-model-invocation: true` or record why model invocation is
+      wanted; trigger-rich description enforced only for model-invoked skills.
 - [ ] Self-contained artifact records request + date + results; works in `--agent`.
 - [ ] User can scope what runs (or it's deliberately all-in with rationale).
 
@@ -96,6 +120,9 @@ Each item is PASS / FAIL / N/A with file:line evidence.
 - [ ] No secret values in code, logs, memory, or committed files.
 - [ ] Non-obvious decisions recorded (decision log / memory).
 - [ ] Docs match reality (no stale references to removed features/sources).
+- [ ] Steering text survives the **deletion test** — no no-op paragraphs
+      (text whose removal would not change agent behavior) and no sediment
+      (duplicated or orphaned material across SKILL.md and `references/`).
 
 ## C. Severity guide (for findings)
 

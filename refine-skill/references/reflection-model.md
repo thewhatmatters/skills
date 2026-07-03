@@ -46,6 +46,39 @@ Always cite the message index `i` from the extractor in the finding, the same wa
 When a signal is ambiguous between bug and preference, ask: *would this change help
 every user of this skill, or just this task?* General → bug. Specific → preference.
 
+## Steering fixes — leading words before more prose (spec A14)
+
+A recurring bug sub-class: the transcript shows Claude **ignored or
+under-followed a SKILL.md instruction** (the step ran, the instruction's
+behavior didn't happen). Before proposing *more* instruction text — which
+fights the never-add-weight-cheaply rule — the first candidate fix is a
+**leading word**: replace the paragraph with (or anchor it on) one
+meaning-dense term used consistently across the skill's steps
+("vertical slice", "meaning-preserving", "report-only"). Two additions to
+the validation ladder for this sub-class:
+
+- **Trace echo** — in the re-run, the leading word appears in the agent's
+  reasoning/output around the affected step. No echo → the word isn't
+  landing; pick another.
+- **Deletion counterpart** — if the original paragraph is being replaced,
+  the diff should net *remove* text, not grow it.
+
+Two related signals with distinct routes:
+
+- **Leg-work failure** — a step was visibly rushed because the end goal was
+  in sight (thin clarifying questions before an eager output step, a skipped
+  exploration pass). More prose rarely fixes this. The candidate proposal is
+  **splitting the phase into its own skill** so the agent sees one step at a
+  time — route the design to the compose-over-extend decision (the vault's
+  `/claude/best-practices/compose-over-extend.md`) rather than fattening the
+  host skill.
+- **Deletion candidates** — sections of SKILL.md the transcript shows were
+  never consulted and never reflected in behavior are no-op suspects
+  (deletion test, spec §B Hygiene). n=1 still applies in reverse but with the
+  lower removal bar: propose the deletion when a section is *provably* inert
+  in this run AND looks inert by inspection; otherwise log an observation
+  and delete on recurrence.
+
 ## The n=1 overfitting guard (the most important rule)
 
 One session is a single, possibly unrepresentative, data point. Bias hard toward

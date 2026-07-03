@@ -1,6 +1,6 @@
 ---
 name: generate-skill
-description: Scaffold a new Claude Code skill against the house spec at ~/.claude/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a Claude skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Claude docs (offline fallback), validates frontmatter against the upstream field list, follows the 13 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
+description: Scaffold a new Claude Code skill against the house spec at ~/.claude/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a Claude skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Claude docs (offline fallback), validates frontmatter against the upstream field list, follows the 14 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
 ---
 
 # generate-skill
@@ -69,8 +69,13 @@ NATIVE: skip reconcile (no "live" to compare).
 Required (any not supplied via flags):
 - **name** — kebab-case, ≤64 chars, matches `^[a-z][a-z0-9-]*$`.
 - **one-line "what it does"** — used in `README.md` and the handoff seed.
-- **trigger-rich description** — verbs + example phrases users may say;
-  this is what Claude sees in the skill listing. Combined `description` +
+- **trigger mode** (spec A14) — model-invoked (default) or user-invoked
+  (`disable-model-invocation: true`). Heuristic: side-effectful / outward /
+  timing-sensitive skills (deploy, announce, send) → user-invoked.
+- **description** — for model-invoked skills: trigger-rich, verbs + example
+  phrases users may say; this is what Claude sees in the skill listing.
+  For user-invoked skills the description never enters the model's context —
+  write it for the human `/`-list instead. Combined `description` +
   `when_to_use` ≤ 1536 chars (live docs).
 
 Optional:
@@ -86,7 +91,7 @@ prompt.
 ## Step 5 — Scaffold
 
 Open `references/generation-recipe.md` and follow it. The recipe enforces the
-13 architecture patterns and uses the LIVE frontmatter field list from Step 2
+14 architecture patterns and uses the LIVE frontmatter field list from Step 2
 — **never invent a field that is not in the live docs**.
 
 Files created under `<out>/<name>/`:
@@ -102,7 +107,7 @@ Files created under `<out>/<name>/`:
   only when "needs scripts" was true (omit the whole dir otherwise).
 
 `--dry-run`: print the would-be tree + the proposed `SKILL.md` frontmatter +
-the opt-in line. Write nothing.
+the publish reminder. Write nothing.
 
 ## Step 6 — Self-audit
 
@@ -126,8 +131,9 @@ Print, in this order:
 
 1. The created tree (or dry-run plan).
 2. The honest verdict line from Step 6.
-3. The exact opt-in line for the user to add to `~/.claude/skills/.gitignore`:
-   `!/<name>/` — followed by `git add <name> .gitignore`.
+3. The publish reminder: `git add <name>` (the repo's `.gitignore` tracks all
+   skills by default — no opt-in line needed; secrets and generated junk are
+   already excluded).
 
 This skill does **not** run git.
 

@@ -9,8 +9,8 @@ Audit a target skill against the canonical spec at
 `~/.claude/skills/skill-architecture.md` and report severity-grouped findings
 with file:line evidence. Report only — never fix unless the user picks a scope.
 
-## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
+## 2. Reusable patterns (link to spec A1..A14)
+Follows `~/.claude/skills/skill-architecture.md` A1–A14. Notable points:
 - **A1 / single source of truth:** the rubric is **not** duplicated here — it
   lives once in the spec (§A patterns, §B rubric, §C severity). Editing the spec
   changes both this auditor and `generate-skill`. This is why audit-skill is

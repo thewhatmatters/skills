@@ -9,8 +9,8 @@ Created: 2026-05-24  ·  Generator: generate-skill @ CC 2.1.145
 Improve a skill by learning from one real session that used it — propose an
 evidence-grounded, validated diff for the user to approve.
 
-## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable:
+## 2. Reusable patterns (link to spec A1..A14)
+Follows `~/.claude/skills/skill-architecture.md` A1–A14. Notable:
 - **A1 progressive disclosure** — the judgement layer (taxonomy, evidence signals,
   validation ladder, overfit guard) lives in `references/reflection-model.md`;
   SKILL.md stays lean and routes to it.
