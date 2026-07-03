@@ -1,6 +1,6 @@
 # OKF authoring conventions (operational condensation)
 
-Loaded by SKILL.md Step 6. Source of truth: the mirrored spec in the vault at
+Loaded by SKILL.md Step 7. Source of truth: the mirrored spec in the vault at
 `reference/okf-spec-v0.1.md`. If this file and the mirror disagree, the
 mirror wins.
 
@@ -20,6 +20,10 @@ Cross-link with absolute form: [text](/path/to/concept.md).
 Conventional headings when applicable: # Schema, # Examples, # Citations.
 ```
 
+- Body structure/formatting follows the house markdown style spec:
+  `~/.claude/skills/format-markdown/references/markdown-style.md`. Where it
+  and OKF overlap (frontmatter, absolute links, reserved `index.md`/`log.md`),
+  OKF — this file — wins; the style spec's own deference table agrees.
 - `resource:` only when the concept describes one canonical asset (URI).
 - Citations: numbered list under `# Citations`; targets may be URLs,
   vault-absolute paths, or mirrors under `/reference/`.

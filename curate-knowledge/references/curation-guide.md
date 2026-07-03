@@ -1,6 +1,6 @@
 # Curation guide — what to extract, how to dedupe, how to ask
 
-Loaded by SKILL.md Steps 3–5 (spec A1 progressive disclosure).
+Loaded by SKILL.md Steps 3–6 (spec A1 progressive disclosure).
 
 ## The filter: what belongs in the vault
 

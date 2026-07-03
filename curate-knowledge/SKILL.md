@@ -51,6 +51,11 @@ SCRIPTS: `python3 scripts/preflight.py --vault=<vault>`. Gates:
   Graceful dead-end (spec A7d): if the chosen fix fails (e.g. create hits a
   permissions error), do not block — fall back to emitting a proposals file
   to `--out`, exactly as `--agent` does, and report the gate in the summary.
+- `SYNC_UNMOUNTED` (gated) — the vault's CloudStorage provider root is
+  absent, i.e. the sync client (Dropbox) likely isn't running. NEVER offer
+  to create a vault here — it would diverge from the synced copy.
+  Interactive: ask the user to start the sync client, then re-run preflight.
+  `--agent`: record the gate in the proposals file, stop.
 - `VAULT_READONLY` (down) — stop; nothing can be written.
 - Missing root `index.md` / `log.md` → degraded (they'll be created in Step 7).
 
@@ -68,7 +73,11 @@ Analyze the session transcript and/or project per
 decisions **with their why**, gotchas/quirks, playbooks, cross-project
 patterns. Filter OUT anything the repo already records (code structure, git
 history, CLAUDE.md content) and anything only relevant to this conversation.
-Draft each candidate's full article body, not just a title.
+Draft each candidate's full article body, not just a title. Bodies follow
+the house markdown style spec at
+`~/.claude/skills/format-markdown/references/markdown-style.md` (read it
+before drafting); OKF rules (frontmatter, absolute links, reserved files)
+win where they overlap — see the deference table in that spec.
 
 ## Step 4 — Dedupe
 

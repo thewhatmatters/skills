@@ -8,6 +8,7 @@ States per check: ready | degraded | gated | down  (with a gate id).
 import argparse
 import json
 import os
+import re
 import sys
 
 DEFAULT_VAULT = os.path.expanduser(
@@ -19,6 +20,15 @@ RANK = {"ready": 0, "degraded": 1, "gated": 2, "down": 3}
 
 def check_vault(vault):
     if not os.path.isdir(vault):
+        # A vault under ~/Library/CloudStorage can be absent *transiently*
+        # when the sync client (Dropbox etc.) isn't running. That is not a
+        # missing vault — creating a fresh bundle there would diverge from
+        # the synced copy once the client comes back.
+        m = re.match(r"^(.*/Library/CloudStorage/[^/]+)(/|$)", vault)
+        if m and not os.path.isdir(m.group(1)):
+            return ("gated", "SYNC_UNMOUNTED",
+                    f"cloud-sync root absent ({m.group(1)}) — sync client "
+                    "likely not running; do NOT create a new vault here")
         return ("gated", "VAULT_MISSING", f"vault not found at {vault}")
     if not os.access(vault, os.W_OK):
         return ("down", "VAULT_READONLY", f"vault not writable: {vault}")
@@ -44,7 +54,6 @@ def check_log(vault):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--vault", default=DEFAULT_VAULT)
-    ap.add_argument("--agent", action="store_true")
     args = ap.parse_args()
     vault = os.path.expanduser(args.vault)
 
