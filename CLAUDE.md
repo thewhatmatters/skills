@@ -120,3 +120,16 @@ Commit only when asked. The repo is maintained off `main` with fast-forward merg
 branch → commit → `git merge --ff-only <branch>` → `git push origin main` → delete the
 branch. Commits end with a `Co-Authored-By:` trailer. This repo never commits generated
 output, and skills themselves never run git.
+
+<!-- wire-vault:start -->
+## Knowledge vault — project layer
+
+This project's durable knowledge (overview, decisions, gotchas) lives in the
+cross-project vault at `~/Library/CloudStorage/Dropbox/Documents/Obsidian/claude/skills/`
+(default vault: `~/Library/CloudStorage/Dropbox/Documents/Obsidian`).
+
+- **Read first:** before re-deriving an architecture decision or re-debugging
+  a non-obvious issue, check `claude/skills/index.md` there.
+- **Write path:** durable insights go through `/curate-knowledge` (gated) —
+  never write vault articles directly.
+<!-- wire-vault:end -->
