@@ -9,8 +9,8 @@ fenced code blocks, .md targets only) so backlinks are computable by the
 consumer. Tool files (CLAUDE.md, HANDOFF.md) are infrastructure, not
 knowledge — skipped like reserved files.
 I/O: stdout JSON {vault, count, concepts:[{path, concept_id, type, title,
-description, tags, links}]} · stderr diagnostics · exit 0 unless the vault
-is absent.
+description, tags, timestamp, links}]} · stderr diagnostics · exit 0 unless
+the vault is absent.
 """
 import argparse
 import json
@@ -105,6 +105,7 @@ def main():
                 "title": fm.get("title"),
                 "description": fm.get("description"),
                 "tags": fm.get("tags", []),
+                "timestamp": fm.get("timestamp"),
                 "links": extract_links(text, dirpath, vault),
             })
 

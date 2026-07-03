@@ -1,6 +1,6 @@
 ---
 name: curate-knowledge
-description: Harvest durable, non-derivable knowledge from the current session or project and file it into the personal OKF vault (the Obsidian knowledge bundle) behind a mandatory human confirmation gate. Use when the user wants to capture what was learned — "curate knowledge", "capture what we learned", "add this to the vault", "save this to the knowledge base", "harvest this session", "remember this in the wiki", "/curate-knowledge". Extracts decisions (with their why), gotchas/platform quirks, playbooks/procedures, and cross-project patterns; filters OUT anything derivable from the repo (code structure, git history, CLAUDE.md content). Dedupes against existing vault concepts, then presents per-article pre-filled recommendations (type, title, description, tags, target path) that the user confirms or edits before ANY write. On approval writes OKF-conformant concepts, wires index.md files, appends to /log.md, and verifies conformance + links. Composes with handoff (session-boundary harvest point) and ingest-source (external URL/PDF captures route into reference/). Never auto-writes — in --agent mode it emits a proposals file instead of touching the vault.
+description: Harvest durable, non-derivable knowledge from the current session or project and file it into the personal OKF vault (the Obsidian knowledge bundle) behind a mandatory human confirmation gate. Use when the user wants to capture what was learned — "curate knowledge", "capture what we learned", "add this to the vault", "save this to the knowledge base", "harvest this session", "remember this in the wiki", "/curate-knowledge". Extracts decisions (with their why), gotchas/platform quirks, playbooks/procedures, and cross-project patterns; filters OUT anything derivable from the repo (code structure, git history, CLAUDE.md content). Dedupes against existing vault concepts, then presents per-article pre-filled recommendations (type, title, description, tags, target path) that the user confirms or edits before ANY write. On approval writes OKF-conformant concepts, wires index.md files, appends to /log.md, and verifies conformance + links. Composes with handoff (session-boundary harvest point) and ingest-source (external URL/PDF captures route into reference/). Also the vault's MAINTENANCE mode — use when the user wants the vault itself cleaned up: "groom the vault", "clean up the claude/ folder in the vault", "find stale or duplicate vault articles", "keep the vault fresh", "vault spring-cleaning" → `--groom[=<vault-folder>]` sweeps existing articles for duplicates, stale claims, orphans, and broken links, proposing merges/updates/archives through the same gate. Never auto-writes — in --agent mode it emits a proposals file instead of touching the vault.
 ---
 
 # curate-knowledge
@@ -32,7 +32,29 @@ session", or invoke `/curate-knowledge`. Optionally name a topic:
 | `--vault=PATH` | vault root override. Default: `/Users/digitalalchemist/Library/CloudStorage/Dropbox/Documents/Obsidian` |
 | `--scope=session\|project\|both` | what to harvest (default: `session`) |
 | `--relink` | maintenance mode: skip extraction, sweep the existing vault for missing cross-links between articles, and propose them as a batch through the gate |
+| `--groom[=FOLDER]` | maintenance mode: sweep an existing vault folder (vault-relative, e.g. `claude/` or `projects/conan/`; omit for the whole vault) for duplicates, stale content, orphans, and mechanical drift; propose merge/update/archive/fix actions through the gate. See "Groom mode" below |
 | `--dry-run` | extract, dedupe, and show the proposal table; write nothing |
+
+## Groom mode (`--groom`)
+
+Vault-only maintenance: the current working directory's project is irrelevant
+— everything read and written lives inside the vault. Re-routes the steps:
+
+- **Steps 0–2 unchanged.** The Step 2 scan always covers the whole vault even
+  when a folder is scoped — backlinks into the scoped folder are needed so
+  archives/merges never silently break other articles.
+- **Steps 3–5 are replaced** by the grooming sweep per
+  `references/grooming-guide.md` (read it first): classify scoped concepts
+  into duplicates → merge, stale claims → update/archive, orphans → wire,
+  mechanical drift → fix. Age alone is never grounds for removal; archive
+  (to `<vault>/archive/`) is the default over delete.
+- **Step 6 gate unchanged and mandatory** — every action (merge, update,
+  archive, delete, link fix) is a per-proposal confirmation. `--agent` emits
+  a grooming report to `--out` and writes nothing; `--dry-run` prints the
+  findings table and stops.
+- **Steps 7–8 unchanged** in contract: execute only approved actions, wire
+  indexes, log entries (`**Merge**`/`**Archive**`/`**Delete**` per the
+  guide), then verify the bundle.
 
 ## Step 0 — Mode probe
 

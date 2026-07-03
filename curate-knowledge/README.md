@@ -2,7 +2,9 @@
 
 **What it is:** Captures the durable lessons from a working session — decisions,
 gotchas, playbooks — and files them into your personal OKF knowledge vault,
-after you approve each one.
+after you approve each one. Also the vault's groundskeeper: `--groom` sweeps
+an existing vault folder for duplicates, stale articles, orphans, and broken
+links, and proposes the cleanup for your approval.
 
 ## What you get
 
@@ -18,6 +20,17 @@ Say things like "capture what we learned", "add this to the vault", or
 "harvest this session" — or invoke `/curate-knowledge`. Example:
 
 > capture what we learned about the Dropbox sync quirks
+
+To clean up the vault instead of adding to it, say "groom the vault" or name
+a folder:
+
+> /curate-knowledge --groom=claude/
+
+Duplicates get merged, stale claims updated, superseded articles archived (to
+`archive/`, not deleted) — each action shown as a diff you approve or skip.
+For always-fresh maintenance, schedule a weekly `--groom --agent` run: it
+writes a report of proposed cleanups, and a later interactive pass applies
+only what you approve.
 
 ## What it needs
 

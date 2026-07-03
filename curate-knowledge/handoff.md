@@ -72,6 +72,21 @@ deliberate deviations:
   keeps the skill dependency-free.
 - 2026-07-02: dedupe favors proposing an UPDATE to an existing concept over
   creating a near-duplicate file; the update is still gated.
+- 2026-07-03: **Added `--groom[=FOLDER]` maintenance mode** (vault cleanup:
+  duplicates → merge, stale claims → update/archive, orphans → wire,
+  mechanical drift → fix), detail in `references/grooming-guide.md`. Kept
+  IN this skill rather than a new `groom-vault` skill: it reuses the gate,
+  the scanner, the OKF conventions, and the dedupe rules wholesale, and
+  `--relink` already set the maintenance-mode precedent. Key policies:
+  age is a signal never a verdict (no removal proposals on timestamp
+  alone; unverifiable claims are flagged, not touched); archive to
+  `<vault>/archive/<original path>` is the default over hard delete; a
+  merge is ONE proposal covering all touched files (anti-gate-fatigue);
+  Step 2 scans the whole vault even under a folder scope so backlink
+  repair sees cross-topic referrers. `scan_vault.py` now also emits
+  `timestamp` (staleness triage input). "Always fresh" = scheduled
+  `--groom --agent` runs emitting reports + occasional interactive passes;
+  the HITL contract is unchanged.
 
 ## 4. Known limitations / environment caveats
 
