@@ -22,6 +22,18 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   because hooks can't summarize, and that session restart is user-driven.
 
 ## 3. Decision log
+- 2026-07-02: **Added `--harvest`** for the frequent-checkpoint workflow —
+  chains the step-5 harvest unconditionally (skips the ask, never the
+  per-article gate; ignored under `--agent`). HANDOFF.md itself deliberately
+  never syncs to the vault: it is session state, exactly what the curation
+  filter excludes — the vault gets the decisions/gotchas *behind* a
+  milestone, via the harvest.
+- 2026-07-02: **Added step 5 — offer a `curate-knowledge` harvest at the
+  session boundary** (before the `/clear` advice, since that skill reads the
+  live session). Conditional and interactive-only: offered only when the
+  session actually produced durable knowledge; skipped under `--agent`.
+  Deliberately a *suggestion hook*, not an extension — knowledge curation
+  stays a separate skill (different lifecycle: state capture vs curation).
 - 2026-05-24: built. Prompted by the user wanting to "stay smart" as context fills.
 - 2026-05-24: **Researched the premise first.** Context degradation ("context
   rot") is real and multiply-documented (Liu 2023 "Lost in the Middle"; Chroma
