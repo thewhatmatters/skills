@@ -48,6 +48,7 @@ automate-browser/tmp/
 /shadcn
 /next-best-practices
 /design-md
+/transitions-dev
 
 # --- Session handoff (per-machine; rebuilt each session via /handoff) --------
 # HANDOFF.md is the resume-ready session-state file the handoff skill writes;
