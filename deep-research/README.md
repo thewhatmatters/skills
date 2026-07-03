@@ -35,6 +35,10 @@ You can also tune the run:
 - `--type=<kind>` — force a specific research type (`market`, `competitive`,
   `feature`, `regulatory`, `product`, `problem`, `opportunity`, `landscape`).
   Default `auto` detects from your question.
+- `--parallel` / `--no-parallel` — fan the search sweep out to parallel
+  subagents, one per research angle (faster wall-clock, higher token cost),
+  or force the serial loop. Default: fan-out at `exhaustive`, serial
+  otherwise.
 - `--no-html` — markdown only.
 - `--dry-run` — show the research plan without doing the search or writing
   any files. Useful to sanity-check angles before committing to an
@@ -62,8 +66,11 @@ and Exa's semantic search. The skill never blocks on missing keys.
 2. **Plan.** Picks the section template for the research type and generates
    the right number of subquery angles for the chosen depth.
 3. **Search.** Runs the subqueries through Tavily/Exa (SCRIPTS) or built-in
-   WebSearch (NATIVE). When recency matters for one of the angles, it
-   invokes `/scan-trends` instead of normal search — skill composition.
+   WebSearch (NATIVE). At `exhaustive` depth (or with `--parallel`) the
+   sweep fans out to parallel subagents — one specialist per angle, each
+   returning distilled, cited findings — while synthesis still happens in
+   one place. When recency matters for one of the angles, it invokes
+   `/scan-trends` instead of normal search — skill composition.
 4. **Follow up** (standard/exhaustive depths). Finds gaps and chases them
    with targeted queries; fetches full content for the most cited sources.
 5. **Synthesize.** Fills in the type template, citing every claim inline,

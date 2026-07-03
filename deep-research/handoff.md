@@ -45,6 +45,20 @@ Notable choices:
 - **No clobber on output filenames.** Re-running on the same slug writes
   `research-<slug>-2.md`, `-3.md`, … (spec A11 layered fallback applied to
   filenames, same convention as `generate-prd`).
+- **Fan-out sweep (2026-07-03) — parallel gathering, serial synthesis.** At
+  `exhaustive` depth (opt-in at `standard` via `--parallel`) Step 4 fans the
+  sweep out to parallel general-purpose subagents, one per angle, governed by
+  `references/agent-fanout.md` (brief template + findings JSON contract).
+  Why: wall-clock (angles run concurrently) and — the bigger win — context
+  isolation: agents burn their own context reading pages and return only
+  distilled cited findings, keeping the main context fresh for synthesis.
+  Hard boundaries: gap analysis and synthesis never delegate; recency angles
+  stay in the main session (`/scan-trends` gates are interactive); degrades
+  to the serial sweep whenever the `Agent` tool is unavailable (spec A3).
+  Rejected: Workflow-tool orchestration (heavier dependency than the task
+  needs) and fan-out at `quick` (overhead exceeds the win). "Specialists"
+  are prompt-made — each agent's brief embeds its angle + the template
+  sections it feeds; there are no per-domain agent definitions to maintain.
 - **No DDG fallback inside `search.py`.** When neither Tavily nor Exa is
   available, the skill drops to NATIVE mode and uses Claude's
   `WebSearch` — *not* a third Python provider tier. This keeps `search.py`
@@ -65,6 +79,12 @@ Notable choices:
   - 🟡 shared `.env.example` "Used by:" notes were stale → updated to list
     `scan-trends, deep-research` for TAVILY/EXA (done; see §6).
 
+- 2026-07-03: added the parallel fan-out sweep — SKILL.md Steps 4–6 +
+  `--parallel`/`--no-parallel` flags + new `references/agent-fanout.md`;
+  README updated. No script changes (fan-out is model-orchestrated via the
+  Agent tool). Not yet exercised on a real run — `/refine-skill
+  deep-research` after the first parallel run.
+
 ## 4. Known limitations / environment caveats
 - NATIVE mode (no python3 or no keys) produces the same artifact but search
   quality may differ — Tavily's ranking and Exa's semantic match are
@@ -75,6 +95,10 @@ Notable choices:
   not relevant to deep-research, since we don't include a DDG path here.
 - Tavily/Exa rate limits apply to SCRIPTS mode; the skill doesn't enforce
   caching/dedupe across runs (each invocation makes fresh calls).
+- Fan-out multiplies token spend roughly with agent count, and agents in a
+  round can't see each other's results — cross-angle awareness only lands
+  at the central barrier (agent-fanout.md §3). Mitigated by the Step-5
+  follow-up round; accepted as the price of parallelism.
 
 ## 5. Audit rubric coverage
 See `skill-architecture.md` §B. Items expected to be N/A or special for

@@ -18,6 +18,9 @@ when needed (spec A1 — progressive disclosure):
   regulatory / product-eval / problem-solving / opportunity / landscape).
 - [`references/synthesis-rules.md`](references/synthesis-rules.md) — citation
   discipline, honesty rules, gap-flagging conventions.
+- [`references/agent-fanout.md`](references/agent-fanout.md) — parallel sweep:
+  the subagent brief, the findings contract, rounds, and degradation rules.
+  Loaded only when Step 4 chooses fan-out.
 
 ## Flags
 
@@ -25,6 +28,7 @@ when needed (spec A1 — progressive disclosure):
 |------|---------|
 | `--type=<kind>` | research type: `market`, `competitive`, `feature`, `regulatory`, `product`, `problem`, `opportunity`, `landscape`, `auto` (default `auto` — detect from question) |
 | `--depth=<level>` | `quick` (1 broad sweep, ~5 sources), `standard` (default — broad sweep + focused follow-up, ~12-20 sources), `exhaustive` (multi-pass, ~30+ sources, may take minutes) |
+| `--parallel` / `--no-parallel` | override the Step-4 execution choice: fan the sweep out to parallel subagents, or force the serial loop. Default auto: `exhaustive` fans out; `standard` and `quick` run serial. |
 | `--out=PATH` | output directory (default: current working dir). Files written as `research-<slug>.md` and (optionally) `research-<slug>.html`. |
 | `--name=<slug>` | explicit kebab slug for the output filenames; default = derived from the research question |
 | `--no-html` | skip the HTML render; markdown only |
@@ -96,15 +100,28 @@ Generate the subquery list:
 - `--depth=exhaustive`: 8–12 subqueries, multiple follow-up rounds, fetch
   full content via WebFetch for the top-cited sources.
 
-Show the plan to the user (interactive) and confirm: *Looks right? / Adjust
-angles / Cancel*. `--agent` proceeds silently with the plan.
+Show the plan to the user (interactive) — including the Step-4 execution
+strategy (serial or fan-out) — and confirm: *Looks right? / Adjust angles /
+Cancel*. `--agent` proceeds silently with the plan.
 
 `--dry-run` prints the plan + would-be file paths and **stops here** — no
 search, no synthesis, no files written.
 
 ## Step 4 — Broad sweep
 
-For each subquery in the plan, run search:
+Pick the execution strategy first:
+
+| depth | default | override |
+|-------|---------|----------|
+| `quick` | serial | none — fan-out overhead always exceeds the win here |
+| `standard` | serial | `--parallel` fans out |
+| `exhaustive` | fan-out | `--no-parallel` forces serial |
+
+Fan-out additionally requires the `Agent` tool. When it's unavailable (e.g.
+this skill is already running inside a subagent), drop to serial with a
+one-line notice — degrade, never block (spec A3).
+
+**Serial sweep** — for each subquery in the plan, run search:
 
 - **SCRIPTS:** `python3 scripts/search.py "<query>" [--provider=tavily|exa]
   [--n=10]` — returns `[{url, title, snippet, score, provider}, ...]` on
@@ -112,21 +129,43 @@ For each subquery in the plan, run search:
   missing.
 - **NATIVE:** use Claude's built-in `WebSearch` with the same query.
 
-Collect results across all subqueries into a working set. Deduplicate by URL.
+**Fan-out sweep** — load
+[`references/agent-fanout.md`](references/agent-fanout.md) and follow it. In
+short: one general-purpose subagent per subquery angle (cap 8; bundle
+overflow angles), all spawned in a single message so they run concurrently.
+Each agent gets the brief template from that file — its angle, the resolved
+mode (SCRIPTS with the absolute `search.py` path, or NATIVE), and the
+findings contract — and returns structured findings JSON (claims with source
+URLs and quote/inference markers), never prose.
+
+Either way: collect results across all subqueries into one working set and
+deduplicate by URL.
 
 If recency is one of the angles (e.g. "recent regulatory changes"), **invoke
-`/scan-trends`** for that subquery instead of search.py — this is normal skill
-composition, not a cross-skill import.
+`/scan-trends`** for that subquery instead of search — this is normal skill
+composition, not a cross-skill import. Always run it in the main session,
+never inside a subagent (its gates are interactive); in fan-out mode run it
+alongside the agents and merge its findings into the working set.
 
 ## Step 5 — Focused follow-up (standard & exhaustive only)
 
-Read the broad-sweep snippets. Identify 3–5 gaps where the type template's
+Read the broad-sweep findings. Identify 3–5 gaps where the type template's
 sections aren't yet well-covered. Issue targeted follow-up queries to fill
 those gaps. For the most authoritative sources, **fetch full content** via
 `WebFetch` (NATIVE) to extract specifics — pricing, exact quotes, contract
 terms, etc. — that snippets alone won't carry.
 
+Gap identification is **always central** — it needs the whole working set,
+so it never delegates. In fan-out mode, the follow-up queries then fan out as
+a second round under the same brief + contract, and full-content fetches of
+the top sources can be delegated per source — see
+[`references/agent-fanout.md` §4](references/agent-fanout.md).
+
 ## Step 6 — Synthesize the report
+
+Synthesis happens **only here, in the main session** — in fan-out mode the
+inputs are the deduped findings sets the agents returned; no agent ever
+writes report prose.
 
 Open [`references/synthesis-rules.md`](references/synthesis-rules.md) for the
 honesty discipline. The short version:
@@ -192,6 +231,11 @@ open questions: 4 items
 
 - **Composes with `/scan-trends`** for recency-focused subqueries; otherwise
   uses bundled `search.py` (Tavily → Exa). No cross-skill imports.
+- **Fan-out is an execution strategy, not a new pipeline** — parallel
+  gathering, serial synthesis. Subagents only search and distill to the
+  findings contract in `references/agent-fanout.md`; classification,
+  planning, gap analysis, and synthesis stay in the main session. Degrades
+  to the serial sweep whenever the `Agent` tool is unavailable.
 - Synthesis is model-driven; the script layer (`search.py`, `report.py`)
   does one concern each (spec A4).
 - Dual-mode (spec A3): SCRIPTS-with-keys preferred; NATIVE produces the same
