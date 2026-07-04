@@ -96,23 +96,38 @@ def _x_session():
                     PROFILE_DIR, headless=True, args=["--no-sandbox"])
                 label = "profile session"
             pg = ctx.pages[0] if ctx.pages else ctx.new_page()
+            # Distinguish "logged out" (a real setup gap → gate) from a
+            # transient x.com outage (never a gate — spec A7a), the same way
+            # runtime x.py separates NO_SESSION from TIMEOUT.
+            verdict = None
             try:
                 pg.goto("https://x.com/home", timeout=20000)
-                pg.wait_for_selector(
-                    '[data-testid="SideNav_AccountSwitcher_Button"]', timeout=8000)
-                ok = True
+                try:
+                    pg.wait_for_selector(
+                        '[data-testid="SideNav_AccountSwitcher_Button"]',
+                        timeout=8000)
+                    verdict = ("ready", f"{label} verified", None)
+                except PWT:
+                    if xmod._looks_logged_out(pg):
+                        verdict = ("gated",
+                                   f"{label} invalid (logged out/expired)",
+                                   "x_login")
+                    else:
+                        verdict = ("degraded",
+                                   f"{label} unverified — x.com slow or "
+                                   "changed markup (transient); retry later",
+                                   None)
             except PWT:
-                ok = False
+                verdict = ("degraded",
+                           "x.com unreachable (transient); retry later", None)
             for closer in (ctx, browser):
                 try:
                     closer and closer.close()
                 except Exception:
                     pass
-            if ok:
-                return "ready", f"{label} verified", None
-            return "gated", f"{label} invalid (logged out/expired)", "x_login"
+            return verdict
     except Exception as e:
-        return "gated", f"session unverifiable: {e}", "x_login"
+        return "degraded", f"session unverifiable ({e}) — transient, not a gate; retry later", None
 
 
 def _web_provider():

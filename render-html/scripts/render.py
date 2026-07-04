@@ -211,6 +211,7 @@ def log(msg):
 # as base64 data-URIs (true offline self-containment); local files are read
 # from disk. Any failure degrades to the original remote reference (spec A4/A7d).
 _INLINE_IMAGES = False
+_INPUT_DIR = None          # dir of the input .md; relative image paths resolve here
 _FETCH_TIMEOUT = 10        # seconds — never hang the render
 _MAX_IMG_BYTES = 10_000_000  # 10 MB cap; larger images stay remote
 
@@ -239,6 +240,10 @@ def resolve_image_src(url):
             data, mime = _fetch_remote(url)
         else:
             path = Path(url).expanduser()
+            if not path.is_absolute() and _INPUT_DIR is not None:
+                # relative to the markdown file, not the process cwd
+                candidate = _INPUT_DIR / path
+                path = candidate if candidate.exists() else path
             data, mime = path.read_bytes(), ""
         mime = mime or mimetypes.guess_type(url)[0] or "image/png"
         b64 = base64.b64encode(data).decode("ascii")
@@ -649,8 +654,10 @@ def main():
                     "prompts, so it is a no-op")
     args = ap.parse_args()
 
-    global _INLINE_IMAGES
+    global _INLINE_IMAGES, _INPUT_DIR
     _INLINE_IMAGES = args.inline_images
+    if args.input:
+        _INPUT_DIR = Path(args.input).expanduser().resolve().parent
 
     source = "stdin"
     if args.input:

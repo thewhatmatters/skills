@@ -21,6 +21,7 @@ polish-copy has no network, key, or binary dependencies.
 """
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -65,16 +66,20 @@ def check_copy_sources(path):
         return ("down", "PROJECT_NOT_FOUND", "no project dir to scan")
     found = set()
     n = 0
-    for p in root.rglob("*"):
-        n += 1
-        if n > 5000:
-            break
-        if any(part in SKIP_DIRS for part in p.parts):
-            continue
-        if p.suffix in SOURCE_EXTS and p.is_file():
-            found.add(p.suffix)
-            if len(found) >= 3:
+    # os.walk with pruning: never descend into SKIP_DIRS, so the entry
+    # budget is spent on real candidates, not node_modules contents.
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+        for name in filenames:
+            n += 1
+            if n > 5000:
                 break
+            if Path(name).suffix in SOURCE_EXTS:
+                found.add(Path(name).suffix)
+                if len(found) >= 3:
+                    break
+        if n > 5000 or len(found) >= 3:
+            break
     if found:
         return ("ready", None, f"sources: {', '.join(sorted(found))}")
     return ("degraded", "NO_COPY_SOURCES",

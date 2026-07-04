@@ -259,10 +259,11 @@ Required JSON keys: `title`, `date`, `type`, `summary`, `sections`,
 `sources`. The script validates these and exits with a clear FATAL message
 if any are missing.
 
-User-derived strings are HTML-escaped and brace-doubled (`{` → `{{`,
-`}` → `}}`) before passing through `.format()`, same brace-safety pattern
-as generate-prd's report.py — so research content containing literal
-`{...}` (pseudocode, JSON examples, regex) won't crash the renderer.
+User-derived strings are HTML-escaped only. Literal `{...}` in research
+content (pseudocode, JSON examples, regex) is safe because `.format()`
+substitutes replacement values verbatim and never re-parses them — values
+must not be brace-doubled, or `{{...}}` leaks into the rendered page.
+Same contract as generate-prd's report.py.
 
 ---
 

@@ -11,6 +11,7 @@ States per check: ready | degraded | gated | down  (with a gate id).
 """
 import argparse
 import json
+import os
 import shutil
 import sys
 
@@ -18,9 +19,17 @@ MARK = {"ready": "✅", "degraded": "⚠ ", "gated": "🔒", "down": "⛔"}
 RANK = {"ready": 0, "degraded": 1, "gated": 2, "down": 3}
 
 
+def claude_bin():
+    """Layered resolution (spec A11), same ladder as trigger_eval.py:
+    $CLAUDE_BIN override → on-PATH `claude`."""
+    return os.environ.get("CLAUDE_BIN") or shutil.which("claude")
+
+
 def check_claude_cli():
-    if shutil.which("claude"):
-        return ("ready", None, "`claude` CLI on PATH (triggering bake-off available)")
+    if claude_bin():
+        return ("ready", None,
+                "`claude` CLI resolved ($CLAUDE_BIN or PATH; "
+                "triggering bake-off available)")
     # A recoverable setup gap, not a transient error → a gate, never a silent
     # degrade. The structural audit still works without it.
     return ("gated", "CLAUDE_CLI_MISSING",

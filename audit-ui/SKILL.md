@@ -39,7 +39,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS**. Otherwise
 | `playwright` | gated `PLAYWRIGHT_MISSING` / `BROWSERS_MISSING` → a11y + visual unavailable until fixed (fix: `pip install playwright && python3 -m playwright install chromium`) |
 | `server` | gated `SERVER_UNREACHABLE` → all live dimensions blocked on a URL; **fix is the user's**: start the dev server (or pass `--url`). Never start it ourselves |
 | `axe` | ready (cached) / needs one-time CDN fetch / gated `AXE_UNAVAILABLE` with `--no-network` and no cache |
-| `lighthouse` | degraded `NODE_MISSING` → vitals unavailable; everything else still runs |
+| `lighthouse` | degraded `LIGHTHOUSE_UNAVAILABLE` → vitals unavailable; everything else still runs |
 | `design_md` | absent → tokens runs in no-spec mode (internal-consistency only) and points at the `design-md` skill |
 
 Scope precedence: `--agent` → all non-gated dimensions, no prompt. `--dims=` → exactly those (a gated selection fires its gate). Otherwise ask ONE `AskUserQuestion` (multiSelect, 4 options: a11y / visual / vitals / tokens), each option's description showing its live preflight status. Gates follow spec A7: unambiguous trigger, ask-don't-degrade interactively (*Fix it for me / I'll do it myself / Skip*), `--agent` bypass, graceful dead-end — a gate never blocks the other dimensions.

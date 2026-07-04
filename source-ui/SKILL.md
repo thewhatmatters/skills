@@ -30,7 +30,7 @@ Triggers on phrases like "show me examples of a pricing page", "how do other app
 Docs-only skill — no Python, no `scripts/`. The mode probe is **native**: check the available tool list for `mcp__mobbin__*` and `mcp__refero__*`.
 
 - **Both present →** FULL: route freely across Mobbin + Refero per `references/routing.md`.
-- **One present →** DEGRADED: use the one that is connected; note the gap in the summary.
+- **One present →** DEGRADED **only when the classified need's routed server is the connected one** (per `references/routing.md`): use it and note the gap in the summary. If the need routes to the *absent* server (e.g. `--styles` or a visual-system need → Refero; a flow/journey need → Refero; an image sweep → Mobbin), that is the same recoverable setup gap as neither-present: fire the Setup Gate below for that server — *connect it and retry* vs *proceed degraded on what's connected*. Under `--agent`: proceed degraded and record the gate in the summary.
 - **Neither present →** surface the gap as a Setup Gate (spec A7), don't degrade silently: name the missing servers (Mobbin / Refero are client-side MCP config Claude can't connect for you) and offer the choice — *connect them and retry* vs *proceed now on the web fallback*. Interactive: ask. Under `--agent`: skip the prompt, proceed on FALLBACK, and record the gate in the summary. FALLBACK = built-in WebSearch / WebFetch for textual precedent and named examples (no images). Never block.
 
 ## Steps 1..N — flow

@@ -20,7 +20,8 @@ What it detects (each may be null/false if absent):
                            animejs / lottie-react found in deps (respect, don't replace)
     tailwind             : bool — tailwindcss present
     package_manager      : npm | pnpm | yarn | bun | null
-    external_skills      : { "motion": bool } — the official Motion+ skill
+    external_skills      : { "motion": bool, "transitions-dev": bool } — the
+                           external skills SKILL.md defers to
                            installed under ~/.claude/skills
 
 I/O:
@@ -35,9 +36,10 @@ import re
 import sys
 from pathlib import Path
 
-# External skills add-motion defers Motion API knowledge to. False here means
-# SKILL.md takes the fallback path (references/motion-library.md + caveat).
-DEFERRAL_TARGETS = ("motion",)
+# External skills add-motion defers to. False here means SKILL.md takes the
+# fallback path (motion → references/motion-library.md + caveat;
+# transitions-dev → hand-write from references/css-animations.md).
+DEFERRAL_TARGETS = ("motion", "transitions-dev")
 
 OTHER_ANIM_LIBS = ("gsap", "react-spring", "@react-spring/web", "animejs",
                    "lottie-react", "@motionone/dom")

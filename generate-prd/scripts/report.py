@@ -44,11 +44,11 @@ EXPECTED JSON SHAPE
 BRACE SAFETY
     User-derived strings (title, summary, section bodies) routinely contain
     literal `{` and `}` — pseudocode, JSON examples, template placeholders.
-    Both the TEMPLATE-level `.format()` call AND the inner per-section
-    interpolation pre-double braces in user input via `safe_braces()` so
-    `.format()` treats them as literal characters rather than placeholder
-    lookups. Without this, a section containing `{user.name}` or `{"foo": 1}`
-    would raise `KeyError` and crash the renderer.
+    That is safe as-is: `.format()` substitutes replacement values verbatim
+    and never re-parses them, so a section containing `{user.name}` cannot
+    raise KeyError. Only the TEMPLATE string itself needs `{{ }}` escapes
+    (its CSS braces). Values must NOT be brace-doubled — doing so leaks
+    literal `{{...}}` into the rendered page.
 """
 
 import argparse
@@ -128,22 +128,17 @@ def log(msg):
     print(msg, file=sys.stderr)
 
 
-def safe_braces(s):
-    """Escape `{` and `}` so user content passes through `.format()` literally.
-
-    See module docstring "BRACE SAFETY".  Apply this to any string that
-    contains user input before it reaches `.format()`.
-    """
-    return s.replace("{", "{{").replace("}", "}}")
-
-
 def safe(s):
-    """HTML-escape AND brace-double a user-derived string for `.format()`."""
-    return safe_braces(html.escape(s))
+    """HTML-escape a user-derived string. Braces need no escaping: the
+    string is passed to `.format()` as a replacement value, which is
+    substituted verbatim, never re-parsed."""
+    return html.escape(s)
 
 
 def render_section(key, label, value):
-    """One <section> per PRD section, fully escaped + brace-safe."""
+    """One <section> per PRD section, fully escaped."""
+    if value is None:
+        value = ""
     text = value if isinstance(value, str) else json.dumps(value, indent=2)
     text = text or "(not discussed — see open questions)"
     return (f'<section id="{html.escape(key)}">'
@@ -179,7 +174,7 @@ def main():
         date=safe(str(data["date"])),
         source=safe(str(data.get("discussion_source", "—"))),
         summary=safe(str(data["summary"])),
-        body=body,  # already fully escaped + brace-safe via render_section
+        body=body,  # already fully escaped via render_section
     )
 
     if args.out:

@@ -32,10 +32,11 @@ Notable choices:
   SKILL.md stays lean (spec A1 progressive disclosure).
 - **`--dry-run` is implemented end-to-end**, not just listed in the flags
   table — Step 5 honors it explicitly and exits before any side effects.
-- **`report.py` brace-safety.** User-derived strings are HTML-escaped *and*
-  brace-doubled (`{` → `{{`, `}` → `}}`) before passing through `.format()`,
-  so PRD content containing literal `{...}` (pseudocode, JSON examples,
-  template placeholders) does not crash the renderer.
+- **`report.py` brace-safety.** User-derived strings are HTML-escaped only.
+  Literal `{...}` in PRD content is safe because `.format()` substitutes
+  replacement values verbatim and never re-parses them. (Corrected
+  2026-07-03: values were previously also brace-doubled on a mistaken
+  KeyError theory, which leaked literal `{{...}}` into the rendered page.)
 
 ## 3. Decision log
 - 2026-05-19: scaffolded by generate-skill (formal `/generate-skill`

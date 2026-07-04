@@ -21,7 +21,7 @@ Nothing to set up — Python standard library only, no keys, no network. It read
 2. Lists the skills available globally and in your project, so it knows what the executing agent can use.
 3. Splits the PRD into one-iteration stories, ordered by dependency (database → backend → UI), with verifiable criteria.
 4. Embeds the relevant discovered skill into each story (only skills that actually exist).
-5. Validates the JSON structure, then writes `prd.json`.
+5. Archives any prior `prd.json` for a different branch, writes the new `prd.json`, then validates its structure.
 6. If your project has no runner yet, offers to drop a `run-tasks.sh` in the project root — a loop that runs the stories one at a time with a fresh agent until they all pass. It's created only if you say yes, never overwrites an existing one, and is never run for you.
 
 ## Where to look next

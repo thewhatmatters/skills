@@ -105,6 +105,8 @@ def main():
         raw = open(args.inp).read() if args.inp else sys.stdin.read()
         doc = json.loads(raw)
     except OSError as e:
+        print(json.dumps({"ok": False, "errors": [f"cannot read input: {e}"],
+                          "warnings": [], "story_count": 0}, indent=2))
         print(f"FATAL: cannot read input ({e})", file=sys.stderr)
         sys.exit(1)
     except json.JSONDecodeError as e:

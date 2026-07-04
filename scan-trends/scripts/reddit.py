@@ -46,6 +46,11 @@ def fetch_json(url, retries=2, delay=3):
                 if attempt < retries - 1:
                     time.sleep(delay)
                     continue
+                # marker the caller/model can see — a rate limit must be
+                # distinguishable from a genuinely empty result so the
+                # documented web.py fallback can fire
+                print("[reddit] 429 rate limited — retries exhausted",
+                      file=sys.stderr)
                 return None
             r.raise_for_status()
             return r.json()

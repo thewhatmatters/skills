@@ -29,11 +29,12 @@ EXPECTED JSON SHAPE
 
 BRACE SAFETY
     User-derived strings (title, summary, section bodies) routinely contain
-    literal `{` and `}` — pseudocode, JSON examples, regex. The TEMPLATE-
-    level `.format()` call uses `safe()` to HTML-escape AND brace-double
-    user content, so research content containing literal `{...}` doesn't
-    crash the renderer with a KeyError. Same pattern as generate-prd's
-    report.py.
+    literal `{` and `}` — pseudocode, JSON examples, regex. That is safe
+    as-is: `.format()` substitutes replacement values verbatim and never
+    re-parses them, so only the TEMPLATE string itself needs `{{ }}`
+    escapes (its CSS braces). Values must NOT be brace-doubled — doing so
+    leaks literal `{{...}}` into the rendered page. Same contract as
+    generate-prd's report.py.
 """
 
 import argparse
@@ -127,14 +128,11 @@ def log(msg):
     print(msg, file=sys.stderr)
 
 
-def safe_braces(s):
-    """Escape `{` and `}` so user content passes through `.format()` literally."""
-    return s.replace("{", "{{").replace("}", "}}")
-
-
 def safe(s):
-    """HTML-escape AND brace-double a user-derived string for `.format()`."""
-    return safe_braces(html.escape(s))
+    """HTML-escape a user-derived string. Braces need no escaping: the
+    string is passed to `.format()` as a replacement value, which is
+    substituted verbatim, never re-parsed."""
+    return html.escape(s)
 
 
 def render_section(key, body):

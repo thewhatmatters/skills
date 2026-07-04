@@ -23,6 +23,7 @@ Caps at 500 strings / 2000 files, disclosed via `truncated` (no silent caps).
 """
 import argparse
 import json
+import os
 import re
 import sys
 from collections import Counter
@@ -133,7 +134,13 @@ def main():
         for c in candidates:
             files.extend(sorted(c.rglob("*")) if c.is_dir() else [c])
     else:
-        files = sorted(root.rglob("*"))
+        # os.walk with pruning: skip SKIP_DIRS subtrees entirely instead of
+        # materializing node_modules and filtering afterwards.
+        files = []
+        for dirpath, dirnames, filenames in os.walk(root):
+            dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+            files.extend(Path(dirpath) / f for f in filenames)
+        files.sort()
 
     strings, scanned = [], 0
     for p in files:

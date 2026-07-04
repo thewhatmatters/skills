@@ -107,11 +107,11 @@ friendly) recording title, date, source, summary, and every section.
 Required JSON keys: `title`, `date`, `summary`, `sections`. The script
 validates these and exits with a clear FATAL message if any are missing.
 
-User-derived strings (title, summary, section bodies) are both HTML-escaped
-*and* brace-doubled (`{` → `{{`, `}` → `}}`) before passing through
-`.format()` — so PRD content containing literal `{...}` (pseudocode, JSON
-examples, template placeholders) does not crash the renderer with a
-`KeyError`.
+User-derived strings (title, summary, section bodies) are HTML-escaped
+only. Literal `{...}` in PRD content (pseudocode, JSON examples, template
+placeholders) is safe as-is: `.format()` substitutes replacement values
+verbatim and never re-parses them, so no KeyError is possible and no
+brace-doubling is needed (doubling would leak `{{...}}` into the page).
 
 ## 5. Dry-run summary shape (Step 5)
 

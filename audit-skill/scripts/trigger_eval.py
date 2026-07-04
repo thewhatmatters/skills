@@ -99,11 +99,11 @@ def main():
 
     try:
         evals = json.loads(open(args.eval_set).read())
-    except OSError as e:
+    except (OSError, ValueError) as e:
         print(f"FATAL: cannot read eval set ({e})", file=sys.stderr)
         sys.exit(1)
 
-    if not shutil.which("claude"):
+    if not claude_bin():
         print("WARN: `claude` CLI not found — results will be inconclusive "
               "(run preflight.py).", file=sys.stderr)
 
@@ -128,8 +128,14 @@ def main():
 
     out = json.dumps(payload, indent=2)
     if args.out:
-        open(args.out, "w").write(out)
-        print(f"\nwrote {args.out}", file=sys.stderr)
+        try:
+            open(args.out, "w").write(out)
+            print(f"\nwrote {args.out}", file=sys.stderr)
+        except OSError as e:
+            # never lose a paid-for run to an unwritable path
+            print(f"WARN: cannot write {args.out} ({e}); printing results "
+                  "to stdout instead", file=sys.stderr)
+            print(out)
     else:
         print(out)
 
