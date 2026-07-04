@@ -1,6 +1,28 @@
 ---
 name: curate-knowledge
-description: Harvest durable, non-derivable knowledge from the current session or project and file it into the personal OKF vault (the Obsidian knowledge bundle) behind a mandatory human confirmation gate. Use when the user wants to capture what was learned — "curate knowledge", "capture what we learned", "add this to the vault", "save this to the knowledge base", "harvest this session", "remember this in the wiki", "/curate-knowledge". Extracts decisions (with their why), gotchas/platform quirks, playbooks/procedures, and cross-project patterns; filters OUT anything derivable from the repo (code structure, git history, CLAUDE.md content). Dedupes against existing vault concepts, then presents per-article pre-filled recommendations (type, title, description, tags, target path) that the user confirms or edits before ANY write. On approval writes OKF-conformant concepts, wires index.md files, appends to /log.md, and verifies conformance + links. Composes with handoff (session-boundary harvest point) and ingest-source (external URL/PDF captures route into reference/). Also the vault's MAINTENANCE mode — use when the user wants the vault itself cleaned up: "groom the vault", "clean up the claude/ folder in the vault", "find stale or duplicate vault articles", "keep the vault fresh", "vault spring-cleaning" → `--groom[=<vault-folder>]` sweeps existing articles for duplicates, stale claims, orphans, and broken links, proposing merges/updates/archives through the same gate. Never auto-writes — in --agent mode it emits a proposals file instead of touching the vault.
+description: >-
+  Harvest durable, non-derivable knowledge from the current session or project
+  and file it into the personal OKF vault (the Obsidian knowledge bundle)
+  behind a mandatory human confirmation gate. Use when the user wants to
+  capture what was learned — "curate knowledge", "capture what we learned",
+  "add this to the vault", "save this to the knowledge base", "harvest this
+  session", "remember this in the wiki", "/curate-knowledge". Extracts
+  decisions (with their why), gotchas/platform quirks, playbooks/procedures,
+  and cross-project patterns; filters OUT anything derivable from the repo
+  (code structure, git history, CLAUDE.md content). Dedupes against existing
+  vault concepts, then presents per-article pre-filled recommendations (type,
+  title, description, tags, target path) that the user confirms or edits
+  before ANY write. On approval writes OKF-conformant concepts, wires index.md
+  files, appends to /log.md, and verifies conformance + links. Composes with
+  handoff (session-boundary harvest point) and ingest-source (external URL/PDF
+  captures route into reference/). Also the vault's MAINTENANCE mode — use
+  when the user wants the vault itself cleaned up: "groom the vault", "clean
+  up the claude/ folder in the vault", "find stale or duplicate vault
+  articles", "keep the vault fresh", "vault spring-cleaning" →
+  `--groom[=<vault-folder>]` sweeps existing articles for duplicates, stale
+  claims, orphans, and broken links, proposing merges/updates/archives through
+  the same gate. Never auto-writes — in --agent mode it emits a proposals file
+  instead of touching the vault.
 ---
 
 # curate-knowledge

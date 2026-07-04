@@ -1,6 +1,23 @@
 ---
 name: craft-claude
-description: Author, audit, and maintain a project's CLAUDE.md and its memory ecosystem — nested CLAUDE.md, CLAUDE.local.md, .claude/rules/ path-scoped rules, and @-imports — against verified Claude Code mechanics, not folklore. Use when the user wants to set up, write, review, lint, tighten, or prune CLAUDE.md — "set up CLAUDE.md for this project", "write/scaffold a CLAUDE.md", "review/audit our CLAUDE.md", "is our CLAUDE.md any good", "trim/prune CLAUDE.md", "our CLAUDE.md is too long / being ignored", "add coding rules", "split rules into .claude/rules", "scope rules to a subdirectory", "convert soft rules to hard rules", "make Claude follow our conventions". Three modes off a project probe — AUTHOR (scaffold an opinionated CLAUDE.md, layered above built-in /init), AUDIT (report-only, severity-grouped: line bloat vs the ~200-line soft target, soft rules where hard belong, inlined examples that should be file:line refs, stale rules, missed scoped-rules splits), MAINTAIN (prune/staleness). Spec-bound to references/claude-md-spec.md. Never edits a project's CLAUDE.md without a consent gate. Operates on the USER's project — not on skills (that's audit-skill) and not on settings.json/hooks (that's update-config).
+description: >-
+  Author, audit, and maintain a project's CLAUDE.md and its memory ecosystem —
+  nested CLAUDE.md, CLAUDE.local.md, .claude/rules/ path-scoped rules, and
+  @-imports — against verified Claude Code mechanics, not folklore. Use when
+  the user wants to set up, write, review, lint, tighten, or prune CLAUDE.md —
+  "set up CLAUDE.md for this project", "write/scaffold a CLAUDE.md",
+  "review/audit our CLAUDE.md", "is our CLAUDE.md any good", "trim/prune
+  CLAUDE.md", "our CLAUDE.md is too long / being ignored", "add coding rules",
+  "split rules into .claude/rules", "scope rules to a subdirectory", "convert
+  soft rules to hard rules", "make Claude follow our conventions". Three modes
+  off a project probe — AUTHOR (scaffold an opinionated CLAUDE.md, layered
+  above built-in /init), AUDIT (report-only, severity-grouped: line bloat vs
+  the ~200-line soft target, soft rules where hard belong, inlined examples
+  that should be file:line refs, stale rules, missed scoped-rules splits),
+  MAINTAIN (prune/staleness). Spec-bound to references/claude-md-spec.md.
+  Never edits a project's CLAUDE.md without a consent gate. Operates on the
+  USER's project — not on skills (that's audit-skill) and not on
+  settings.json/hooks (that's update-config).
 ---
 
 # craft-claude

@@ -1,6 +1,25 @@
 ---
 name: use-grid-system
-description: Bring a GENUINE Josef Müller-Brockmann modular grid (International Typographic Style) into web app and design projects — TailwindCSS-first. Use when the user wants a real, load-bearing grid: "put this on a grid", "Müller-Brockmann / Swiss / International Typographic Style layout", "add a column + baseline grid", "grid overlay toggle", "align everything to the grid / to the baseline", "make this editorial/magazine layout", "set up our grid system", "a 12-column modular grid for this dashboard/app". Encodes the discipline (columns + row fields/modules on constant gutters, an 8px baseline rhythm, grotesque type, flush-left, restrained black/white/red) AND the front-end engineering to make the grid real, visible, and verified: one Tailwind @theme source of truth, subgrid bands that place by column LINE, a toggleable column+baseline overlay (the g key), runtime optical alignment so display ink (not its box) lands on the line, and verification composed via audit-ui/automate-browser. Two profiles: editorial (strict fields) and app (column-line + baseline, relaxed rows). Probes the project first and never imposes Tailwind on a non-Tailwind codebase. Composes with build-ui (execution), frontend-design (taste), design-md (owns the token spec), source-ui (reference). Do NOT use to audit a skill (audit-skill) or for general UI work without a grid mandate (build-ui).
+description: >-
+  Bring a GENUINE Josef Müller-Brockmann modular grid (International
+  Typographic Style) into web app and design projects — TailwindCSS-first. Use
+  when the user wants a real, load-bearing grid: "put this on a grid",
+  "Müller-Brockmann / Swiss / International Typographic Style layout", "add a
+  column + baseline grid", "grid overlay toggle", "align everything to the
+  grid / to the baseline", "make this editorial/magazine layout", "set up our
+  grid system", "a 12-column modular grid for this dashboard/app". Encodes the
+  discipline (columns + row fields/modules on constant gutters, an 8px
+  baseline rhythm, grotesque type, flush-left, restrained black/white/red) AND
+  the front-end engineering to make the grid real, visible, and verified: one
+  Tailwind @theme source of truth, subgrid bands that place by column LINE, a
+  toggleable column+baseline overlay (the g key), runtime optical alignment so
+  display ink (not its box) lands on the line, and verification composed via
+  audit-ui/automate-browser. Two profiles: editorial (strict fields) and app
+  (column-line + baseline, relaxed rows). Probes the project first and never
+  imposes Tailwind on a non-Tailwind codebase. Composes with build-ui
+  (execution), frontend-design (taste), design-md (owns the token spec),
+  source-ui (reference). Do NOT use to audit a skill (audit-skill) or for
+  general UI work without a grid mandate (build-ui).
 ---
 
 # use-grid-system

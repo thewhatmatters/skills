@@ -1,6 +1,25 @@
 ---
 name: ingest-source
-description: Ingest any source — a YouTube video, webpage/article, PDF, image, or local document — into a structured, cited markdown summary, then save it as project knowledge in docs/sources/ with an index that CLAUDE.md @-imports so future sessions are informed by it. Use when the user supplies a link or file and wants it summarized, transcribed, captured, or remembered for the project — "summarize this YouTube video", "tl;dr this video/article", "what does this video/page/PDF say", "key points with timestamps", "notes from this talk", "ingest this", "capture this source", "add this PDF/article to the project docs", "save this for the project", "remember this source". YouTube: watches audio + visuals via the Gemini API when a Google key is present (best for on-screen demos/text), else keyless timestamped captions via yt-dlp; public videos only for the watch tier. Webpages: fetched and distilled, with browser fallback for JS-heavy pages. PDFs and images: read natively. Adapts structure to the content (tutorial → steps; top-N → ranked items; review → pros/cons; talk/essay → key points; spec/paper → key facts + structure map). Persisting is the default; --no-save for a summary only. Asks whether to save to the project (docs/sources/), the personal OKF vault (routed through curate-knowledge — "ingest this into the vault"), or both. Replaces summarize-yt. Pairs with render-html for a branded page.
+description: >-
+  Ingest any source — a YouTube video, webpage/article, PDF, image, or local
+  document — into a structured, cited markdown summary, then save it as
+  project knowledge in docs/sources/ with an index that CLAUDE.md @-imports so
+  future sessions are informed by it. Use when the user supplies a link or
+  file and wants it summarized, transcribed, captured, or remembered for the
+  project — "summarize this YouTube video", "tl;dr this video/article", "what
+  does this video/page/PDF say", "key points with timestamps", "notes from
+  this talk", "ingest this", "capture this source", "add this PDF/article to
+  the project docs", "save this for the project", "remember this source".
+  YouTube: watches audio + visuals via the Gemini API when a Google key is
+  present (best for on-screen demos/text), else keyless timestamped captions
+  via yt-dlp; public videos only for the watch tier. Webpages: fetched and
+  distilled, with browser fallback for JS-heavy pages. PDFs and images: read
+  natively. Adapts structure to the content (tutorial → steps; top-N → ranked
+  items; review → pros/cons; talk/essay → key points; spec/paper → key facts +
+  structure map). Persisting is the default; --no-save for a summary only.
+  Asks whether to save to the project (docs/sources/), the personal OKF vault
+  (routed through curate-knowledge — "ingest this into the vault"), or both.
+  Replaces summarize-yt. Pairs with render-html for a branded page.
 ---
 
 # ingest-source

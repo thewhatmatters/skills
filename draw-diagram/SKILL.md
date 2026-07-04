@@ -1,6 +1,17 @@
 ---
 name: draw-diagram
-description: Turn intent into Mermaid diagrams — flowcharts, user flows, ERDs, sequence, state, architecture, and requirement diagrams — and render them as a fenced Markdown block, an SVG/PNG, or a self-contained HTML page. Use when the user wants to draw or generate a diagram, flow, or chart from a description — "draw a diagram", "make a flowchart", "diagram this", "user flow for X", "sequence/ER/state/architecture diagram", "visualize this process", "turn this into mermaid", "add a PRD diagram". Generates Mermaid syntax (the source of truth) and renders it through a graceful ladder: the fenced block always works; SVG/PNG come from the mmdc CLI (global or via npx) with a Kroki network fallback. Composes with render-html (branded embed) and generate-prd. Pure-stdlib Python core; Node and network are optional.
+description: >-
+  Turn intent into Mermaid diagrams — flowcharts, user flows, ERDs, sequence,
+  state, architecture, and requirement diagrams — and render them as a fenced
+  Markdown block, an SVG/PNG, or a self-contained HTML page. Use when the user
+  wants to draw or generate a diagram, flow, or chart from a description —
+  "draw a diagram", "make a flowchart", "diagram this", "user flow for X",
+  "sequence/ER/state/architecture diagram", "visualize this process", "turn
+  this into mermaid", "add a PRD diagram". Generates Mermaid syntax (the
+  source of truth) and renders it through a graceful ladder: the fenced block
+  always works; SVG/PNG come from the mmdc CLI (global or via npx) with a
+  Kroki network fallback. Composes with render-html (branded embed) and
+  generate-prd. Pure-stdlib Python core; Node and network are optional.
 ---
 
 # draw-diagram
