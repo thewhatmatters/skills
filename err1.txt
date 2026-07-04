@@ -1,5 +1,0 @@
-craft-claude readiness
-  ✅ spec         claude-md-spec.md readable
-  ✅ target       target project dir readable (/private/tmp/claude-501/-Users-digitalalchemist-Library-CloudStorage-Dropbox-Documents-Obsidian/3baf67e3-779c-467e-be0a-c2679d0e2839/scratchpad/proj)
-  ✅ render_html  render-html available for branded reports
-  → overall: ready
