@@ -15,7 +15,7 @@ import re
 import sys
 
 DEFAULT_VAULT = os.path.expanduser(
-    "~/Library/CloudStorage/Dropbox/Documents/Obsidian"
+    "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN"
 )
 # Tool files (CLAUDE.md, HANDOFF.md) are a documented producer deviation:
 # infrastructure with externally-defined formats, exempt from the frontmatter

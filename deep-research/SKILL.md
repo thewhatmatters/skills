@@ -131,8 +131,9 @@ one-line notice — degrade, never block (spec A3).
 
 **Fan-out sweep** — load
 [`references/agent-fanout.md`](references/agent-fanout.md) and follow it. In
-short: one general-purpose subagent per subquery angle (cap 8; bundle
-overflow angles), all spawned in a single message so they run concurrently.
+short: one subagent per subquery angle (`research-worker` when available,
+else `general-purpose` — see §1 there; cap 8; bundle overflow angles), all
+spawned in a single message so they run concurrently.
 Each agent gets the brief template from that file — its angle, the resolved
 mode (SCRIPTS with the absolute `search.py` path, or NATIVE), and the
 findings contract — and returns structured findings JSON (claims with source

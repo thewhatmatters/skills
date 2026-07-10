@@ -35,7 +35,7 @@ only what you approve.
 ## What it needs
 
 Nothing beyond the vault itself (default:
-`~/Library/CloudStorage/Dropbox/Documents/Obsidian`). No API keys, no network.
+`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN`). No API keys, no network.
 Python 3 makes the scans faster, but the skill works without it.
 
 ## How it works (high level)

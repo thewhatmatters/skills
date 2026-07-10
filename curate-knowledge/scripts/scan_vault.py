@@ -19,7 +19,7 @@ import re
 import sys
 
 DEFAULT_VAULT = os.path.expanduser(
-    "~/Library/CloudStorage/Dropbox/Documents/Obsidian"
+    "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN"
 )
 RESERVED = {"index.md", "log.md"}
 TOOL_FILES = {"claude.md", "handoff.md"}  # compared case-insensitively (macOS FS)

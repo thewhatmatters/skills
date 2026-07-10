@@ -12,7 +12,7 @@ import re
 import sys
 
 DEFAULT_VAULT = os.path.expanduser(
-    "~/Library/CloudStorage/Dropbox/Documents/Obsidian"
+    "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN"
 )
 MARK = {"ready": "✅", "degraded": "⚠ ", "gated": "🔒", "down": "⛔"}
 RANK = {"ready": 0, "degraded": 1, "gated": 2, "down": 3}

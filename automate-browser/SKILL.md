@@ -125,6 +125,14 @@ just need to *understand* a page — screenshots cost vision tokens.
   browser closes and anything staged in an open dialog/wizard (an unclicked
   Apply/Save) is discarded — only committed state persists. Always finish
   open → edit → **Apply → verify** inside one script.
+- **Overlays eat clicks — fail fast:** first-run/onboarding/what's-new modals
+  (which a fresh persistent profile WILL hit, even when the user's own browser
+  never shows them) intercept pointer events; Playwright retries for the full
+  30s timeout and the error names the blocking element. Probe with a per-call
+  timeout (`.click(timeout=5000)`) so a blocked click fails fast — don't lower
+  the page-wide default, which also governs `goto` on heavy SPAs. Dismiss
+  dialogs first (`interactive_outline` shows their buttons; there may be
+  **several stacked** — loop until none is visible), then act.
 - **Heavy SPAs amortize badly:** each script re-pays launch + full app load
   (a GA4/console-class SPA costs ~10s before the first action). Batch
   discover→act→verify into fewer, larger scripts instead of one action per run.

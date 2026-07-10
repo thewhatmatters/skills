@@ -18,7 +18,7 @@ fan-out. Two invariants govern everything here:
 | Agents per round | one per subquery angle, **cap 8** |
 | More angles than 8 | bundle related angles (e.g. `pricing` + `business model`) into one agent |
 | Spawn | all agents of a round in a **single message** so they run concurrently |
-| Agent type | `general-purpose` (needs Bash for SCRIPTS mode, WebSearch/WebFetch for NATIVE) |
+| Agent type | `research-worker` when the Agent tool offers it (its definition already carries the constraints + contract, so the brief can shrink to the variables: question, angle, sections, mode, budget); else `general-purpose` with the full §2 brief (needs Bash for SCRIPTS mode, WebSearch/WebFetch for NATIVE) |
 | Recency angles | **excluded** from fan-out — run `/scan-trends` in the main session (its gates are interactive) and merge its findings at the barrier |
 
 ## 2. The agent brief

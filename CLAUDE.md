@@ -125,8 +125,8 @@ output, and skills themselves never run git.
 ## Knowledge vault — project layer
 
 This project's durable knowledge (overview, decisions, gotchas) lives in the
-cross-project vault at `~/Library/CloudStorage/Dropbox/Documents/Obsidian/claude/skills/`
-(default vault: `~/Library/CloudStorage/Dropbox/Documents/Obsidian`).
+cross-project vault at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN/claude/skills/`
+(default vault: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN`).
 
 - **Read first:** before re-deriving an architecture decision or re-debugging
   a non-obvious issue, check `claude/skills/index.md` there.

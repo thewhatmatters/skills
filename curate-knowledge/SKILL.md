@@ -51,7 +51,7 @@ session", or invoke `/curate-knowledge`. Optionally name a topic:
 |------|---------|
 | `--agent` | non-interactive (spec A7b). The HITL gate CANNOT be bypassed, so this mode never writes to the vault — it writes a proposals file to `--out` for later interactive review. |
 | `--out=PATH` | where the `--agent` proposals file and `--dry-run` plan go (default: session scratchpad) |
-| `--vault=PATH` | vault root override. Default: `/Users/digitalalchemist/Library/CloudStorage/Dropbox/Documents/Obsidian` |
+| `--vault=PATH` | vault root override. Default: `/Users/digitalalchemist/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN` |
 | `--scope=session\|project\|both` | what to harvest (default: `session`) |
 | `--relink` | maintenance mode: skip extraction, sweep the existing vault for missing cross-links between articles, and propose them as a batch through the gate |
 | `--groom[=FOLDER]` | maintenance mode: sweep an existing vault folder (vault-relative, e.g. `claude/` or `projects/conan/`; omit for the whole vault) for duplicates, stale content, orphans, and mechanical drift; propose merge/update/archive/fix actions through the gate. See "Groom mode" below |

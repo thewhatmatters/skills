@@ -42,7 +42,7 @@ the whole artifact).
    session scratchpad, never into repos or the vault. (Learned 2026-07-03:
    an auditor's stderr capture landed in the skills repo and got committed.)
 5. **Second-brain knowledge layer (required).** Every agent leverages the
-   OKF vault at `~/Library/CloudStorage/Dropbox/Documents/Obsidian/` in both
+   OKF vault at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN/` in both
    directions: **consume** — before judging, consult the vault articles
    relevant to its domain (house decisions, platform gotchas) and cite them
    by vault path when they inform a finding; **feed** — when evidence

@@ -29,7 +29,7 @@ base", or invoke `/wire-vault` from the project directory.
 |------|---------|
 | `--agent` | non-interactive (spec A7b): probe + report only; NEVER edits the project CLAUDE.md or the vault — prints the marker block for manual paste |
 | `--project=NAME` | override the probed project name |
-| `--vault=PATH` | vault root override (default: `~/Library/CloudStorage/Dropbox/Documents/Obsidian`) |
+| `--vault=PATH` | vault root override (default: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN`) |
 
 ## Step 0 — Mode
 

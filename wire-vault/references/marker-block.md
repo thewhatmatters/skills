@@ -11,7 +11,7 @@ and replaces everything between them, inclusive).
 
 This project's durable knowledge (overview, decisions, gotchas) lives in the
 cross-project vault at `<vault>/projects/<name>/`
-(default vault: `~/Library/CloudStorage/Dropbox/Documents/Obsidian`).
+(default vault: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN`).
 
 - **Read first:** before re-deriving an architecture decision or re-debugging
   a non-obvious issue, check `projects/<name>/index.md` there.
