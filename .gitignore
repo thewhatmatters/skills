@@ -1,0 +1,66 @@
+# =============================================================================
+# Commit everything under ~/.claude/skills EXCEPT secrets and generated junk.
+# (Switched from the earlier opt-in whitelist — all skills are now tracked.)
+# =============================================================================
+
+# --- Secrets — NEVER commit ---------------------------------------------------
+# .env holds Tavily/Exa keys + X auth_token. .env.* covers .env.local etc.
+# .env.example is the committed template (re-included below).
+.env
+.env.*
+!.env.example
+
+# Local, machine-specific Claude permission allowlists — not shared.
+**/settings.local.json
+
+# --- Generated / runtime junk -------------------------------------------------
+# Runtime caches (docs cache, browser profiles, etc.)
+**/.cache/
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Generated per-run artifacts
+results.html
+
+# automate-browser scratch output (screenshots, scraped pages, etc.)
+automate-browser/tmp/
+
+# --- Symlinked third-party skills (not ours to commit) -----------------------
+# Skills installed by other apps (Conan, etc.) sometimes drop a symlink into
+# ~/.claude/skills. Their source lives elsewhere; just ignore the symlink here.
+/conan-change-radio
+
+# --- External skill installer (shadcn/ui official skill, etc.) ---------------
+# Compose with external skills; don't vendor their source. `skills-lock.json`
+# (committed) pins the version + hash so a fresh checkout can re-install
+# deterministically. The install artifacts live here and stay local:
+/.agents/
+/.claude/skills/
+# Plus top-level symlinks we add by hand so each skill is discoverable as a
+# *user-global* skill (the installer drops them under .claude/skills/ which
+# only works when cwd is here; the symlinks at top-level resolve the same
+# install from any project). Same pattern as /conan-change-radio above.
+/shadcn
+/next-best-practices
+/design-md
+/transitions-dev
+
+# --- Session handoff (per-machine; rebuilt each session via /handoff) --------
+# HANDOFF.md is the resume-ready session-state file the handoff skill writes;
+# .claude/current-task.txt is the one-line label the status line reads;
+# .claude/handoff-archive/ is the PreCompact hook's rolling snapshot history
+# (machine-local debug history, not curated memory — that lives in
+# ~/.claude/projects/<encoded>/memory/ via the typed-memory system).
+# All session-local and don't belong in the shared repo.
+/HANDOFF.md
+/.claude/current-task.txt
+/.claude/handoff-archive/
+
+# macOS
+.DS_Store
+/remotion-best-practices
