@@ -16,7 +16,7 @@ against a format another skill owns:
 
 | Target | Owner — defer entirely |
 |--------|------------------------|
-| OKF reserved files (`index.md`, `log.md`) and article frontmatter | `curate-knowledge/references/okf-conventions.md` |
+| OKF reserved files (`index.md`, `log.md`) and article frontmatter | `curate-vault/references/okf-conventions.md` |
 | Vault article *bodies* | This spec (structure) within OKF's body rules (absolute links, `# Citations`) |
 | `CLAUDE.md` / `.claude/rules/` | `craft-claude` |
 | Copy *content* quality (word choice, tone, CTAs) | `polish-copy` |

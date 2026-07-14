@@ -10,7 +10,7 @@ area in the vault, and optionally creates that area.
   that project knows where its decisions and gotchas live — and checks there
   before re-deriving them.
 - Optionally, a `projects/<name>/overview.md` article in the vault (created
-  through curate-knowledge, so you approve it first).
+  through curate-vault, so you approve it first).
 
 ## How to run
 
@@ -21,13 +21,13 @@ enough knowledge to deserve its own vault area — it's safe to re-run
 
 ## What it needs
 
-Nothing beyond the vault and the curate-knowledge skill (both part of the
+Nothing beyond the vault and the curate-vault skill (both part of the
 second-brain setup). No API keys, no network.
 
 ## How it works (high level)
 
 1. Figures out the project's name and confirms it with you.
-2. Checks the vault is reachable (reusing curate-knowledge's readiness check)
+2. Checks the vault is reachable (reusing curate-vault's readiness check)
    and whether the project is already wired.
 3. Advises against wiring if the project has no real knowledge to point at
    yet — the global vault block already covers the basics everywhere.

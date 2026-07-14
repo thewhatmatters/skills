@@ -1,13 +1,13 @@
 ---
 name: wire-vault
-description: Wire the current project to the personal OKF vault as a per-project knowledge layer. Use when the user wants a project connected to the second brain — "wire this project to the vault", "connect this project to the knowledge base", "set up the vault layer for this project", "link the vault here", "/wire-vault". Probes the project name, checks vault + CLAUDE.md status, and idempotently inserts/updates a consent-gated wire-vault marker block in the project's CLAUDE.md pointing at <vault>/projects/<name>/; offers to create projects/<name>/overview.md through curate-knowledge's gate (this skill never writes vault articles itself). Recommends AGAINST wiring when the project has no accumulated knowledge yet — the global Layer 1 block in ~/.claude/CLAUDE.md already covers baseline vault consumption everywhere. Composes with curate-knowledge (owns all vault writes) and craft-claude (owns broader CLAUDE.md authoring; this skill manages only its own marker block). Under --agent it never edits — prints the block for manual paste. Keyless, no network, no scripts of its own.
+description: Wire the current project to the personal OKF vault as a per-project knowledge layer. Use when the user wants a project connected to the second brain — "wire this project to the vault", "connect this project to the knowledge base", "set up the vault layer for this project", "link the vault here", "/wire-vault". Probes the project name, checks vault + CLAUDE.md status, and idempotently inserts/updates a consent-gated wire-vault marker block in the project's CLAUDE.md pointing at <vault>/projects/<name>/; offers to create projects/<name>/overview.md through curate-vault's gate (this skill never writes vault articles itself). Recommends AGAINST wiring when the project has no accumulated knowledge yet — the global Layer 1 block in ~/.claude/CLAUDE.md already covers baseline vault consumption everywhere. Composes with curate-vault (owns all vault writes) and craft-claude (owns broader CLAUDE.md authoring; this skill manages only its own marker block). Under --agent it never edits — prints the block for manual paste. Keyless, no network, no scripts of its own.
 ---
 
 # wire-vault
 
 Connect the current project to the OKF vault: a consent-gated marker block in
 the project's CLAUDE.md plus an optional `projects/<name>/` area in the vault,
-created through curate-knowledge's gate.
+created through curate-vault's gate.
 
 ## What it does
 
@@ -34,7 +34,7 @@ base", or invoke `/wire-vault` from the project directory.
 ## Step 0 — Mode
 
 Docs-only skill: no scripts of its own, no mode probe. Vault checks are
-delegated to curate-knowledge's preflight (Step 2); everything else is
+delegated to curate-vault's preflight (Step 2); everything else is
 native file reads.
 
 ## Steps
@@ -43,9 +43,9 @@ native file reads.
    `name`, the git remote basename, the directory name. Confirm it with the
    user (`--project=` or `--agent` skips the confirmation).
 2. **Preflight by composition (spec A6/A8)** — run
-   `python3 ~/.claude/skills/curate-knowledge/scripts/preflight.py --vault=<vault>`
+   `python3 ~/.claude/skills/curate-vault/scripts/preflight.py --vault=<vault>`
    for the vault checks (its gates apply: `VAULT_MISSING` → offer to run
-   curate-knowledge's fix path or stop; `VAULT_READONLY` → stop). If python3
+   curate-vault's fix path or stop; `VAULT_READONLY` → stop). If python3
    is absent, degrade to a native existence/writability check of the vault
    dir — never block on the script. Natively check the project `CLAUDE.md`:
    `present` / `absent` / `already wired` (marker block found).
@@ -59,10 +59,10 @@ native file reads.
    consumption; empty scaffolding is noise). Proceed only if the user still
    wants it.
 5. **Vault project area (optional, delegated)** — if `projects/<name>/` is
-   missing and the user wants it, hand curate-knowledge a pre-drafted
+   missing and the user wants it, hand curate-vault a pre-drafted
    `type: Project` candidate for `projects/<name>/overview.md` (by reference,
    spec A8 — its HITL gate, index/log wiring, and verification apply). This
-   skill NEVER writes vault files itself — if curate-knowledge is unavailable,
+   skill NEVER writes vault files itself — if curate-vault is unavailable,
    skip this step and report the gap; do not write the vault directly as a
    fallback.
 6. **CLAUDE.md consent gate (spec A7)** — render the marker block from
@@ -76,7 +76,7 @@ native file reads.
 ## Conventions this skill follows
 
 - Spec is `~/.claude/skills/skill-architecture.md`.
-- Composition by reference (spec A8): curate-knowledge owns all vault writes
+- Composition by reference (spec A8): curate-vault owns all vault writes
   and the vault preflight; craft-claude owns project CLAUDE.md authoring
   beyond this skill's own marker block.
 - Keyless; no network; no scripts — the one reused script degrades to native

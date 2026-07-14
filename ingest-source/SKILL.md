@@ -18,7 +18,7 @@ description: >-
   items; review → pros/cons; talk/essay → key points; spec/paper → key facts +
   structure map). Persisting is the default; --no-save for a summary only.
   Asks whether to save to the project (docs/sources/), the personal OKF vault
-  (routed through curate-knowledge — "ingest this into the vault"), or both.
+  (routed through curate-vault — "ingest this into the vault"), or both.
   Replaces summarize-yt. Pairs with render-html for a branded page.
 ---
 
@@ -41,7 +41,7 @@ ingested. Acquisition details live in `references/youtube.md` and
 `references/web-docs.md`; summary shapes in `references/templates.md`; the
 persistence contract and CLAUDE.md gate in `references/persistence.md` (A1).
 Before persisting, a destination gate asks whether the summary belongs to the
-project, the personal OKF vault (delegated to `curate-knowledge`), or both.
+project, the personal OKF vault (delegated to `curate-vault`), or both.
 
 ## How to run
 
@@ -104,13 +104,13 @@ yt-dlp by hand per `references/youtube.md`, persistence by hand per
    ask before inserting the `@`-import block (scripts never edit CLAUDE.md;
    under `--agent`, skip and report the block instead).
 7. **Persist — vault** (when dest includes `vault`) — delegate to the
-   `curate-knowledge` skill (by reference, spec A8): hand it the summary as a
+   `curate-vault` skill (by reference, spec A8): hand it the summary as a
    pre-drafted `type: Reference` candidate targeting a topic directory per
-   the vault's layout (curate-knowledge's curation guide owns the path
+   the vault's layout (curate-vault's curation guide owns the path
    recommendation).
    Its own HITL gate, index/log wiring, and bundle verification apply — this
    skill never writes into the vault directly. Under `--agent`,
-   curate-knowledge emits its proposals file instead of writing; report that
+   curate-vault emits its proposals file instead of writing; report that
    honestly.
 8. **Report** — file(s) written per destination, `created|updated`, index
    line, tier used, wiring status. Offer the `render-html` step.
@@ -122,13 +122,13 @@ yt-dlp by hand per `references/youtube.md`, persistence by hand per
   network (spec A4).
 - Composition by reference, not import — delegates hostile pages to
   `automate-browser`, branded HTML to `render-html`, vault persistence to
-  `curate-knowledge`; feeds `generate-prd` / `deep-research`; runs none of
+  `curate-vault`; feeds `generate-prd` / `deep-research`; runs none of
   their code (spec A8).
 - Layered binary resolution (spec A11): yt-dlp via `$YT_DLP_BIN → PATH → uvx →
   pipx → gated install → degrade`; web fetch via `requests → urllib → curl`.
 - Secrets via the shared `scripts/_env.py` loader; `GOOGLE_API_KEY` /
   `GEMINI_API_KEY` in the `x-goog-api-key` header only, never in URLs/logs.
   Keyless tiers work with no key — the key is a gate, not a blocker (spec A7).
-- Persists into the **user's project** and/or — only via `curate-knowledge`'s
+- Persists into the **user's project** and/or — only via `curate-vault`'s
   gate — the OKF vault; never into `~/.claude/skills/` (commit-by-default
   repo). Generated artifacts stay out of this repo.

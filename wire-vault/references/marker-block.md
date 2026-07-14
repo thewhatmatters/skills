@@ -15,7 +15,7 @@ cross-project vault at `<vault>/projects/<name>/`
 
 - **Read first:** before re-deriving an architecture decision or re-debugging
   a non-obvious issue, check `projects/<name>/index.md` there.
-- **Write path:** durable insights go through `/curate-knowledge` (gated) —
+- **Write path:** durable insights go through `/curate-vault` (gated) —
   never write vault articles directly.
 <!-- wire-vault:end -->
 ```

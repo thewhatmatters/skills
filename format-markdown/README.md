@@ -11,7 +11,7 @@ data, tight bullets, a TOC threshold).
 - **FORMAT mode:** the file rewritten to spec, meaning-preserving —
   structure changes only, never rewording.
 - **A shared rulebook:** `references/markdown-style.md`, which the
-  document-writing skills (curate-knowledge, ingest-source, handoff,
+  document-writing skills (curate-vault, ingest-source, handoff,
   deep-research, generate-prd) follow when they author markdown.
 
 ## How to run

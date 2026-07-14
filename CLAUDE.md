@@ -130,6 +130,6 @@ cross-project vault at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/
 
 - **Read first:** before re-deriving an architecture decision or re-debugging
   a non-obvious issue, check `claude/skills/index.md` there.
-- **Write path:** durable insights go through `/curate-knowledge` (gated) —
+- **Write path:** durable insights go through `/curate-vault` (gated) —
   never write vault articles directly.
 <!-- wire-vault:end -->
