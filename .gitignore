@@ -57,9 +57,12 @@ automate-browser/tmp/
 # (machine-local debug history, not curated memory — that lives in
 # ~/.claude/projects/<encoded>/memory/ via the typed-memory system).
 # All session-local and don't belong in the shared repo.
-/HANDOFF.md
-/.claude/current-task.txt
-/.claude/handoff-archive/
+# Unanchored (**/) on purpose: sessions sometimes run with cwd inside an
+# individual skill folder (e.g. skills/curate-vault/), not just skills/
+# itself, so these must match at any depth or they silently stop applying.
+**/HANDOFF.md
+**/.claude/current-task.txt
+**/.claude/handoff-archive/
 
 # macOS
 .DS_Store
