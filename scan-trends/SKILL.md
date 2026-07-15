@@ -154,9 +154,11 @@ it in display order:
 
 1. **What I learned** — patterns + key patterns, with its citation rules.
 2. **Stats block** — per-source counts; "(via web)" lines for fallback sources.
-3. **Write `results.html`** — **always** persist the run (both modes; also under
-   `--agent`) by piping the documented JSON to `scripts/report.py`. Report the
-   absolute path; if `report.py` fails, note it but do not block.
+3. **Persist the run** — **always** (both modes; also under `--agent`).
+   Resolve the destination per §3 of the reference (project `docs/research/`,
+   vault `research/`, or working dir), then pipe the documented JSON to
+   `scripts/report.py`. Report the absolute path; if `report.py` fails, note
+   it but do not block.
 4. **Invitation** — tailored to QUERY_TYPE.
 
 For `COMPARISON`, `RECOMMENDATIONS`, or `PROMPTING`, use that type's format from
@@ -175,7 +177,7 @@ searches. Only write prompts if explicitly asked.
 | `--agent` | Non-interactive: skip pauses & the source picker, output full report, stop |
 | `--sources=a,b,c` | Run exactly these sources (no picker). Names: `reddit`, `x`, `youtube`, `hackernews`, `polymarket`, `web` |
 | `--all` | Run all 6 sources, no picker (fires gates for any not ready) |
-| `--out=PATH` | Where to write the HTML report (default: `results.html` in the working dir) |
+| `--out=PATH` | Where to write the HTML report (skips the destination ask). Without it, Step 4 asks: project `docs/research/`, vault `research/`, or working dir (`--agent` default: `results.html` in the working dir) |
 
 ## Recoverable Setup Gates
 

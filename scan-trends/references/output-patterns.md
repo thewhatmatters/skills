@@ -51,12 +51,45 @@ instead — it has no like/repost counts. Likewise, if Reddit came from the web
 fallback (reddit.py was 403-blocked), render it as `|- Reddit (via web): {N} pages`
 — it has no upvote/comment counts.
 
-## 3. results.html
+## 3. Persist the run (destination + results.html)
 
 After the stats block, **always** persist the run as a self-contained HTML file
-(both modes; also under `--agent`). Build this JSON from the report you just
-displayed — do not re-research — and pipe it to `report.py` (default output
-`results.html` in the working directory, or the `--out=` path):
+(both modes; also under `--agent`).
+
+**Resolve the destination first**, by this precedence:
+
+1. **`--out=PATH`** → use it verbatim; no prompt.
+2. **`--agent`** → `results.html` in the working dir (the historical
+   default); no prompt.
+3. **Otherwise ask** with one `AskUserQuestion`: *Where should this report
+   live?*
+   - **Project docs** — `<project>/docs/research/trends-<slug>.html` (create
+     the dir if absent). For research that belongs to the current repo.
+   - **Vault research** — `<vault>/research/` in the OKF vault (default
+     vault root: same as curate-vault's `--vault` default). For
+     cross-project findings worth keeping.
+   - **Working directory** — `results.html`, the historical default.
+
+**Vault destination only — OKF wiring.** The vault is markdown-native, so
+also persist the report you just displayed as
+`<vault>/research/trends-<slug>.md` (no re-research — same content), with the
+HTML as its companion at `trends-<slug>.html`. Per
+`~/.claude/skills/curate-vault/references/okf-conventions.md`:
+
+1. Prepend OKF frontmatter to the md: `type: Research`, `title`,
+   `description` (one sentence), `tags`, `timestamp` (ISO 8601). Link the
+   HTML companion from the body: `[Interactive HTML version](/research/trends-<slug>.html)`.
+2. Add the article's line to `<vault>/research/index.md` (reuse the
+   frontmatter `description`).
+3. Append a `**Creation**` entry under today's date in `<vault>/log.md`
+   (newest-first).
+4. Verify: `python3 ~/.claude/skills/curate-vault/scripts/verify_bundle.py --vault=<vault>`.
+
+No clobber anywhere: if the target file exists, suffix `-2`, `-3`, ….
+
+Build this JSON from the report you just displayed — do not re-research — and
+pipe it to `report.py` (default output `results.html` in the working
+directory, or the resolved destination path):
 
 ```bash
 python3 scripts/report.py --out=results.html <<'JSON'

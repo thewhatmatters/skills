@@ -29,7 +29,7 @@ when needed (spec A1 — progressive disclosure):
 | `--type=<kind>` | research type: `market`, `competitive`, `feature`, `regulatory`, `product`, `problem`, `opportunity`, `landscape`, `auto` (default `auto` — detect from question) |
 | `--depth=<level>` | `quick` (1 broad sweep, ~5 sources), `standard` (default — broad sweep + focused follow-up, ~12-20 sources), `exhaustive` (multi-pass, ~30+ sources, may take minutes) |
 | `--parallel` / `--no-parallel` | override the Step-4 execution choice: fan the sweep out to parallel subagents, or force the serial loop. Default auto: `exhaustive` fans out; `standard` and `quick` run serial. |
-| `--out=PATH` | output directory (default: current working dir). Files written as `research-<slug>.md` and (optionally) `research-<slug>.html`. |
+| `--out=PATH` | output directory (skips the Step-7 destination ask). Files written as `research-<slug>.md` and (optionally) `research-<slug>.html`. Without it, Step 7 asks: project `docs/research/`, vault `research/`, or current dir (`--agent` default). |
 | `--name=<slug>` | explicit kebab slug for the output filenames; default = derived from the research question |
 | `--no-html` | skip the HTML render; markdown only |
 | `--transcript=PATH` | load the research question from a file instead of the current session |
@@ -183,14 +183,42 @@ Produce the structured JSON (see
 holding the title, type, depth, slug, date, sources used, the type-specific
 sections, and the open questions.
 
-## Step 7 — Write the markdown report (or dry-run)
+## Step 7 — Choose destination, then write the markdown report
 
 `--dry-run` was already handled at Step 3; not reachable here.
 
-Otherwise: emit `<out>/research-<slug>.md` following the markdown layout for
+**Resolve `<out>` first**, by this precedence:
+
+1. **`--out=PATH`** → use it verbatim; no prompt.
+2. **`--agent`** → current working dir (the historical default); no prompt.
+3. **Otherwise ask** with one `AskUserQuestion`: *Where should this report
+   live?*
+   - **Project docs** — `<project>/docs/research/` (create the dir if
+     absent). Use when the research belongs to the repo you're working in.
+   - **Vault research** — `<vault>/research/` in the OKF vault (default
+     vault root: same as curate-vault's `--vault` default). Use for
+     cross-project product/tool research worth keeping.
+   - **Current directory** — the historical default.
+
+Then emit `<out>/research-<slug>.md` following the markdown layout for
 the chosen research type in `references/research-templates.md`. **No
 clobber** — if the file exists, write `research-<slug>-2.md`, `-3.md`, …
 (spec A11 layered fallback).
+
+**Vault destination only — OKF wiring.** The destination answer above is the
+per-write human confirmation, but the file must land conformant (see
+`~/.claude/skills/curate-vault/references/okf-conventions.md`):
+
+1. Prepend OKF frontmatter to the md: `type: Research`, `title`,
+   `description` (one sentence), `tags`, `timestamp` (ISO 8601). If the HTML
+   companion was rendered (Step 8), link it from the body:
+   `[Interactive HTML version](/research/research-<slug>.html)`.
+2. Add the article's line to `<vault>/research/index.md` (reuse the
+   frontmatter `description`).
+3. Append a `**Creation**` entry under today's date in `<vault>/log.md`
+   (newest-first).
+4. Verify: `python3 ~/.claude/skills/curate-vault/scripts/verify_bundle.py
+   --vault=<vault>` — fix anything this write introduced.
 
 ## Step 8 — Render HTML (optional)
 
@@ -246,4 +274,7 @@ open questions: 4 items
 - Honest citations: every claim links to its source; gaps are surfaced, not
   invented (spec A12).
 - No clobber: never overwrite an existing `research-<slug>.md` (spec A11).
-- This skill does not run git; it doesn't write outside `<out>`.
+- This skill does not run git; it doesn't write outside `<out>` — except the
+  vault destination's OKF wiring (`research/index.md`, `/log.md`), which is
+  part of landing the article conformantly and is covered by the user's
+  explicit destination choice in Step 7.
