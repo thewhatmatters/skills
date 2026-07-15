@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: Scans your codebase for shallow modules (per John Ousterhout's deep-module principle) and proposes deepening refactors as a visual HTML report, then walks you through implementing whichever one you pick. User-invoked only — run it explicitly (e.g. "run improve-codebase-architecture" or "/improve-codebase-architecture"). Worth running every few days as an ongoing habit, not just once.
+description: Scans your codebase for shallow modules (per John Ousterhout's deep-module principle) and proposes deepening refactors as a markdown report (pass --html for a visual HTML version), then walks you through implementing whichever one you pick. User-invoked only — run it explicitly (e.g. "run improve-codebase-architecture" or "/improve-codebase-architecture"). Worth running every few days as an ongoing habit, not just once.
 disable-model-invocation: true
 ---
 
@@ -56,34 +56,43 @@ Apply the **deletion test** to anything you suspect is shallow: would
 deleting it concentrate complexity, or just move it? A "yes, concentrates"
 is the signal you want.
 
-### 2. Present candidates as an HTML report
+### 2. Present candidates as a report
 
-Write a self-contained HTML file to the OS temp directory so nothing lands
-in the repo. Resolve the temp dir from `$TMPDIR`, falling back to `/tmp`
-(or `%TEMP%` on Windows), and write to
+Default output is **markdown, presented directly in the conversation**;
+pass `--html` for the visual HTML report instead.
+
+**Markdown (default).** One `##` section per candidate carrying the fields
+below. Before/after structure goes in fenced ` ```mermaid ` blocks when the
+relationships are graph-shaped (call graphs, dependencies, sequences), else
+a compact before/after table or indented tree — never pad with decoration
+markdown can't carry. No file is written; the report is the chat output.
+
+**HTML (`--html`).** Write a self-contained HTML file to the OS temp
+directory so nothing lands in the repo. Resolve the temp dir from
+`$TMPDIR`, falling back to `/tmp` (or `%TEMP%` on Windows), and write to
 `<tmpdir>/architecture-review-<timestamp>.html` so each run gets a fresh
 file. Open it for the user — `xdg-open <path>` on Linux, `open <path>` on
-macOS, `start <path>` on Windows — and tell them the absolute path.
+macOS, `start <path>` on Windows — and tell them the absolute path. The
+report uses **Tailwind via CDN** for layout and styling, and **Mermaid via
+CDN** for diagrams where a graph/flow/sequence reliably communicates the
+structure. Mix Mermaid with hand-crafted CSS/SVG visuals — Mermaid for
+graph-shaped relationships, hand-built divs/SVG for editorial visuals
+(mass diagrams, cross-sections, collapse animations). Each candidate gets
+a **before/after visualisation**. Be visual. See
+[references/HTML-REPORT.md](references/HTML-REPORT.md) for the full HTML
+scaffold, diagram patterns, and styling guidance.
 
-The report uses **Tailwind via CDN** for layout and styling, and
-**Mermaid via CDN** for diagrams where a graph/flow/sequence reliably
-communicates the structure. Mix Mermaid with hand-crafted CSS/SVG visuals —
-use Mermaid when relationships are graph-shaped (call graphs, dependencies,
-sequences), and hand-built divs/SVG when you want something more editorial
-(mass diagrams, cross-sections, collapse animations). Each candidate gets a
-**before/after visualisation**. Be visual.
-
-For each candidate, render a card with:
+For each candidate, render a section (markdown) or card (HTML) with:
 
 - **Files** — which files/modules are involved
 - **Problem** — why the current architecture is causing friction
 - **Solution** — plain English description of what would change
 - **Benefits** — explained in terms of locality and leverage, and how
   tests would improve
-- **Before / After diagram** — side-by-side, custom-drawn, illustrating the
-  shallowness and the deepening
+- **Before / After diagram** — illustrating the shallowness and the
+  deepening (side-by-side custom-drawn in HTML; mermaid/table in markdown)
 - **Recommendation strength** — one of `Strong`, `Worth exploring`,
-  `Speculative`, rendered as a badge
+  `Speculative` (a badge in HTML, bold inline in markdown)
 
 End the report with a **Top recommendation** section: which candidate
 you'd tackle first and why.
@@ -99,16 +108,13 @@ clearly in the card (e.g. a warning callout: *"contradicts ADR-0007 — but
 worth reopening because…"*). Don't list every theoretical refactor an ADR
 forbids.
 
-See [references/HTML-REPORT.md](references/HTML-REPORT.md) for the full
-HTML scaffold, diagram patterns, and styling guidance.
+Do NOT propose interfaces yet. After the report is presented, ask the
+user: "Which of these would you like to explore?"
 
-Do NOT propose interfaces yet. After the file is written, ask the user:
-"Which of these would you like to explore?"
-
-Under `--agent`: write and open the report as normal, then stop — skip the
-selection prompt and the rest of this process (Step 3 requires a live
-human pick and a live `grilling` conversation; neither has a non-interactive
-form).
+Under `--agent`: produce the report as normal (writing + opening the file
+under `--html`), then stop — skip the selection prompt and the rest of
+this process (Step 3 requires a live human pick and a live `grilling`
+conversation; neither has a non-interactive form).
 
 ### 3. Grilling loop
 

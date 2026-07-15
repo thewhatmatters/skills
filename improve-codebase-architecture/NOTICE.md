@@ -31,9 +31,14 @@ invites this: "Hack around with them. Make them your own."
 - Added this NOTICE.md and a plain-language README.md (required by this
   house's spec, pattern A13; the upstream repo doesn't have per-skill
   READMEs).
-- No changes to the exploration method, the HTML report format, the
-  deferred-interface-design discipline, or the grilling handoff — those are
-  unchanged from the source.
+- The report default changed from the source's always-HTML to
+  **markdown-in-conversation, with `--html` opting into the original visual
+  HTML report** (2026-07-15, house preference: report-emitting skills
+  default to markdown). The HTML format itself, when opted into, is
+  unchanged from the source (`references/HTML-REPORT.md`).
+- No changes to the exploration method, the deferred-interface-design
+  discipline, or the grilling handoff — those are unchanged from the
+  source.
 
 ## Original license
 

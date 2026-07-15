@@ -17,6 +17,12 @@ scratch. Sibling skills from the same pass: `codebase-design`, `grilling`.
 
 ## Decisions
 
+- **Markdown report by default, `--html` opt-in (2026-07-15).** The source
+  skill always writes an HTML file; the user asked that report-emitting
+  skills default to markdown in-conversation with HTML as an option. The
+  HTML path (and `references/HTML-REPORT.md`) is unchanged when opted into;
+  markdown mode renders one section per candidate with mermaid fenced
+  blocks or before/after tables, and writes no file.
 - **Vendor + adapt**, chosen by the user over a from-scratch simplified
   version or a full 4-skill port (see the three-option `AskUserQuestion` in
   this session). Rationale in `codebase-design/handoff.md`.

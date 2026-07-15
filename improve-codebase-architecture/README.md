@@ -18,8 +18,9 @@ improved how well an agent could work in that code afterward.
 
 ## What you get
 
-A single self-contained HTML report, written to your OS temp directory
-(never your repo), with one card per candidate: which files are involved,
+A markdown report right in the conversation (or, with `--html`, a single
+self-contained HTML report written to your OS temp directory — never your
+repo), with one section/card per candidate: which files are involved,
 what's currently causing friction, what would change, a before/after
 diagram, and a recommendation strength (`Strong` / `Worth exploring` /
 `Speculative`). It ends with a top pick and why.
@@ -48,8 +49,8 @@ recommends running it every few days as an ongoing habit, not just once.
 
 ## What it needs
 
-Nothing external — no scripts, no secrets, no network access beyond the
-Tailwind/Mermaid CDN links the generated HTML report loads in your browser.
+Nothing external — no scripts, no secrets, no network access (the `--html`
+report's Tailwind/Mermaid CDN links load in your browser, not here).
 It needs the Agent tool's `Explore` subagent type to walk the codebase, and
 composes with two sibling skills: `codebase-design` (vocabulary) and
 `grilling` (the post-selection interview).
@@ -59,9 +60,10 @@ composes with two sibling skills: `codebase-design` (vocabulary) and
 1. **Explore** — reads `CONTEXT.md`/`docs/adr/` if present, then an Explore
    subagent walks the codebase looking for friction, applying the deletion
    test from `codebase-design` to anything suspected shallow.
-2. **Report** — writes the HTML file (scaffold and diagram patterns in
-   `references/HTML-REPORT.md`), opens it, and stops — it deliberately does
-   not propose an interface yet.
+2. **Report** — presents the markdown report (or, with `--html`, writes
+   and opens the HTML file — scaffold and diagram patterns in
+   `references/HTML-REPORT.md`) and stops — it deliberately does not
+   propose an interface yet.
 3. **Grill** — once you pick a candidate, hands off to `grilling` to design
    the fix with you, updating `CONTEXT.md` (`references/CONTEXT-FORMAT.md`)
    and offering an ADR (`references/ADR-FORMAT.md`) as decisions

@@ -84,6 +84,12 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
   install is ever needed, commit a `package.json` and keep `node_modules` gitignored.
 - **Generated artifacts stay out of the repo.** Skills write reports / rendered HTML to
   the user's home dir or `/tmp`, never into `~/.claude/skills/` (it's commit-by-default).
+- **Reports default to markdown; HTML is opt-in.** A report-emitting skill presents
+  markdown (in-conversation or as a `.md` file) by default and offers HTML behind a flag
+  (`--html`, or an explicit render step like `render-html`) — never HTML-only (e.g.
+  `improve-codebase-architecture` defaults to markdown, `--html` restores its visual
+  report; `deep-research`/`generate-prd` write md + optional HTML). `render-html` itself
+  is exempt (HTML is its product).
 - **Compose with external skills; don't vendor them.** When a well-maintained upstream
   skill (e.g. `shadcn` from `shadcn/ui`, `next-best-practices` from `vercel-labs/next-skills`)
   is installed via [skills.sh](https://www.skills.sh) — `npx skills add <repo> --skill <name>` —
