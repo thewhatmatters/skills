@@ -51,45 +51,56 @@ instead — it has no like/repost counts. Likewise, if Reddit came from the web
 fallback (reddit.py was 403-blocked), render it as `|- Reddit (via web): {N} pages`
 — it has no upvote/comment counts.
 
-## 3. Persist the run (destination + results.html)
+## 3. Persist the run (destination + HTML report)
 
 After the stats block, **always** persist the run as a self-contained HTML file
 (both modes; also under `--agent`).
 
-**Resolve the destination first**, by this precedence:
+**Resolve the destination first**, by this precedence (`<slug>` = the
+kebab-cased `TOPIC`):
 
-1. **`--out=PATH`** → use it verbatim; no prompt.
+1. **`--out=PATH`** → use it verbatim; no prompt (an explicit path is the
+   consent).
 2. **`--agent`** → `results.html` in the working dir (the historical
    default); no prompt.
 3. **Otherwise ask** with one `AskUserQuestion`: *Where should this report
    live?*
    - **Project docs** — `<project>/docs/research/trends-<slug>.html` (create
      the dir if absent). For research that belongs to the current repo.
-   - **Vault research** — `<vault>/research/` in the OKF vault (default
-     vault root: same as curate-vault's `--vault` default). For
-     cross-project findings worth keeping.
+   - **Vault research** — `<vault>/research/synthesis/` in the OKF vault
+     (default vault root: same as curate-vault's `--vault` default;
+     `research/` keeps captures in `sources/` and reports in `synthesis/`).
+     For cross-project findings worth keeping.
    - **Working directory** — `results.html`, the historical default.
 
-**Vault destination only — OKF wiring.** The vault is markdown-native, so
-also persist the report you just displayed as
-`<vault>/research/trends-<slug>.md` (no re-research — same content), with the
-HTML as its companion at `trends-<slug>.html`. Per
+**OKF wiring — whenever the resolved destination is inside the vault**,
+however it got there (menu choice or explicit `--out`). First confirm the
+vault root exists — if absent (sync client not running), NEVER create it:
+fall back to the working dir with a note (curate-vault's `SYNC_UNMOUNTED`
+rule). The vault is markdown-native, so also persist the report you just
+displayed as `<vault>/research/synthesis/trends-<slug>.md` (no re-research —
+same content), with the HTML as its companion at `trends-<slug>.html`. Per
 `~/.claude/skills/curate-vault/references/okf-conventions.md`:
 
 1. Prepend OKF frontmatter to the md: `type: Research`, `title`,
    `description` (one sentence), `tags`, `timestamp` (ISO 8601). Link the
-   HTML companion from the body: `[Interactive HTML version](/research/trends-<slug>.html)`.
-2. Add the article's line to `<vault>/research/index.md` (reuse the
-   frontmatter `description`).
+   HTML companion from the body:
+   `[Interactive HTML version](/research/synthesis/trends-<slug>.html)`.
+2. Add the article's line under `## Synthesized reports` in
+   `<vault>/research/index.md` (reuse the frontmatter `description`).
 3. Append a `**Creation**` entry under today's date in `<vault>/log.md`
    (newest-first).
 4. Verify: `python3 ~/.claude/skills/curate-vault/scripts/verify_bundle.py --vault=<vault>`.
+   If curate-vault is absent (steps 1–3 are self-contained), skip the verify
+   and say so in the summary.
 
-No clobber anywhere: if the target file exists, suffix `-2`, `-3`, ….
+No clobber for named files (`trends-<slug>.*` in docs/ or the vault): if the
+target exists, suffix `-2`, `-3`, …. The working-dir `results.html` default
+keeps its historical overwrite behavior.
 
 Build this JSON from the report you just displayed — do not re-research — and
-pipe it to `report.py` (default output `results.html` in the working
-directory, or the resolved destination path):
+pipe it to `report.py` with `--out=<resolved destination path>` (shown here
+with the working-dir default):
 
 ```bash
 python3 scripts/report.py --out=results.html <<'JSON'

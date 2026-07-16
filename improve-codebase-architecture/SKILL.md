@@ -39,12 +39,15 @@ python3 ~/.claude/scripts/preflight-deps.py --skills=codebase-design,grilling
 ```
 
 Both siblings are hard dependencies (the vocabulary source; the Step-3
-interview loop). On `gated`, tell the user which is missing (one `git pull`
-away in the skills repo), then degrade rather than block (spec A7d):
-missing `codebase-design` → use the vocabulary summary inlined below and
-flag the drift risk in the report header; missing `grilling` → produce the
-report, and at Step 3 fall back to a plain one-question-at-a-time
-conversation with the same intent.
+interview loop). If the helper itself is missing, treat both deps as
+`gated` and continue with the degrades below (spec A11). On `gated`,
+interactive runs offer *Fix it for me (git pull in ~/.claude) / I'll do it
+myself / Skip* (spec A7c); on Skip or fix failure — and always under
+`--agent` — degrade rather than block (spec A7d): missing
+`codebase-design` → use the vocabulary summary inlined above (the intro's
+term list) and flag the drift risk in the report header; missing
+`grilling` → produce the report, and at Step 3 fall back to a plain
+one-question-at-a-time conversation with the same intent.
 
 ### 1. Explore
 
@@ -127,10 +130,11 @@ forbids.
 Do NOT propose interfaces yet. After the report is presented, ask the
 user: "Which of these would you like to explore?"
 
-Under `--agent`: produce the report as normal (writing + opening the file
-under `--html`), then stop — skip the selection prompt and the rest of
-this process (Step 3 requires a live human pick and a live `grilling`
-conversation; neither has a non-interactive form).
+Under `--agent`: produce the report as normal (under `--html`, write the
+file and report its absolute path — skip the auto-open; a headless run has
+no browser to open into), then stop — skip the selection prompt and the
+rest of this process (Step 3 requires a live human pick and a live
+`grilling` conversation; neither has a non-interactive form).
 
 ### 3. Grilling loop
 

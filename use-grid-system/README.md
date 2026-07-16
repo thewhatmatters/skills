@@ -27,7 +27,9 @@ grid", "Müller-Brockmann / Swiss layout", or run
 
 ## What it needs
 
-Nothing required — it is keyless and works with no setup. For the full Tailwind
+Nothing required — it is keyless and works with no setup. Verification
+uses your audit-ui / automate-browser skills when installed and falls back
+to manual overlay checks otherwise. For the full Tailwind
 path it expects a Tailwind v4 project (it detects this); otherwise it degrades to
 a framework-free `:root` scaffold. The optional React overlay composes the
 `tailwindcss-react-grid-overlay` package when React is present.

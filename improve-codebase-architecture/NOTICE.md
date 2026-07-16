@@ -31,6 +31,11 @@ invites this: "Hack around with them. Make them your own."
 - Added this NOTICE.md and a plain-language README.md (required by this
   house's spec, pattern A13; the upstream repo doesn't have per-skill
   READMEs).
+- A Step-0 dependency preflight was added (2026-07-16; upstream has none):
+  the shared `~/.claude/scripts/preflight-deps.py` helper checks the two
+  hard sibling skills (`codebase-design`, `grilling`) per this house's
+  spec A15, with documented degrades. Step 1 also gained an explicit
+  Agent-tool-unavailable fallback (explore inline).
 - The report default changed from the source's always-HTML to
   **markdown-in-conversation, with `--html` opting into the original visual
   HTML report** (2026-07-15, house preference: report-emitting skills

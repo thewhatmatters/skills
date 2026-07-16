@@ -35,6 +35,23 @@ A clean run reads: `col=0px overlay=0px baseline≤4px ink=0px → PASS`.
   the check functions, print the deltas, and read back the crop with the
   image-capable Read tool.
 
+## Degraded (deps gated): manual pass
+
+When Step 1's dependency check gated on audit-ui/automate-browser, verify by
+hand and report honestly what wasn't measured:
+
+- Toggle the `g`-key overlay at widths above and below `--grid-maxw`.
+- **Check 1 (col)** — eyeball both edges of each band against the overlay's
+  column lines; any visible gap at either edge fails.
+- **Check 2 (overlay)** — confirm overlay and content share one content box:
+  the first/last column lines must kiss the content edges at both widths.
+- **Check 3 (baseline)** — pick three text blocks; their baselines should sit
+  on overlay rows (within roughly half a baseline by eye).
+- **Check 4 (ink)** — CANNOT be eyeballed reliably (sub-pixel font-metric
+  offsets); report it as `ink=unmeasured` — never guess a PASS.
+- Verdict format stays the same, e.g.
+  `col≈0 overlay≈0 baseline≈ok ink=unmeasured → PASS (manual, degraded)`.
+
 ## The measurement gotchas (carry verbatim)
 - **Embed the real webfont for offline/headless runs** or the ink check is wrong
   (headless Chrome falls back to a different grotesque — −16px vs −7px for the same

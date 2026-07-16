@@ -76,7 +76,10 @@ and Exa's semantic search. The skill never blocks on missing keys.
 5. **Synthesize.** Fills in the type template, citing every claim inline,
    labelling sections it couldn't source as "not surfaced" and pushing them
    into Open questions.
-6. **Write.** Markdown always; HTML optionally via `scripts/report.py`.
+6. **Write.** First resolves where the report lives — `--out` verbatim,
+   working dir under `--agent`, otherwise it asks: project `docs/research/`,
+   vault `research/synthesis/` (with OKF wiring), or the working dir.
+   Markdown always; HTML optionally via `scripts/report.py`.
    Never clobbers an existing file with the same slug.
 
 ## Where to look next

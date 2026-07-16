@@ -86,9 +86,14 @@ deviations should be deliberate, not accidental.
     shared file without which the run can't fulfill its contract. Declare and
     check alongside the A6 preflight via the shared helper:
     `python3 ~/.claude/scripts/preflight-deps.py --skills=… --agents=… --files=…`.
-    A missing dep gates as `DEPS_MISSING` (A7 applies — never blocks), and
-    SKILL.md documents the specific degrade (e.g. generate-skill without
-    audit-skill scaffolds but ships unaudited, said up front).
+    A missing dep gates as `DEPS_MISSING` — full A7 applies: interactive
+    runs offer the A7c menu when the fix is actionable (*Fix it for me* —
+    usually one `git pull` — */ I'll do it myself / Skip*); announce-then-
+    degrade without asking is the `--agent` posture. Either way SKILL.md
+    documents the specific degrade (e.g. generate-skill without audit-skill
+    scaffolds but ships unaudited, said up front), and when the run is
+    NATIVE because python3 is absent, the same checks fall back to built-in
+    file tools (does `<skill>/SKILL.md` exist?).
     (b) **Session-only** — MCP tools and the Agent tool exist only inside the
     running session; scripts cannot see them. Probe model-side at Step 0 and
     document the fallback (MCP absent → built-in WebSearch/WebFetch; Agent

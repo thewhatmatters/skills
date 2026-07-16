@@ -11,7 +11,13 @@ Make a real Müller-Brockmann modular grid load-bearing in a web project — one
 a toggleable overlay, and runtime optical alignment — then prove it adheres.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable applications:
+Follows `~/.claude/skills/skill-architecture.md` A1–A15. Notable applications:
+
+- **A15 (2026-07-16):** audit-ui + automate-browser promoted from soft composes
+  to a preflighted hard pair (`preflight-deps.py` in Step 1) — Step 7's
+  measured verification is part of this skill's contract, so their absence
+  gates with a documented manual-pass degrade (verification.md §Degraded)
+  rather than being silently assumed.
 - **A1 progressive disclosure** — the canon + Tailwind layer + profiles + optical
   + verification + non-Tailwind fallback all live in `references/`; SKILL.md stays
   lean and routes to them.

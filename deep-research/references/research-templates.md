@@ -337,7 +337,9 @@ DRY RUN — no search, no files written
 question:  "research the pet insurance market in the US"
 type:      market   (auto-detected)
 depth:     standard
-out:       /Users/you/research-pet-insurance-us.md  (+.html)
+out:       (would ask: project docs/research/ | vault research/synthesis/ | cwd)
+           — or the literal --out path / cwd under --agent, e.g.
+           /Users/you/research-pet-insurance-us.md  (+.html)
 
 research plan (8 subquery angles):
   1. pet insurance market size US 2026

@@ -54,8 +54,8 @@ No API keys required.
    against the live docs, so nothing invented sneaks in.
 5. **Self-audit** — run `audit-skill` on the new skill and attach its
    report. The generator always finishes; the status line tells the truth.
-6. **Emit** — show the file tree, the honest verdict, and the one `.gitignore`
-   line you need to add to publish the new skill.
+6. **Emit** — show the file tree, the honest verdict, and the `git add`
+   publish reminder (the skills repo tracks new skills by default).
 
 ## Where to look next
 

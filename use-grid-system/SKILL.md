@@ -75,9 +75,11 @@ mode in one line.
    `down` stops a run (nothing here is network-bound). Then the dependency
    check for Step 7's verification pair:
    `python3 ~/.claude/scripts/preflight-deps.py --skills=audit-ui,automate-browser`
-   — `gated` → proceed, but announce now that Step 7 degrades to manual
-   verification (open the overlay, eyeball the four checks yourself) instead
-   of the measured audit-ui/automate-browser pass (spec A7d).
+   (NATIVE without python3: check the two `~/.claude/skills/<name>/SKILL.md`
+   paths exist with built-in file tools instead) — `gated` → proceed, but
+   announce now that Step 7 degrades to the manual pass in
+   `references/verification.md` §"Degraded" instead of the measured
+   audit-ui/automate-browser pass (spec A7d).
 2. **Probe the project** — `python3 scripts/probe.py [path]` → JSON: Tailwind
    v4/v3/none, framework (React/Vue/none), existing `DESIGN.md ## Grid`, current
    `--spacing` base. This picks the path and prevents silently re-scaling a live
@@ -99,9 +101,12 @@ mode in one line.
    where React is present rather than rebuild.
 7. **Verify** — don't trust, measure. Run the four adherence checks
    (`references/verification.md`) through **audit-ui / automate-browser**, at
-   widths above and below `--maxw`. Report `col / overlay / baseline / ink` deltas.
-8. **Hand off** — give the tokens + patterns to **build-ui** to implement;
-   **frontend-design** for taste; **source-ui** for reference layouts.
+   widths above and below `--maxw`. Report `col / overlay / baseline / ink`
+   deltas. If Step 1's dependency check gated, follow the "Degraded (deps
+   gated): manual pass" section there instead.
+8. **Hand off** — give the tokens + patterns to **build-ui** to implement
+   (if installed); **frontend-design** for taste; **source-ui** for
+   reference layouts — all "if available", never assumed.
 
 ## Conventions this skill follows
 

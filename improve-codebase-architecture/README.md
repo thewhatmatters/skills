@@ -49,14 +49,20 @@ recommends running it every few days as an ongoing habit, not just once.
 
 ## What it needs
 
-Nothing external — no scripts, no secrets, no network access (the `--html`
-report's Tailwind/Mermaid CDN links load in your browser, not here).
-It needs the Agent tool's `Explore` subagent type to walk the codebase, and
-composes with two sibling skills: `codebase-design` (vocabulary) and
-`grilling` (the post-selection interview).
+No secrets and no network access (the `--html` report's Tailwind/Mermaid
+CDN links load in your browser, not here). A Step-0 check runs the shared
+`~/.claude/scripts/preflight-deps.py` helper: `codebase-design`
+(vocabulary) and `grilling` (the post-selection interview) are hard
+sibling dependencies — if one is missing the skill says so and degrades
+(inline vocabulary with a drift flag; a plain interview at Step 3). It
+prefers the Agent tool's `Explore` subagent to walk the codebase, falling
+back to `general-purpose`, or to exploring inline when the Agent tool
+isn't available at all.
 
 ## How it works
 
+0. **Preflight** — checks the two sibling-skill dependencies exist,
+   offering a fix or a documented degrade if not.
 1. **Explore** — reads `CONTEXT.md`/`docs/adr/` if present, then an Explore
    subagent walks the codebase looking for friction, applying the deletion
    test from `codebase-design` to anything suspected shallow.

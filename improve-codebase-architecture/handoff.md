@@ -17,6 +17,13 @@ scratch. Sibling skills from the same pass: `codebase-design`, `grilling`.
 
 ## Decisions
 
+- **Hard-dep preflight via the shared helper (2026-07-16).** Step 0 now runs
+  `~/.claude/scripts/preflight-deps.py --skills=codebase-design,grilling`
+  (spec A15): both siblings are hard deps — vocabulary source and the Step-3
+  loop — gated with an A7c fix offer and documented degrades (inline
+  vocabulary + drift flag; plain interview). Step 1 gained the
+  Agent-tool-unavailable inline-exploration fallback, and `--agent --html`
+  no longer auto-opens a browser (headless has none).
 - **Markdown report by default, `--html` opt-in (2026-07-15).** The source
   skill always writes an HTML file; the user asked that report-emitting
   skills default to markdown in-conversation with HTML as an option. The
@@ -88,13 +95,10 @@ done in this session.
   checked for internal consistency (link paths, skill-name references), but
   not verified by actually invoking it. Recommend running it on a real
   project before trusting the HTML report output blindly.
-- **Self-audit not yet run.** `audit-skill` should be pointed at all three
-  new skills (`codebase-design`, `grilling`, `improve-codebase-architecture`)
-  before considering this "shipped" per this house's generate-skill
-  convention (Step 6 self-audit) — this vendoring pass used direct
-  authorship instead of the generate-skill interactive flow, so that
-  automatic self-audit step didn't run.
-- Not yet added to the vault's `claude/skills/skill-catalog.md`.
-- Not yet committed to the skills repo (`~/.claude/skills` is a git repo
-  per prior sessions' handoffs — check `git status` before committing;
-  these are new untracked files).
+- ~~Self-audit not yet run~~ — done 2026-07-16: a `skill-auditor` pass
+  found no HIGHs; its MEDIUMs (stale README, gate missing the A7c offer)
+  were fixed the same day.
+- ~~Not yet added to the vault's skill-catalog~~ — done (catalog row
+  updated 2026-07-15 for the markdown-default report).
+- ~~Not yet committed~~ — committed and pushed (7abd99e onward; repo is
+  `github.com/thewhatmatters/claude`, skills live under `skills/`).

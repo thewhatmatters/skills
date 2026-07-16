@@ -12,7 +12,7 @@ synthesizes a cited markdown report — optionally with a self-contained HTML
 companion.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A13;
+This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A15;
 note here any deliberate deviations.
 
 Notable choices:
@@ -66,6 +66,18 @@ Notable choices:
   documents on the dev machine's DDG endpoint.
 
 ## 3. Decision log
+
+- **2026-07-15/16 — destination step + vault write path.** Step 7 resolves
+  the report destination (`--out` verbatim → `--agent` cwd → ask: project
+  `docs/research/` / vault `research/synthesis/` / cwd). Vault-bound writes
+  do full OKF wiring; the wiring triggers on the RESOLVED path being inside
+  the vault (an explicit `--out` into the vault counts — the path is the
+  consent), never creates an absent vault root (SYNC_UNMOUNTED rule), and
+  skips verify_bundle with a note if curate-vault's files are missing. This
+  deliberately reinterprets "vault writes only via curate-vault": the
+  destination choice is the per-write human confirmation (recorded in both
+  CLAUDE.md write-path rules). Audit findings from 2026-07-16 (preflight
+  proxy, --out bypass, scan-trends if-available guard) fixed same day.
 - 2026-05-19: scaffolded by generate-skill (formal `/generate-skill`
   invocation).
 - 2026-05-19: Tavily/Exa keys both present in `~/.claude/skills/.env`

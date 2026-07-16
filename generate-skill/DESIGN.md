@@ -144,6 +144,15 @@ spec changes — same reason the handoff added Recoverable Setup Gates.
 6. **Emit** — created tree + honest verdict line + the opt-in line. No git
    actions (you own the `.gitignore` opt-in and commit).
 
+> **Addendum 2026-07-16:** this flow narrative has drifted from the live
+> SKILL.md in three places and is kept as the original design record: the
+> spec now holds **15 patterns (A1–A15)** in `skill-architecture.md` (not
+> "10 reusable patterns in handoff.md §3"); the `.gitignore` opt-in line is
+> gone — the skills repo is commit-by-default, the emit step shows a
+> `git add` reminder; and Step 1 now also runs the shared dependency check
+> (`~/.claude/scripts/preflight-deps.py --skills=audit-skill`, A15) with an
+> A7c gate and a ships-unaudited degrade.
+
 ## 7. Flags (consistent with scan-trends handoff §3.7)
 
 `--agent` (no prompts/pauses, documented defaults), `--out=PATH`,

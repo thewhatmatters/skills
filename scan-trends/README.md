@@ -6,8 +6,11 @@ been saying about a topic *recently*, with sources you can click.
 ## What you get
 
 A grounded, cited summary of the last N days of discussion on any topic — plus
-a self-contained `results.html` you can open in a browser (records your exact
-question, the date, and every finding with links).
+a self-contained HTML report you can open in a browser (records your exact
+question, the date, and every finding with links). Interactive runs ask where
+it lives — project `docs/research/`, the vault's `research/synthesis/` (with a
+markdown companion), or the working dir; `--agent`/no-flag runs keep the
+historical `results.html` in the working dir.
 
 ## How to run it
 

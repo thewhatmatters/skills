@@ -78,7 +78,10 @@ prompt — classify the question along three axes:
 
 `python3 scripts/preflight.py --out=<out>` — checks target writability, key
 presence, network, and report.py availability (the full per-check state
-table lives in the script's docstring). Act on `overall`:
+table lives in the script's docstring). When `<out>` isn't resolved yet
+(interactive default — Step 7 asks later), this validates the cwd as a
+proxy; re-check writability of the actual destination once Step 7 resolves
+it. Act on `overall`:
 
 - `ready` / `degraded` → proceed; note any degraded item in the run summary.
 - `gated` (`KEYS_MISSING`) → interactive: *Set keys / Proceed in NATIVE /
@@ -143,10 +146,12 @@ Either way: collect results across all subqueries into one working set and
 deduplicate by URL.
 
 If recency is one of the angles (e.g. "recent regulatory changes"), **invoke
-`/scan-trends`** for that subquery instead of search — this is normal skill
-composition, not a cross-skill import. Always run it in the main session,
-never inside a subagent (its gates are interactive); in fan-out mode run it
-alongside the agents and merge its findings into the working set.
+`/scan-trends`** for that subquery instead of search — if it's available;
+otherwise run the recency angle as a date-bounded search in the main session
+and note the substitution. This is normal skill composition, not a
+cross-skill import. Always run it in the main session, never inside a
+subagent (its gates are interactive); in fan-out mode run it alongside the
+agents and merge its findings into the working set.
 
 ## Step 5 — Focused follow-up (standard & exhaustive only)
 
@@ -189,15 +194,18 @@ sections, and the open questions.
 
 **Resolve `<out>` first**, by this precedence:
 
-1. **`--out=PATH`** → use it verbatim; no prompt.
+1. **`--out=PATH`** → use it verbatim; no prompt (an explicit path is the
+   consent).
 2. **`--agent`** → current working dir (the historical default); no prompt.
 3. **Otherwise ask** with one `AskUserQuestion`: *Where should this report
    live?*
    - **Project docs** — `<project>/docs/research/` (create the dir if
      absent). Use when the research belongs to the repo you're working in.
-   - **Vault research** — `<vault>/research/` in the OKF vault (default
-     vault root: same as curate-vault's `--vault` default). Use for
-     cross-project product/tool research worth keeping.
+   - **Vault research** — `<vault>/research/synthesis/` in the OKF vault
+     (default vault root: same as curate-vault's `--vault` default;
+     `research/` organizes captures in `sources/` and reports in
+     `synthesis/`). Use for cross-project product/tool research worth
+     keeping.
    - **Current directory** — the historical default.
 
 Then emit `<out>/research-<slug>.md` following the markdown layout for
@@ -205,20 +213,26 @@ the chosen research type in `references/research-templates.md`. **No
 clobber** — if the file exists, write `research-<slug>-2.md`, `-3.md`, …
 (spec A11 layered fallback).
 
-**Vault destination only — OKF wiring.** The destination answer above is the
-per-write human confirmation, but the file must land conformant (see
+**OKF wiring — whenever the resolved `<out>` is inside the vault**, however
+it got there (menu choice or explicit `--out`; the destination answer or the
+explicit path is the per-write human confirmation). First confirm the vault
+root actually exists — if it's absent (sync client not running), NEVER
+create it: fall back to the working dir with a note (curate-vault's
+`SYNC_UNMOUNTED` rule). Then land the file conformant (see
 `~/.claude/skills/curate-vault/references/okf-conventions.md`):
 
 1. Prepend OKF frontmatter to the md: `type: Research`, `title`,
    `description` (one sentence), `tags`, `timestamp` (ISO 8601). If the HTML
    companion was rendered (Step 8), link it from the body:
-   `[Interactive HTML version](/research/research-<slug>.html)`.
-2. Add the article's line to `<vault>/research/index.md` (reuse the
-   frontmatter `description`).
+   `[Interactive HTML version](/research/synthesis/research-<slug>.html)`.
+2. Add the article's line under `## Synthesized reports` in
+   `<vault>/research/index.md` (reuse the frontmatter `description`).
 3. Append a `**Creation**` entry under today's date in `<vault>/log.md`
    (newest-first).
 4. Verify: `python3 ~/.claude/skills/curate-vault/scripts/verify_bundle.py
-   --vault=<vault>` — fix anything this write introduced.
+   --vault=<vault>` — fix anything this write introduced. If curate-vault's
+   files are missing (steps 1–3 above are self-contained), skip the verify
+   and say so in the summary.
 
 ## Step 8 — Render HTML (optional)
 

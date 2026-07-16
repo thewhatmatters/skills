@@ -48,9 +48,13 @@ Both modes — dependency check (shared helper):
 python3 ~/.claude/scripts/preflight-deps.py --skills=audit-skill --files="~/.claude/skills/skill-architecture.md"
 ```
 
-`gated` on `audit-skill` → still scaffold, but say up front that Step 6's
+`gated` on `audit-skill` → interactive: offer *Fix it for me (git pull in
+~/.claude) / I'll do it myself / Skip* (spec A7c); on Skip or fix failure —
+and always under `--agent` — still scaffold, but say up front that Step 6's
 self-audit will be skipped and the result ships unaudited (degrade, never
-block — spec A7d); the spec file missing is already a STOP above.
+block — spec A7d). The spec file missing is already a STOP above. NATIVE
+without python3: run the same check with built-in file tools instead — do
+`~/.claude/skills/audit-skill/SKILL.md` and the spec file exist?
 
 ## Step 2 — Docs
 

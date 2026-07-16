@@ -106,6 +106,17 @@ A skill in this family passes if:
 
 ## 5. Decision log (the "why")
 
+- **2026-07-15/16 — destination step.** The persist step resolves where the
+  HTML lands (`--out` verbatim → `--agent` working-dir `results.html` → ask:
+  project `docs/research/` / vault `research/synthesis/` / working dir).
+  Vault-bound runs also persist the displayed report as `trends-<slug>.md`
+  (vault is markdown-native; HTML alone is unindexable) with full OKF
+  wiring; the wiring triggers on the RESOLVED path being inside the vault
+  (explicit `--out` counts — the path is the consent); an unmounted vault
+  root is never created (SYNC_UNMOUNTED rule — fall back to cwd with a
+  note). Audit findings from 2026-07-16 (vault guard, synthesis/ subdir,
+  --out anchor, verify degrade, no-clobber scope) fixed same day.
+
 - **`/last30days` → `/scan-trends`** + `--days=N`: a fixed "30 days" in the name
   made no sense when the window is parameterizable.
 - **Bluesky removed:** `public.api.bsky.app` 403'd from the dev machine; user

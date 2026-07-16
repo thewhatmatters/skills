@@ -13,7 +13,7 @@ built to.
 ## Single source of truth
 
 `skill-architecture.md` defines how every skill in this family is built:
-**§A** 13 architecture patterns (A1–A13), **§B** the audit rubric, **§C** the severity
+**§A** 15 architecture patterns (A1–A15), **§B** the audit rubric, **§C** the severity
 guide. Two skills are bound to it:
 
 - **`generate-skill`** scaffolds new skills *to* the spec (then self-audits).
