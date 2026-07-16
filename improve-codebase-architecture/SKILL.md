@@ -32,6 +32,20 @@ shared design vocabulary:
 
 ## Process
 
+### 0. Preflight dependencies
+
+```bash
+python3 ~/.claude/scripts/preflight-deps.py --skills=codebase-design,grilling
+```
+
+Both siblings are hard dependencies (the vocabulary source; the Step-3
+interview loop). On `gated`, tell the user which is missing (one `git pull`
+away in the skills repo), then degrade rather than block (spec A7d):
+missing `codebase-design` → use the vocabulary summary inlined below and
+flag the drift risk in the report header; missing `grilling` → produce the
+report, and at Step 3 fall back to a plain one-question-at-a-time
+conversation with the same intent.
+
 ### 1. Explore
 
 Read the project's domain glossary (`CONTEXT.md`) and any ADRs in
@@ -39,7 +53,9 @@ Read the project's domain glossary (`CONTEXT.md`) and any ADRs in
 
 Then use the Agent tool with `subagent_type=Explore` to walk the codebase
 (fall back to `general-purpose` if `Explore` isn't available in the current
-harness). Don't follow rigid heuristics — explore organically and note
+harness; if the Agent tool itself is unavailable — e.g. this skill is
+already running inside a subagent — explore inline in the main session:
+degrade, never block). Don't follow rigid heuristics — explore organically and note
 where you experience friction:
 
 - Where does understanding one concept require bouncing between many small

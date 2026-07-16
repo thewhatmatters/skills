@@ -72,7 +72,12 @@ mode in one line.
 ## Steps
 
 1. **Preflight** — `python3 scripts/preflight.py [--agent]`. Read the JSON; only
-   `down` stops a run (nothing here is network-bound).
+   `down` stops a run (nothing here is network-bound). Then the dependency
+   check for Step 7's verification pair:
+   `python3 ~/.claude/scripts/preflight-deps.py --skills=audit-ui,automate-browser`
+   — `gated` → proceed, but announce now that Step 7 degrades to manual
+   verification (open the overlay, eyeball the four checks yourself) instead
+   of the measured audit-ui/automate-browser pass (spec A7d).
 2. **Probe the project** — `python3 scripts/probe.py [path]` → JSON: Tailwind
    v4/v3/none, framework (React/Vue/none), existing `DESIGN.md ## Grid`, current
    `--spacing` base. This picks the path and prevents silently re-scaling a live

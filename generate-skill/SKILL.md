@@ -42,6 +42,16 @@ SCRIPTS: `python3 scripts/preflight.py --out=<destination>`. Read the JSON.
 NATIVE: confirm `~/.claude/skills/skill-architecture.md` is readable and the
 snapshot is present; otherwise STOP.
 
+Both modes — dependency check (shared helper):
+
+```bash
+python3 ~/.claude/scripts/preflight-deps.py --skills=audit-skill --files="~/.claude/skills/skill-architecture.md"
+```
+
+`gated` on `audit-skill` → still scaffold, but say up front that Step 6's
+self-audit will be skipped and the result ships unaudited (degrade, never
+block — spec A7d); the spec file missing is already a STOP above.
+
 ## Step 2 — Docs
 
 SCRIPTS: `python3 scripts/docs.py` (add `--refresh` if the flag was passed).
