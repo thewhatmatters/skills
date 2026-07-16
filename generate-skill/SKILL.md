@@ -1,6 +1,6 @@
 ---
 name: generate-skill
-description: Scaffold a new Claude Code skill against the house spec at ~/.claude/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a Claude skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Claude docs (offline fallback), validates frontmatter against the upstream field list, follows the 14 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
+description: Scaffold a new Claude Code skill against the house spec at ~/.claude/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a Claude skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Claude docs (offline fallback), validates frontmatter against the upstream field list, follows the 15 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
 ---
 
 # generate-skill
@@ -101,7 +101,7 @@ prompt.
 ## Step 5 — Scaffold
 
 Open `references/generation-recipe.md` and follow it. The recipe enforces the
-14 architecture patterns and uses the LIVE frontmatter field list from Step 2
+15 architecture patterns and uses the LIVE frontmatter field list from Step 2
 — **never invent a field that is not in the live docs**.
 
 Files created under `<out>/<name>/`:

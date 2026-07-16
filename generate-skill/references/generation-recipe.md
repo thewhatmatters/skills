@@ -4,8 +4,8 @@ This file is loaded by `SKILL.md` Step 5 — progressive disclosure (spec A1).
 It is the only place that holds scaffold templates; everything else stays
 lean.
 
-The 14 architecture patterns are NOT duplicated here. They live in
-`~/.claude/skills/skill-architecture.md` (A1–A14). The recipe references them
+The 15 architecture patterns are NOT duplicated here. They live in
+`~/.claude/skills/skill-architecture.md` (A1–A15). The recipe references them
 by id (e.g. "spec A6 = preflight") so a future spec edit changes both the
 generator and the auditor automatically.
 
@@ -188,8 +188,8 @@ Created: <<TODAY>>  ·  Generator: generate-skill @ CC <<CC_VERSION>>
 ## 1. Purpose
 <<ONE_LINER>>
 
-## 2. Reusable patterns (link to spec A1..A14)
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A14;
+## 2. Reusable patterns (link to spec A1..A15)
+This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A15;
 note here any deliberate deviations.
 
 ## 3. Decision log

@@ -1,11 +1,12 @@
 # Skill Architecture — Canonical Spec
 
 The single source of truth for how a "research/automation" skill in this family
-is built. **`audit-skill` checks against this; a future `generate-skill`
-scaffolds to this.** Edit here once; both tools follow.
+is built. **`audit-skill` checks against this; `generate-skill` scaffolds to
+this.** Edit here once; both tools follow.
 
-Reference implementation: `scan-trends`. Last updated: 2026-07-03 (added A14
-trigger mode, the A1 branch test, and the deletion-test rubric item).
+Reference implementation: `scan-trends`. Last updated: 2026-07-16 (added A15
+dependency discipline + its rubric item; previously 2026-07-03: A14 trigger
+mode, the A1 branch test, the deletion-test rubric item).
 
 ---
 
@@ -79,6 +80,24 @@ deviations should be deliberate, not accidental.
     meaning-dense terms used consistently (e.g. "vertical slice", "meaning-
     preserving") whose adoption is observable in reasoning traces — over
     paragraphs of instruction.
+15. **Dependency discipline.** Cross-dependencies come in three classes, each
+    with its own check:
+    (a) **Hard, script-checkable** — a sibling skill, agent definition, or
+    shared file without which the run can't fulfill its contract. Declare and
+    check alongside the A6 preflight via the shared helper:
+    `python3 ~/.claude/scripts/preflight-deps.py --skills=… --agents=… --files=…`.
+    A missing dep gates as `DEPS_MISSING` (A7 applies — never blocks), and
+    SKILL.md documents the specific degrade (e.g. generate-skill without
+    audit-skill scaffolds but ships unaudited, said up front).
+    (b) **Session-only** — MCP tools and the Agent tool exist only inside the
+    running session; scripts cannot see them. Probe model-side at Step 0 and
+    document the fallback (MCP absent → built-in WebSearch/WebFetch; Agent
+    tool absent → inline/serial).
+    (c) **Soft composes** — mentioned skills that enhance but aren't required
+    stay guarded by "if available"; never assumed installed, never gated.
+    The weekly lint (`~/.claude/scripts/vault-skills-lint.py`) backstops all
+    three classes with zero per-skill wiring: stale `~/.claude/...` path
+    references alert immediately; unknown skill/agent names alert when new.
 
 ## B. Audit rubric
 
@@ -104,6 +123,10 @@ Each item is PASS / FAIL / N/A with file:line evidence.
 - [ ] Preflight covers every external dependency; 4-state status + gate id;
       unreliable deps verified for real.
 - [ ] Recoverable gaps use the Setup Gate pattern (all 4 parts present).
+- [ ] Dependencies classified per A15: hard deps preflighted via the shared
+      helper with a documented degrade; session-only deps (MCP, Agent tool)
+      probed model-side with a documented fallback; soft composes guarded by
+      "if available".
 - [ ] Transient errors do NOT trigger gates (trigger is unambiguous).
 - [ ] `--agent` bypasses every prompt/pause.
 - [ ] Fallbacks are honest; partial runs disclosed in output.
