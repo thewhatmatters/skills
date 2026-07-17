@@ -2,9 +2,14 @@
 """Verify OKF conformance + link integrity for the vault (read-only).
 
 Checks the v0.1 conformance floor: (1) every non-reserved .md has a parseable
-frontmatter block, (2) with a non-empty `type`. Also resolves every
-bundle-absolute link (and relative links in index files) outside fenced code
-blocks. Broken links are reported as `info` — OKF tolerates them by design.
+frontmatter block, (2) with a non-empty `type`, (3) the block parses as STRICT
+YAML — Obsidian rejects invalid YAML (e.g. an unquoted value containing `: `)
+and renders the whole block as body text, so lenient acceptance here hides
+user-visible breakage. Strict parsing uses PyYAML when importable; otherwise a
+narrow heuristic catches the known-fatal unquoted-`: ` pattern (disclosed on
+stderr). Also resolves every bundle-absolute link (and relative links in index
+files) outside fenced code blocks. Broken links are reported as `info` — OKF
+tolerates them by design.
 I/O: stdout JSON {conformant, errors, broken_links, stats} · stderr board ·
 exit 1 only when conformance errors exist (broken links never fail the run).
 """
@@ -13,6 +18,29 @@ import json
 import os
 import re
 import sys
+
+try:
+    import yaml as _yaml
+except ImportError:
+    _yaml = None
+
+# plain (unquoted, non-block) scalar value that contains `: ` — invalid YAML
+_COLON_SPACE = re.compile(r"^(\w[\w-]*):\s+(?![\"'|>#])(?=.*: ).*$", re.M)
+
+
+def yaml_errors(fm, rel):
+    """Strict-parse a frontmatter block; return conformance error strings."""
+    if _yaml is not None:
+        try:
+            _yaml.safe_load(fm)
+            return []
+        except _yaml.YAMLError as e:
+            detail = str(e).split("\n")[0]
+            return [f"{rel}: frontmatter is not valid YAML ({detail}) — "
+                    f"quote values containing `: `"]
+    hits = [m.group(1) for m in _COLON_SPACE.finditer(fm)]
+    return [f"{rel}: `{k}` value contains unquoted `: ` (invalid YAML) — "
+            f"double-quote it" for k in hits]
 
 DEFAULT_VAULT = os.path.expanduser(
     "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN"
@@ -64,8 +92,10 @@ def main():
             m = re.match(r"^---\n(.*?)\n---(\n|$)", text, re.S)
             if not m:
                 errors.append(f"{rel}: no parseable frontmatter block")
-            elif not re.search(r"^type:\s*\S", m.group(1), re.M):
-                errors.append(f"{rel}: missing or empty `type`")
+            else:
+                if not re.search(r"^type:\s*\S", m.group(1), re.M):
+                    errors.append(f"{rel}: missing or empty `type`")
+                errors.extend(yaml_errors(m.group(1), rel))
 
         # CommonMark fences: a block opened with N backticks closes only on a
         # run of >= N — nested shorter fences stay inside (e.g. ``` in ````).
@@ -91,6 +121,9 @@ def main():
                         broken.append(f"{rel}:{i} -> {target}")
 
     conformant = not errors
+    if _yaml is None:
+        print("strict YAML unavailable (no PyYAML) — heuristic check only",
+              file=sys.stderr)
     print(f"concepts: {n_concepts}  reserved: {n_reserved}", file=sys.stderr)
     print(f"conformance errors: {len(errors)}", file=sys.stderr)
     for e in errors:

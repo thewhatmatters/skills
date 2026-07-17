@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Web application — runtime architecture",
+    "description": "Request path from clients through the edge into services and stores."
+  },
+  "components": [
+    { "id": "browser", "label": "Browser", "sublabel": "Next.js SPA", "kind": "client", "row": 0, "col": 0 },
+    { "id": "mobile", "label": "Mobile app", "sublabel": "React Native", "kind": "client", "row": 1, "col": 0 },
+    { "id": "cdn", "label": "CDN / Edge", "sublabel": "static + cache", "kind": "gateway", "row": 0, "col": 1, "rowspan": 2 },
+    { "id": "api", "label": "API service", "sublabel": "REST + auth", "kind": "service", "row": 0, "col": 2, "rowspan": 2 },
+    { "id": "db", "label": "PostgreSQL", "sublabel": "primary store", "kind": "store", "row": 0, "col": 3 },
+    { "id": "cache", "label": "Redis", "sublabel": "cache + sessions", "kind": "store", "row": 1, "col": 3 },
+    { "id": "queue", "label": "Job queue", "kind": "queue", "row": 2, "col": 2 },
+    { "id": "worker", "label": "Worker", "sublabel": "async jobs", "kind": "service", "row": 2, "col": 3 },
+    { "id": "email", "label": "Email provider", "kind": "external", "row": 2, "col": 4 }
+  ],
+  "boundaries": [
+    { "id": "vpc", "label": "Private network", "contains": ["api", "db", "cache", "queue", "worker"] }
+  ],
+  "connections": [
+    { "from": "browser", "to": "cdn", "label": "HTTPS" },
+    { "from": "mobile", "to": "cdn", "label": "HTTPS" },
+    { "from": "cdn", "to": "api" },
+    { "from": "api", "to": "db", "label": "SQL" },
+    { "from": "api", "to": "cache", "label": "get/set" },
+    { "from": "api", "to": "queue", "label": "enqueue" },
+    { "from": "queue", "to": "worker", "label": "consume" },
+    { "from": "worker", "to": "email", "label": "SMTP", "style": "dashed" }
+  ]
+}

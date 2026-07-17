@@ -9,8 +9,12 @@ mirror wins.
 ```markdown
 ---
 type: <Type>                        # REQUIRED, non-empty
-title: <Display name>
-description: <One sentence — reused verbatim in index entries>
+title: "<Display name>"            # ALWAYS double-quote title + description:
+description: "<One sentence — reused verbatim in index entries>"
+                                    # an unquoted value containing `: ` is
+                                    # invalid YAML and Obsidian dumps the whole
+                                    # block as body text; verify_bundle.py
+                                    # strict-parses and rejects it
 tags: [tag, tag]
 timestamp: <ISO 8601, e.g. 2026-07-02T00:00:00Z>
 ---

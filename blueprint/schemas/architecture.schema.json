@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "blueprint architecture IR",
+  "description": "Typed intermediate representation for architecture diagrams. The agent authors this; validate.py gates it; render.py draws it. Grid placement only — no free coordinates, no arithmetic.",
+  "type": "object",
+  "required": ["schema_version", "diagram_type", "meta", "components"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "diagram_type": { "const": "architecture" },
+    "meta": {
+      "type": "object",
+      "required": ["title"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "maxLength": 80 },
+        "description": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "row", "col"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "label": { "type": "string", "minLength": 1 },
+          "sublabel": { "type": "string" },
+          "kind": { "enum": ["service", "store", "queue", "client", "external", "gateway"] },
+          "row": { "type": "integer", "minimum": 0, "maximum": 7 },
+          "col": { "type": "integer", "minimum": 0, "maximum": 5 },
+          "rowspan": { "type": "integer", "minimum": 1, "maximum": 4 },
+          "colspan": { "type": "integer", "minimum": 1, "maximum": 3 }
+        }
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "contains"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "label": { "type": "string", "minLength": 1 },
+          "contains": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        }
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "additionalProperties": false,
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "label": { "type": "string", "maxLength": 40 },
+          "style": { "enum": ["solid", "dashed"] },
+          "bidirectional": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
