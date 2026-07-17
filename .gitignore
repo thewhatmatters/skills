@@ -31,9 +31,12 @@ results.html
 automate-browser/tmp/
 
 # --- Symlinked third-party skills (not ours to commit) -----------------------
-# Skills installed by other apps (Conan, etc.) sometimes drop a symlink into
-# ~/.claude/skills. Their source lives elsewhere; just ignore the symlink here.
+# Skills installed by other apps (Conan, Orca, etc.) sometimes drop a symlink
+# into ~/.claude/skills. Their source lives elsewhere; ignore the symlink here.
 /conan-change-radio
+/orca-cli
+/orchestration
+/computer-use
 
 # --- External skill installer (shadcn/ui official skill, etc.) ---------------
 # Compose with external skills; don't vendor their source. `skills-lock.json`
@@ -63,6 +66,13 @@ automate-browser/tmp/
 **/HANDOFF.md
 **/.claude/current-task.txt
 **/.claude/handoff-archive/
+# core.ignorecase=true (macOS) makes **/HANDOFF.md also swallow the
+# lowercase per-skill DECISION LOGS (skills/<name>/handoff.md — tracked,
+# living docs). Un-ignore those explicitly. Residual risk accepted: a
+# session HANDOFF.md written inside a skill dir becomes trackable — but on
+# a case-insensitive filesystem it would be the same file as handoff.md
+# anyway, so the real hazard there is content clobber, not tracking.
+!*/handoff.md
 
 # macOS
 .DS_Store
