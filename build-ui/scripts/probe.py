@@ -143,7 +143,7 @@ def shadcn_info(root):
 
 
 # Deferral targets — external skills build-ui hands execution off to. SKILL.md
-# Step 3 surfaces an install command from the fallback path when one is False.
+# Step 5 surfaces an install command from the fallback path when one is False.
 DEFERRAL_TARGETS = ("shadcn", "next-best-practices")
 
 

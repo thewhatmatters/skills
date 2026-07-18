@@ -10,7 +10,7 @@ Implement UI in a real project, following its existing stack and conventions
 instead of imposing new ones. Owns the *execution* axis of frontend work.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
+Follows `~/.claude/skills/skill-architecture.md` A1–A15. Notable points:
 - **A1 progressive disclosure:** per-stack guidance (Tailwind, shadcn, vanilla
   CSS, a11y) lives in `references/`, loaded only for the libraries the project
   actually uses. SKILL.md stays a lean flow.
@@ -19,8 +19,11 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
 - **A4 scripts:** `probe.py` (project inventory), `preflight.py` (project root
   found + writable) — JSON stdout, diagnostics stderr, graceful.
 - **A8 composition by reference:** names `frontend-design` (taste), `add-motion`
-  (planned, animation), `source-ui` (visual reference); imports none. The
-  boundary is explicit so the descriptions don't cross-fire.
+  (animation craft — shipped, executes motion inside this contract on showcase
+  tiers), `grilling` (interview loop), `source-ui` (visual reference),
+  `use-grid-system` (grid discipline); imports none. v2 marks each compose
+  "if installed" with an inline fallback (A15c). The boundary is explicit so
+  the descriptions don't cross-fire.
 
 ## 3. Decision log
 - 2026-05-31: **Probe the project for `DESIGN.md`; reference the file, not a
@@ -132,6 +135,50 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   standards doc the user supplied; preserved verbatim with light framing for
   the references/ idiom.
 
+- 2026-07-18: **v2 — widened from execution skill to tiered production
+  contract** (probe → tier → brief → build → art gate → checkpoint verify).
+  Motivated by the cinematic-scroll-prompt-kit experiment (amirmushichge repo):
+  its value was the *separation of stable implementation contract from
+  per-project brief*, plus measurable QA checkpoints — and by the Fujigoko
+  failure, where a checkpoint-verified build was rejected on art direction
+  after full spend. Decisions:
+  - **Merged the contract layer INTO build-ui** rather than adding a separate
+    orchestrator skill (`ship-ui`/`motion-contract` were considered; user chose
+    to keep the name). Two skills both catching UI asks was a real
+    cross-trigger risk; one front door with tiers is cheaper to route.
+  - **Tiered process (user-confirmed):** micro → straight to execution;
+    product → quick brief; showcase → grilling interview into a committed
+    `docs/briefs/<slug>.md` + HARD art-direction gate (one approved frame
+    before full build) + checkpoint QA (≥2 viewports, forward AND reverse for
+    scroll work, reduced motion, console, interaction integrity).
+  - **Art gate rationale:** "verified-but-ugly ships without it" — taste is
+    checked on one cheap frame before the spend. Under `--agent` it degrades
+    (build frame, flag `ART_GATE_UNREVIEWED`, continue) per A7d.
+  - **Brief template asks imagery-source FIRST** — the Fujigoko lesson: the
+    imagery plan (photo/generated/painterly-code/flat-vector) sets the quality
+    ceiling before any motion or code quality matters.
+  - **Interview is composed, not owned:** `grilling` runs the loop;
+    `references/brief-template.md` is the target document. `--quick` collapses
+    to one pre-filled form; `--brief=PATH` reuses a locked brief.
+  - Existing probe/references machinery untouched; `add-motion` executes
+    motion inside this contract on showcase tiers (composition unchanged).
+  - Spec-drift note at scaffold time: live docs (CC 2.1.181) added a
+    `disallowed-tools` frontmatter field vs the 2.1.144 baseline — not used
+    here; recorded per reconcile policy.
+- 2026-07-18: **v2 description trigger-eval (25-query bake-off, claude-fable-5):
+  16/25 routing match; shipped without wording changes.** All sibling
+  boundaries held (grilling/audit-ui/use-grid-system/source-ui/decompose-prd
+  should-triggers and all pure negatives: clean). build-ui's own misses routed
+  to *none* despite verbatim description phrases ("wire up this form", "ship
+  end-to-end", "hero/landing sequence") — context-free eval sessions answer
+  trivial-looking asks directly rather than invoking a skill; wording is not
+  the bottleneck, so no churn. Two live cross-fire pairs to watch:
+  "interview me about this UI" → `grilling` (interviews, but outside the
+  build contract) and "run the UI contract" → `audit-ui` ("contract" reads as
+  review). Explicit `/build-ui` bypasses routing. Re-measure only on the next
+  description change. Eval set + results in session scratchpad
+  (build-ui-trigger-eval.json / -result.json).
+
 ## 4. Known limitations / environment caveats
 - **Library coverage** in `references/` is intentionally lean — Tailwind,
   shadcn, vanilla CSS, a11y. CSS-in-JS (styled-components, vanilla-extract,
@@ -149,7 +196,8 @@ Secrets/gate rows are N/A (keyless, no network, no external binaries; python3
 is the only runtime).
 
 ## 6. Notes
-Pairs with `frontend-design` (taste), `source-ui` (visual reference, Mobbin +
-Refero), `decompose-prd` (iteration-sized story slicing for the build), and an
-eventual `add-motion` (animation craft). Browser verification lives in
+Pairs with `grilling` (showcase interview loop), `frontend-design` (taste),
+`add-motion` (animation craft), `source-ui` (visual reference, Mobbin +
+Refero), `use-grid-system` (grid discipline), and `decompose-prd`
+(iteration-sized story slicing for the build). Browser verification lives in
 `automate-browser` / `example-skills:webapp-testing`.
