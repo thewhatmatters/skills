@@ -16,7 +16,8 @@ description: "<One sentence — reused verbatim in index entries>"
                                     # block as body text; verify_bundle.py
                                     # strict-parses and rejects it
 tags: [tag, tag]
-timestamp: <ISO 8601, e.g. 2026-07-02T00:00:00Z>
+created: <ISO 8601 — set ONCE when the article is added; NEVER bumped>
+timestamp: <ISO 8601, e.g. 2026-07-02T00:00:00Z — last meaningful change>
 ---
 
 Body: structural markdown (headings, lists, tables) over prose.
@@ -24,6 +25,13 @@ Cross-link with absolute form: [text](/path/to/concept.md).
 Conventional headings when applicable: # Schema, # Examples, # Citations.
 ```
 
+- `created` vs `timestamp` (house extension, additive — legal because the
+  OKF floor is only parseable frontmatter + non-empty `type`): `created` is
+  when the article entered the vault and is immutable; `timestamp` is the
+  spec's own "last meaningful change" and is bumped on every gated update.
+  New articles set both (identical at birth). Never rewrite `created` during
+  updates, merges, or grooms — audit-vault reads the pair to split document
+  age from freshness.
 - Body structure/formatting follows the house markdown style spec:
   `~/.claude/skills/format-markdown/references/markdown-style.md`. Where it
   and OKF overlap (frontmatter, absolute links, reserved `index.md`/`log.md`),
