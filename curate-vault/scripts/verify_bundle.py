@@ -57,6 +57,15 @@ TOOL_FILES = {"claude.md", "handoff.md"}
 _HAZ = re.compile(r"(?<!\\)\$\$|(?<!\\)\$\S[^$\n]*\S\$|(?<!\\)<[a-zA-Z/][a-zA-Z0-9/-]*( [^>]*)?>")
 _HAZ_OK = re.compile(r"^</?(br|hr|b|i|em|strong|sub|sup|code|pre|kbd|details|summary|img|a)( |/|>)", re.I)
 
+# Human-confirmed false positives, keyed (vault-relative path, reported
+# fragment) — path not line number, so entries survive edits elsewhere in the
+# file. Known mode: an inline code span wrapping across lines defeats the
+# per-line backtick stripping. Groomed 2026-07-18.
+_HAZ_ALLOWLIST = {
+    ("projects/prive/tm-app/net-new-scraper-playbook.md", "<slug>"),
+    ("projects/prive/tm-app/net-new-scraper-playbook.md", "<PORT>"),
+}
+
 
 def render_hazards(text, rel):
     """Per-line candidate sweep for Obsidian render hazards in the body.
@@ -83,6 +92,8 @@ def render_hazards(text, rel):
         for m in _HAZ.finditer(stripped):
             frag = m.group(0)
             if frag.startswith("<") and _HAZ_OK.match(frag):
+                continue
+            if (rel, frag[:40]) in _HAZ_ALLOWLIST:
                 continue
             out.append(f"{rel}:{i} {frag[:40]}")
     return out
