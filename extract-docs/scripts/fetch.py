@@ -169,7 +169,38 @@ def to_markdown(html_text):
     md, title = conv.markdown(), conv.title
     if title and not md.startswith("#"):
         md = f"# {title}\n\n{md}"
-    return md, title
+    return escape_bare_tags(md), title
+
+
+_BARE_TAG = re.compile(r"(?<![\\`])(</?[a-zA-Z][a-zA-Z0-9-]*(?: [^>`\n]*)?/?>)")
+
+
+def escape_bare_tags(md):
+    """Backtick bare HTML/JSX-ish tags left in prose by conversion.
+
+    Obsidian (and other markdown renderers) treat a bare `<head>`-style tag
+    as raw HTML that can swallow the rest of the block. Applied per line,
+    skipping fenced blocks and existing inline code spans, so code samples
+    stay verbatim. Deterministic + idempotent — safe across refreshes.
+    """
+    out, in_fence = [], False
+    for line in md.split("\n"):
+        if re.match(r"^\s*```", line):
+            in_fence = not in_fence
+            out.append(line)
+            continue
+        if in_fence or "`" in line:
+            # lines with existing spans: only wrap tags outside the spans
+            if not in_fence and "<" in line:
+                parts = re.split(r"(`[^`]*`)", line)
+                line = "".join(p if p.startswith("`") else _BARE_TAG.sub(r"`\1`", p)
+                               for p in parts)
+            out.append(line)
+            continue
+        if "<" in line:
+            line = _BARE_TAG.sub(r"`\1`", line)
+        out.append(line)
+    return "\n".join(out)
 
 
 def local_path(url, prefix, out_dir):

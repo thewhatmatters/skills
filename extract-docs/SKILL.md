@@ -31,7 +31,8 @@ tree is *regenerable* — re-run to refresh; nothing here is curated memory.
 | `--vendor=<slug>` | override the vendor slug (default: derived from the domain, e.g. `onorca-dev` → `orca`… ask if ambiguous) |
 | `--max-pages=N` | scope cap (default 200); manifests larger than N gate for scope confirmation |
 | `--tier=<t>` | force a ladder tier: `llms-full`, `llms`, `page-md`, `sitemap`, `crawl` |
-| `--dry-run` | probe the ladder, print the plan (tier, page count, destination), write nothing |
+| `--refresh` | update an existing mirror in place: probe again, then `scripts/refresh.py` applies only the **delta** (added / changed / removed pages) and reports it — see "Refreshing a mirror" |
+| `--dry-run` | probe the ladder, print the plan (tier, page count, destination), write nothing. With `--refresh`: compute and report the delta without writing |
 
 ## Step 0 — Mode probe
 
@@ -92,6 +93,23 @@ table of every page (title, local path, source URL). This is the run's
 artifact (spec A10) and the refresh anchor — re-running the skill re-fetches
 against it. Suggest (don't apply) a CLAUDE.md `@docs/sources/<vendor>/index.md`
 import so future sessions see the docs.
+
+## Refreshing a mirror (`--refresh`)
+
+For a destination that already holds a mirror: run the Step-2 probe as
+usual, then `python3 scripts/refresh.py --manifest=<probe-json> --out=<dest>
+[--dry-run]` instead of `fetch.py`. It classifies every page — **added**
+(fetched + written), **changed** (body replaced, any existing OKF
+frontmatter preserved verbatim), **removed** (deleted), unchanged (left
+alone) — and emits the delta JSON. Honest cost: the full manifest is still
+fetched for comparison; the win is write-churn and the **delta report**,
+which doubles as a vendor changelog (surface it to the user — renames and
+new pages are exactly the signal that invalidates existing project
+knowledge). After a non-empty delta: re-run whatever conformance/index
+pass the original extraction used (vault mirrors: frontmatter for added
+pages, index regeneration, a log entry naming the delta, verify). A
+version-scoped manifest (e.g. Next.js llms.txt) makes the delta a
+version-bump detector — note the new version in the mirror's root index.
 
 ## Step 6 — Offer the vault distillate (interactive only)
 

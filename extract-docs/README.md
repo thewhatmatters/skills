@@ -34,8 +34,10 @@ otherwise they're listed as not captured.
 2. **Fetch + convert** — scripts download each page and convert the main
    content to markdown deterministically; the model never pages through the
    site burning tokens.
-3. **Index** — writes the manifest index that doubles as the refresh anchor;
-   re-run the skill any time to update the capture.
+3. **Index** — writes the manifest index that doubles as the refresh anchor.
+   Re-run any time for a full re-extract, or use `--refresh` to apply only
+   the delta (added/changed/removed pages) and get a report of what the
+   vendor changed — useful as a docs changelog.
 4. **Distill (optional)** — if something genuinely durable surfaced, offers
    one vault article via curate-vault.
 

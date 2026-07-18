@@ -25,6 +25,8 @@ note here any deliberate deviations.
   hence no `preflight-deps.py` wiring.
 
 ## 3. Decision log
+- 2026-07-18: Added `--refresh` (scripts/refresh.py) — delta refresh for existing mirrors: added/changed/removed classification by source-comment URL + normalized-body hash (frontmatter and extracted-date excluded so re-runs converge); changed pages keep local OKF frontmatter verbatim; full manifest still fetched (the win is write-churn + the delta report as vendor changelog). Also to_markdown now backticks bare HTML/JSX tags left in prose (Obsidian render safety; unit-tested, idempotent) — motivated by 49 hazard candidates in the first Next.js mirror.
+
 
 - 2026-07-17: scaffolded by generate-skill; self-audit (skill-auditor) found
   0 HIGH / 1 MEDIUM — probe.py pre-truncated manifests to `--max-pages`,
