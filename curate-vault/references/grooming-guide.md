@@ -33,7 +33,7 @@ proposal or a report-only flag — never a silent fix.
 | **Duplicate / heavy overlap** | Same rules as the Dedupe section of `curation-guide.md`, applied vault-against-itself: title similarity, description overlap, same tags + same claims in the body | **Merge** into one survivor |
 | **Stale content** | A claim about checkable reality fails verification (a path, flag, tool, or version that no longer exists); or a newer article supersedes it | **Update** the stale part; archive only when nothing durable remains |
 | **Orphan** | Listed in no `index.md` AND no incoming links (invert the scan's `links`) | **Wire** into the right index; archive only if also superseded |
-| **Mechanical drift** | `verify_bundle.py` output: missing/empty frontmatter `type`, broken links whose intended target is inferable (file was moved/renamed) | **Fix** (add frontmatter, retarget link) |
+| **Mechanical drift** | `verify_bundle.py` output: missing/empty frontmatter `type`, invalid YAML, broken links whose intended target is inferable (file was moved/renamed), and its `render_hazards` list (unescaped math / bare tags in bodies) | **Fix** (add frontmatter, retarget link, escape/backtick the hazard) |
 
 ## Staleness rules — age is a signal, never a verdict
 
@@ -88,6 +88,18 @@ Follow the existing rules: updates preserve untouched frontmatter keys and
 bump `timestamp` (Dedupe rules in `curation-guide.md`); index wiring and log
 entries per SKILL.md Step 7. Broken links are legal in OKF — propose a fix
 only when the intended target is inferable; otherwise report.
+
+When completing a directory index, **regenerate** entry lines from each
+article's frontmatter (`title` + `description`) instead of hand-writing them
+— descriptions stay in sync by construction.
+
+**Render hazards are candidates, not verdicts.** The verifier's
+`render_hazards` list has structural false-positive modes — multi-line code
+spans defeat any regex, and the same strings are inert inside frontmatter
+(Obsidian properties don't parse MathJax/HTML). Eyeball every hit in
+context before proposing an edit; fix by backticking tags / escaping `\$`
+in body text only. See the gotcha:
+`/obsidian/unescaped-math-and-tags-break-rendering.md`.
 
 ## The gate
 

@@ -162,7 +162,9 @@ frontmatter (required `type`; `title`, `description`, `tags`, `timestamp`),
 absolute `/path.md` links, `# Citations` where claims have sources. Then wire:
 add an entry line to the target directory's `index.md` (create it if new),
 add new top-level directories to the root `/index.md`, and append a dated
-entry to `/log.md` (newest first, ISO date heading).
+entry to `/log.md` (newest first, ISO date heading; anchor the insertion on
+existing entry text, never on a date heading — a concurrent session may be
+writing the same section).
 
 ## Step 8 — Verify + summary
 

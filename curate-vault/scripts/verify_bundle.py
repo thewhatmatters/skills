@@ -54,6 +54,40 @@ RESERVED = {"index.md", "log.md"}
 TOOL_FILES = {"claude.md", "handoff.md"}
 
 
+_HAZ = re.compile(r"(?<!\\)\$\$|(?<!\\)\$\S[^$\n]*\S\$|(?<!\\)<[a-zA-Z/][a-zA-Z0-9/-]*( [^>]*)?>")
+_HAZ_OK = re.compile(r"^</?(br|hr|b|i|em|strong|sub|sup|code|pre|kbd|details|summary|img|a)( |/|>)", re.I)
+
+
+def render_hazards(text, rel):
+    """Per-line candidate sweep for Obsidian render hazards in the body.
+
+    Report-only: false positives are expected (multi-line code spans defeat
+    any regex approach) — callers surface these for human review, never fail
+    the run on them.
+    """
+    lines = text.splitlines()
+    fm_end = 0
+    if lines and lines[0] == "---":
+        for i in range(1, len(lines)):
+            if lines[i] == "---":
+                fm_end = i
+                break
+    out, in_fence = [], False
+    for i, line in enumerate(lines[fm_end + 1:], fm_end + 2):
+        if re.match(r"^\s*```", line):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        stripped = re.sub(r"`[^`]*`", "", line)
+        for m in _HAZ.finditer(stripped):
+            frag = m.group(0)
+            if frag.startswith("<") and _HAZ_OK.match(frag):
+                continue
+            out.append(f"{rel}:{i} {frag[:40]}")
+    return out
+
+
 def md_files(vault):
     for dirpath, dirs, files in os.walk(vault):
         dirs[:] = sorted(d for d in dirs if not d.startswith("."))
@@ -74,7 +108,7 @@ def main():
                           "broken_links": [], "stats": {}}))
         sys.exit(1)
 
-    errors, broken, n_concepts, n_reserved = [], [], 0, 0
+    errors, broken, hazards, n_concepts, n_reserved = [], [], [], 0, 0
 
     for path in md_files(vault):
         rel = os.path.relpath(path, vault)
@@ -83,6 +117,9 @@ def main():
         except OSError as e:
             errors.append(f"{rel}: unreadable ({e})")
             continue
+
+        if not rel.startswith("archive/"):
+            hazards.extend(render_hazards(text, rel))
 
         base = os.path.basename(path)
         if base in RESERVED or base.lower() in TOOL_FILES:
@@ -128,6 +165,9 @@ def main():
     print(f"conformance errors: {len(errors)}", file=sys.stderr)
     for e in errors:
         print(f"  ⛔ {e}", file=sys.stderr)
+    print(f"render hazards (info — human-review candidates): {len(hazards)}", file=sys.stderr)
+    for h in hazards:
+        print(f"  ⚠ {h}", file=sys.stderr)
     print(f"broken links (info — legal in OKF): {len(broken)}", file=sys.stderr)
     for b in broken:
         print(f"  ℹ {b}", file=sys.stderr)
@@ -137,6 +177,7 @@ def main():
         "conformant": conformant,
         "errors": errors,
         "broken_links": broken,
+        "render_hazards": hazards,
         "stats": {"concepts": n_concepts, "reserved": n_reserved},
     }, indent=2))
     sys.exit(0 if conformant else 1)
