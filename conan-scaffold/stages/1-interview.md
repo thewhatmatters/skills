@@ -26,9 +26,9 @@ Five areas, in this order:
    gate every commit (typecheck, test, build). "Not decided yet" is a
    valid answer — it gets recorded as an open decision, not forced.
 4. **Rituals.** Two independent choices:
-   - **Handoff at session boundaries** — convention only (the CLAUDE.md
-     instructs sessions to run a handoff before ending/compacting), or
-     enforced (the first working session offers to install the handoff
+   - **Checkpoint at session boundaries** — convention only (the CLAUDE.md
+     instructs sessions to run a checkpoint before ending/compacting), or
+     enforced (the first working session offers to install the checkpoint
      hooks). Ask which they want.
    - **Knowledge wiring** — should the project be wired into their
      knowledge vault now, later, or not at all?

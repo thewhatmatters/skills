@@ -15,7 +15,7 @@ description: >-
   title, description, tags, target path) that the user confirms or edits
   before ANY write. On approval writes OKF-conformant concepts, wires index.md
   files, appends to /log.md, and verifies conformance + links. Composes with
-  handoff (session-boundary harvest point) and ingest-source (external URL/PDF
+  checkpoint (session-boundary harvest point) and ingest-source (external URL/PDF
   captures route into reference/). Also the vault's MAINTENANCE mode — use
   when the user wants the vault itself cleaned up: "groom the vault", "clean
   up the claude/ folder in the vault", "find stale or duplicate vault

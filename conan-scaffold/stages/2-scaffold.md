@@ -54,12 +54,12 @@ rule that every change passes them before commit. If the stack is
 undecided, write the open decision here instead of inventing one.
 
 ### `## Session rituals`
-- End-of-session, pre-compact, and before `/clear`: write a handoff
-  (the `handoff` skill, if available; otherwise a HANDOFF.md capturing
-  state, decisions, and next steps).
-- If the user chose **enforced** in the interview: add — "If handoff
-  enforcement hooks are not installed in this project, offer to install
-  them (the handoff skill's setup documents them) in the first working
+- End-of-session, pre-compact, and before `/clear`: write a checkpoint
+  (the `checkpoint` skill, if available; otherwise a project-memory note
+  capturing state, decisions, and next steps).
+- If the user chose **enforced** in the interview: add — "If checkpoint
+  enforcement hooks are not installed, offer to install
+  them (the checkpoint skill's setup documents them) in the first working
   session."
 
 ### `## Knowledge`

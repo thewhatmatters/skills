@@ -1,12 +1,14 @@
-# handoff — Handoff & decisions
+# checkpoint — Handoff & decisions
 
 Living record of what this skill is, the decisions behind it, and any
-non-obvious constraints (spec A12).
+non-obvious constraints (spec A12). (This file keeps the suite-wide
+`handoff.md` decision-log filename; unrelated to the retired `handoff` skill.)
 
-Created: 2026-05-24  ·  built against the spec (CC 2.1.145)
+Created: 2026-05-24 as `handoff`  ·  renamed `checkpoint` 2026-07-22  ·  built against the spec (CC 2.1.145)
 
 ## 1. Purpose
-Write a resume-ready `HANDOFF.md` so a fresh session continues sharp instead of
+Checkpoint the session's working state into a resume-ready `checkpoint.md`
+project-memory entry so a fresh session continues sharp instead of
 context-rotted, and maintain the status-line task label. The model-driven core
 of a "context-hygiene" system (status line + hooks + lower auto-compact).
 
@@ -22,6 +24,26 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
   because hooks can't summarize, and that session restart is user-driven.
 
 ## 3. Decision log
+- 2026-07-22: **Renamed `handoff` → `checkpoint`; write target moved from
+  `<cwd>/HANDOFF.md` to the project-memory entry**
+  `~/.claude/projects/<munged-cwd>/memory/checkpoint.md` (+ MEMORY.md index
+  upsert). User decision: the ephemeral-state artifact should live in the
+  memory system, not the repo working tree; `HANDOFF.md` only made sense for
+  handing to a human (now the `--out` escape hatch, which writes an
+  *additional* plain copy). Two facts were weighed explicitly before deciding:
+  memory's native loading is index-line + relevance recall only (NOT full-body
+  auto-load), and the SessionStart hook was already injecting HANDOFF.md in
+  full. Resolution: keep both hooks and repoint them at the memory entry, so
+  the guaranteed full reload survives the move; PreCompact archives to
+  `~/.claude/.cache/checkpoint/<munged-cwd>/` (house pattern — state in
+  .cache; archives must never sit in the memory dir where they'd pollute
+  recall). The checkpoint entry is the memory system's one deliberately
+  ephemeral file: `type: project`, overwritten per run, its frontmatter
+  description doubling as the MEMORY.md index one-liner. Munge rule for the
+  memory path: every char outside `[A-Za-z0-9-]` → `-` (verified against
+  existing `~/.claude/projects/` dirs). SessionStart falls back to a legacy
+  `<cwd>/HANDOFF.md` until the first `/checkpoint` migrates + deletes it.
+  Description keeps "write a handoff"/"/handoff" as legacy triggers.
 - 2026-07-02: **Added `--harvest`** for the frequent-checkpoint workflow —
   chains the step-5 harvest unconditionally (skips the ask, never the
   per-article gate; ignored under `--agent`). HANDOFF.md itself deliberately
@@ -68,10 +90,13 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
 ## 4. Known limitations / environment caveats
 - No magic threshold: defaults (compact 65%, status line yellow 50 / red 75) are
   starting points, tune per workload.
-- A hook can't generate a smart summary — keep HANDOFF.md fresh so PreCompact
-  always preserves something good.
+- A hook can't generate a smart summary — keep the checkpoint entry fresh so
+  PreCompact always preserves something good.
 - SessionStart `additionalContext` injection should be verified on the user's CC
-  version; the on-disk HANDOFF.md + CLAUDE.md `@import` is the guaranteed path.
+  version; the on-disk entry + its MEMORY.md index line is the fallback path.
+- The memory-dir munge rule is inferred from observed `~/.claude/projects/`
+  names, not a documented contract — if Claude Code ever changes its project-dir
+  encoding, the hooks and skill step 2 must follow.
 - Status line shows context % to the *human*; nothing exposes it to the model.
 
 ## 5. Audit rubric coverage

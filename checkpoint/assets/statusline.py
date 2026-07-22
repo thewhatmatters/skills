@@ -4,7 +4,7 @@
 Reads the status-line JSON on stdin and prints one line:
     [Model] ⎇ branch │ ctx NN% │ $C.CC │ <current task>
 The context segment is color-coded (green < YELLOW ≤ yellow < RED ≤ red) and a
-"⚠ /handoff" nudge is appended once it's red — the human's cue to checkpoint,
+"⚠ /checkpoint" nudge is appended once it's red — the human's cue to checkpoint,
 since the model itself cannot read its context level.
 
 Input (Claude Code statusLine, stdin JSON): uses model.display_name,
@@ -19,7 +19,7 @@ import os
 import sys
 
 YELLOW = 50   # ctx % at/above which the meter turns yellow
-RED = 75      # ctx % at/above which it turns red + nudges /handoff
+RED = 75      # ctx % at/above which it turns red + nudges /checkpoint
 
 C = {"green": "\033[32m", "yellow": "\033[33m", "red": "\033[31m",
      "dim": "\033[2m", "reset": "\033[0m"}
@@ -55,7 +55,7 @@ def main():
         col = C["red"] if p >= RED else C["yellow"] if p >= YELLOW else C["green"]
         seg = f"{col}ctx {p}%{C['reset']}"
         if p >= RED:
-            seg += f"{C['red']} ⚠ /handoff{C['reset']}"
+            seg += f"{C['red']} ⚠ /checkpoint{C['reset']}"
         parts.append(seg)
 
     if isinstance(cost, (int, float)) and cost > 0:
