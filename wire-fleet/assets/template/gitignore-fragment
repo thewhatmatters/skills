@@ -1,0 +1,4 @@
+# wire-fleet commit policy: audit trail committed, evidence media ignored
+.fleet/ledger/*/
+!.fleet/ledger/events.jsonl
+.fleet/memory/
