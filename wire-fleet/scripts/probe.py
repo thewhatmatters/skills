@@ -24,7 +24,11 @@ def sh(args, cwd):
 
 
 def probe_entry_point(root):
-    """Return (kind, path) for the file Claude actually loads."""
+    """Return (kind, wire_target, claude_host) for the project's entry point.
+
+    wire_target is the file the marker block goes into; claude_host is the
+    CLAUDE.md that loads it (same file unless AGENTS.md is imported).
+    """
     root_claude = os.path.join(root, "CLAUDE.md")
     dot_claude = os.path.join(root, ".claude", "CLAUDE.md")
     agents = os.path.join(root, "AGENTS.md")
@@ -79,9 +83,13 @@ def main():
     fleet = {"present": os.path.isdir(fleet_dir), "template_version": None}
     fy = os.path.join(fleet_dir, "fleet.yaml")
     if os.path.isfile(fy):
-        m = re.search(r'^template_version:\s*"?([^"\n]+)"?', open(fy).read(),
-                      re.MULTILINE)
-        fleet["template_version"] = m.group(1) if m else "unknown"
+        try:
+            body = open(fy, encoding="utf-8", errors="replace").read()
+            m = re.search(r'^template_version:\s*"?([^"\n]+)"?', body,
+                          re.MULTILINE)
+            fleet["template_version"] = m.group(1) if m else "unknown"
+        except OSError:
+            fleet["template_version"] = "unreadable"
 
     marker = False
     if target and os.path.isfile(target):

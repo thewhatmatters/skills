@@ -1,6 +1,23 @@
 ---
 name: wire-fleet
-description: Bolt the agent-fleet orchestration overlay onto an existing project as a self-contained .fleet/ directory (fleet.yaml, role specs, tickets, memory, ledger), then wire the project's Claude entry point with an idempotent consent-gated marker block. Use when the user wants a project connected to the fleet — "wire this project to the fleet", "add the agent fleet here", "install .fleet in this repo", "set up the fleet", "bolt the fleet onto X", "/wire-fleet" — or to refresh an existing overlay ("update the fleet template", "--update"). Probes before touching anything — project entry point (root CLAUDE.md, .claude/CLAUDE.md, AGENTS.md-with-import, or none), git status, existing .fleet/, and the project's real gate commands (test/typecheck/build) which are captured into fleet.yaml so verify runs this project's floor. Pins the bundled template version; --update resyncs files the project hasn't modified and flags the ones it has. Day-one commit policy: JSONL audit trail committed, evidence media gitignored. NOT the vault wiring (that's wire-vault), NOT the fleet design doc (vault ideas/agent-org-pm-sme-fleet.md), and it never runs the fleet loop itself — it only installs and wires.
+description: >-
+  Bolt the agent-fleet orchestration overlay onto an existing project as a
+  self-contained .fleet/ directory (fleet.yaml, role specs, tickets, memory,
+  ledger), then wire the project's Claude entry point with an idempotent
+  consent-gated marker block. Use when the user wants a project connected to
+  the fleet — "wire this project to the fleet", "add the agent fleet here",
+  "install .fleet in this repo", "set up the fleet", "bolt the fleet onto X",
+  "/wire-fleet" — or to refresh an existing overlay ("update the fleet
+  template", "--update"). Probes before touching anything — project entry
+  point (root CLAUDE.md, .claude/CLAUDE.md, AGENTS.md-with-import, or none),
+  git status, existing .fleet/, and the project's real gate commands
+  (test/typecheck/build) which are captured into fleet.yaml so verify runs
+  this project's floor. Pins the bundled template version; --update resyncs
+  files the project hasn't modified and flags the ones it has. Day-one commit
+  policy — JSONL audit trail committed, evidence media gitignored. NOT the
+  vault wiring (that's wire-vault), NOT the fleet design doc (vault
+  ideas/agent-org-pm-sme-fleet.md), and it never runs the fleet loop itself —
+  it only installs and wires.
 ---
 
 # wire-fleet
@@ -12,7 +29,7 @@ Claude entry point with an idempotent, consent-gated marker block.
 
 - **overlay** — the self-contained `.fleet/` directory; one dir to add, one to delete to un-wire. Everything fleet-owned lives inside it.
 - **entry point** — the file Claude actually loads for this project (root `CLAUDE.md`, `.claude/CLAUDE.md`, or an `AGENTS.md` it imports); probed, never assumed.
-- **marker block** — the `<!-- wire-fleet:start/end -->` block; the ONLY thing this skill ever writes outside `.fleet/`, always shown for consent first, idempotent on re-run.
+- **marker block** — the `<!-- wire-fleet:start/end -->` block; the only *entry-point* edit this skill makes, always shown for consent first, idempotent on re-run. Exactly one other write lands outside `.fleet/`: the `.gitignore` commit-policy append (Step 4) — both are named in the Step 3 consent round.
 - **pinned template** — `assets/template/` version recorded in the installed fleet.yaml; `--update` resyncs unmodified files and flags modified ones, never overwrites local edits.
 
 ## How to run
@@ -55,7 +72,9 @@ proceed anyway / cancel (`--agent`: proceed, record the gate).
 Confirm with the user in ONE question round: roles to install, gate commands
 (pre-filled from the probe), ticket backend (local `.fleet/tickets/` default;
 Linear ids if they name them). Show the exact marker block and where it will
-be inserted. This is the consent gate — nothing is written before it.
+be inserted, AND state that Step 4 also appends the commit-policy lines to
+the project's `.gitignore` — the full outside-`.fleet/` write scope is on
+the table before consent. Nothing is written before this gate.
 
 ## Step 4 — Install the overlay
 

@@ -40,14 +40,18 @@ def render_fleet_yaml(subs):
 def merge_gitignore(root):
     frag = open(os.path.join(TEMPLATE, "gitignore-fragment")).read()
     gi = os.path.join(root, ".gitignore")
-    existing = open(gi).read() if os.path.isfile(gi) else ""
-    if ".fleet/ledger/*/" in existing:
-        return "already-present"
-    with open(gi, "a") as f:
-        if existing and not existing.endswith("\n"):
-            f.write("\n")
-        f.write("\n" + frag)
-    return "merged"
+    try:
+        existing = (open(gi, encoding="utf-8", errors="replace").read()
+                    if os.path.isfile(gi) else "")
+        if ".fleet/ledger/*/" in existing:
+            return "already-present"
+        with open(gi, "a", encoding="utf-8") as f:
+            if existing and not existing.endswith("\n"):
+                f.write("\n")
+            f.write("\n" + frag)
+        return "merged"
+    except OSError as e:
+        return f"failed ({e}) — append the fragment manually"
 
 
 def main():
@@ -82,8 +86,12 @@ def main():
         for rel, recorded in manifest["files"].items():
             if rel == "fleet.yaml":
                 # Project-configured at install (rendered {{TOKENS}}); a raw
-                # resync would clobber the project's config. Template changes
-                # to fleet.yaml are surfaced for manual review instead.
+                # resync would clobber the project's config, so it is always
+                # skipped and listed under skipped_project_configured. NB:
+                # upstream template changes to fleet.yaml are NOT detected —
+                # compare against assets/template/fleet.yaml by hand. Files
+                # ADDED to the template after install are likewise not synced
+                # (the loop iterates the install-time manifest only).
                 skipped_configured.append(rel)
                 continue
             src = os.path.join(TEMPLATE, manifest["sources"].get(rel, rel))

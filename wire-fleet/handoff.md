@@ -34,6 +34,17 @@ deliberate notes:
   flagged, never overwritten.
 - 2026-08-06: commit policy in template `.gitignore` fragment — ledger
   JSONL/tickets/MEMORY.md committed, `ledger/*/` evidence media ignored.
+- 2026-08-06: trigger mode = model-invoked (A14), deliberately. Although the
+  skill is side-effectful, every write is consent-gated (Step 3 shows the
+  full outside-`.fleet/` scope before anything lands), matching the
+  wire-vault precedent; the trigger-rich description is what routes "wire
+  this project to the fleet" correctly.
+- 2026-08-06: post-audit fixes (skill-auditor, 0 critical / 1 important):
+  corrected the write-scope "ONLY" claim in SKILL.md/README (the .gitignore
+  append is the second outside-`.fleet/` write, now named in the consent
+  round), folded the frontmatter description to a `>-` block scalar
+  (lenient-frontmatter gotcha), guarded unreadable-file edges in
+  probe/install, aligned stale comments/docstrings.
 
 ## 4. Known limitations / environment caveats
 

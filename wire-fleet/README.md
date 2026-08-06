@@ -9,8 +9,9 @@ Claude entry point with a small consent-gated marker block.
 - A `.fleet/` directory in your project: fleet.yaml (with your project's real
   test/typecheck/build commands captured for the verify role), role specs,
   a tickets directory, memory tiers, and the events ledger.
-- One marker block in your CLAUDE.md (or AGENTS.md) pointing Claude at it —
-  the only edit made outside `.fleet/`.
+- One marker block in your CLAUDE.md (or AGENTS.md) pointing Claude at it,
+  plus a short commit-policy append to your `.gitignore` — the only two
+  edits made outside `.fleet/`, both shown before you approve.
 - A pinned template version, so `/wire-fleet --update` can refresh unmodified
   files when the fleet protocol improves, without touching your local edits.
 

@@ -1,5 +1,6 @@
 # .fleet/fleet.yaml — per-project fleet config (installed by wire-fleet)
-# Template version: {{TEMPLATE_VERSION}} — do not edit this line; --update keys on it.
+# Template version: {{TEMPLATE_VERSION}} — probe reports this; --update keys
+# on .fleet/.template-manifest.json, not this line.
 # v0 HONESTY: `enforced:` is aspirational — the PM (a model) interprets
 # everything below. Runtime enforcement is future Conan work.
 
