@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Install or update the .fleet/ overlay in a project.
+"""Install or update the .sagan/ overlay in a project.
 
 I/O: stdout JSON {status, installed|synced|flagged, template_version} ·
-stderr diagnostics · exit 2 on refusal (existing .fleet without --update,
-missing template). Install substitutes {{TOKENS}} into fleet.yaml, writes a
-sha256 manifest (.fleet/.template-manifest.json) for --update modification
+stderr diagnostics · exit 2 on refusal (existing .sagan without --update,
+missing template). Install substitutes {{TOKENS}} into sagan.yaml, writes a
+sha256 manifest (.sagan/.template-manifest.json) for --update modification
 detection, and merges the commit-policy fragment into the project .gitignore.
 Never touches CLAUDE.md/AGENTS.md — the marker block is Claude's native,
 consent-gated edit.
@@ -19,7 +19,7 @@ import sys
 TEMPLATE_VERSION = "0.1.0"
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(HERE, "..", "assets", "template")
-CORE = ["fleet.yaml", "MEMORY.md"]
+CORE = ["sagan.yaml", "MEMORY.md"]
 
 
 def sha256(path):
@@ -30,8 +30,8 @@ def sha256(path):
     return h.hexdigest()
 
 
-def render_fleet_yaml(subs):
-    body = open(os.path.join(TEMPLATE, "fleet.yaml")).read()
+def render_sagan_yaml(subs):
+    body = open(os.path.join(TEMPLATE, "sagan.yaml")).read()
     for token, value in subs.items():
         body = body.replace("{{%s}}" % token, value)
     return body
@@ -43,7 +43,7 @@ def merge_gitignore(root):
     try:
         existing = (open(gi, encoding="utf-8", errors="replace").read()
                     if os.path.isfile(gi) else "")
-        if ".fleet/ledger/*/" in existing:
+        if ".sagan/ledger/*/" in existing:
             return "already-present"
         with open(gi, "a", encoding="utf-8") as f:
             if existing and not existing.endswith("\n"):
@@ -68,7 +68,7 @@ def main():
     args = ap.parse_args()
 
     root = os.path.abspath(os.path.expanduser(args.project))
-    fleet = os.path.join(root, ".fleet")
+    fleet = os.path.join(root, ".sagan")
     manifest_path = os.path.join(fleet, ".template-manifest.json")
 
     if not os.path.isdir(TEMPLATE):
@@ -78,18 +78,18 @@ def main():
     if args.update:
         if not os.path.isfile(manifest_path):
             print(json.dumps({"status": "error",
-                              "detail": "no manifest — not a wire-fleet install (or NATIVE install); cannot --update safely"}))
+                              "detail": "no manifest — not a wire-sagan install (or NATIVE install); cannot --update safely"}))
             sys.exit(2)
         manifest = json.load(open(manifest_path))
         synced, flagged, missing = [], [], []
         skipped_configured = []
         for rel, recorded in manifest["files"].items():
-            if rel == "fleet.yaml":
+            if rel == "sagan.yaml":
                 # Project-configured at install (rendered {{TOKENS}}); a raw
                 # resync would clobber the project's config, so it is always
                 # skipped and listed under skipped_project_configured. NB:
-                # upstream template changes to fleet.yaml are NOT detected —
-                # compare against assets/template/fleet.yaml by hand. Files
+                # upstream template changes to sagan.yaml are NOT detected —
+                # compare against assets/template/sagan.yaml by hand. Files
                 # ADDED to the template after install are likewise not synced
                 # (the loop iterates the install-time manifest only).
                 skipped_configured.append(rel)
@@ -119,7 +119,7 @@ def main():
 
     if os.path.isdir(fleet):
         print(json.dumps({"status": "error",
-                          "detail": ".fleet/ already exists — use --update"}))
+                          "detail": ".sagan/ already exists — use --update"}))
         sys.exit(2)
 
     roles = [r.strip() for r in args.roles.split(",") if r.strip()]
@@ -139,12 +139,12 @@ def main():
     os.makedirs(os.path.join(fleet, "tickets"))
     open(os.path.join(fleet, "ledger", "events.jsonl"), "w").close()
 
-    with open(os.path.join(fleet, "fleet.yaml"), "w") as f:
-        f.write(render_fleet_yaml(subs))
-    # fleet.yaml is project-configured at render; record its rendered hash so
+    with open(os.path.join(fleet, "sagan.yaml"), "w") as f:
+        f.write(render_sagan_yaml(subs))
+    # sagan.yaml is project-configured at render; record its rendered hash so
     # only later *user* edits count as modifications.
-    files["fleet.yaml"] = sha256(os.path.join(fleet, "fleet.yaml"))
-    sources["fleet.yaml"] = "fleet.yaml"
+    files["sagan.yaml"] = sha256(os.path.join(fleet, "sagan.yaml"))
+    sources["sagan.yaml"] = "sagan.yaml"
 
     shutil.copyfile(os.path.join(TEMPLATE, "MEMORY.md"),
                     os.path.join(fleet, "MEMORY.md"))
@@ -170,7 +170,7 @@ def main():
                "sources": sources}, open(manifest_path, "w"), indent=2)
     gi = merge_gitignore(root)
 
-    print(f"installed .fleet/ ({len(files)} tracked files) · gitignore {gi}",
+    print(f"installed .sagan/ ({len(files)} tracked files) · gitignore {gi}",
           file=sys.stderr)
     print(json.dumps({"status": "installed", "template_version": TEMPLATE_VERSION,
                       "installed": sorted(files), "gitignore": gi,

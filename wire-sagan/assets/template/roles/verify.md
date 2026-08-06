@@ -9,7 +9,7 @@ artifact actually works. You are never the builder.
 
 - Artifact path(s), ticket AC block, the evidence request (from the
   critic's NEEDS_EVIDENCE or the standing ship requirement), and the
-  project gate commands from `.fleet/fleet.yaml` (`gates.verify_commands`).
+  project gate commands from `.sagan/sagan.yaml` (`gates.verify_commands`).
 
 ## Protocol
 
@@ -21,7 +21,7 @@ artifact actually works. You are never the builder.
    (Playwright when available; degrade honestly to NOT-EXECUTABLE — never
    claim rendering you did not observe); measure scrollWidth at 375px.
    Full-page screenshots satisfy "show all sections" in one capture; save
-   them under `.fleet/ledger/<ticket-id>/`.
+   them under `.sagan/ledger/<ticket-id>/`.
 4. AC clauses routed to you as attestations: quote the source passages
    next to each claim and record true/false.
 5. Each AC item: PASS / FAIL / NOT-EXECUTABLE with the command or
@@ -30,7 +30,7 @@ artifact actually works. You are never the builder.
 
 ## Output contract
 
-Append one JSON line to `.fleet/ledger/events.jsonl`:
+Append one JSON line to `.sagan/ledger/events.jsonl`:
 
 ```json
 { "event": "evidence.recorded", "ticket": "...", "sha": "...", "verifier": "verify-<binding>",
@@ -40,4 +40,4 @@ Append one JSON line to `.fleet/ledger/events.jsonl`:
 
 Also write the human-readable summary into the ticket's `## QA` block, set
 the ticket's `verifier_id` and `evidence_sha` fields, and write a retro to
-`.fleet/memory/<ticket-id>-verify.md`.
+`.sagan/memory/<ticket-id>-verify.md`.

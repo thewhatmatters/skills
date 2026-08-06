@@ -1,6 +1,6 @@
-# .fleet/fleet.yaml — per-project fleet config (installed by wire-fleet)
+# .sagan/sagan.yaml — per-project fleet config (installed by wire-sagan)
 # Template version: {{TEMPLATE_VERSION}} — probe reports this; --update keys
-# on .fleet/.template-manifest.json, not this line.
+# on .sagan/.template-manifest.json, not this line.
 # v0 HONESTY: `enforced:` is aspirational — the PM (a model) interprets
 # everything below. Runtime enforcement is future Conan work.
 
@@ -54,11 +54,11 @@ gates:
     build: "{{GATE_BUILD}}"
 
 memory:
-  scratch: .fleet/memory/
-  synthesis: .fleet/MEMORY.md
+  scratch: .sagan/memory/
+  synthesis: .sagan/MEMORY.md
   promote_to: {{PROMOTE_TARGET}}    # AGENTS.md if the project has one, else CLAUDE.md
 
 ticket:
-  store: {{TICKET_STORE}}           # local-files (.fleet/tickets/) or linear
+  store: {{TICKET_STORE}}           # local-files (.sagan/tickets/) or linear
   blocks: [ac, frontend, qa, decisions]
   required_fields: [ac, builder_id, verifier_id, evidence_sha]

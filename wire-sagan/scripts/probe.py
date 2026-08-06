@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Probe a project for wire-fleet installation (read-only).
+"""Probe a project for wire-sagan installation (read-only).
 
-I/O: stdout JSON {project, git, entry_point, fleet, gates, marker_present} ·
+I/O: stdout JSON {project, git, entry_point, sagan, gates, marker_present} ·
 stderr diagnostics · exit 2 on unusable project path. Never writes.
 """
 import argparse
@@ -11,7 +11,7 @@ import re
 import subprocess
 import sys
 
-MARKER_START = "<!-- wire-fleet:start -->"
+MARKER_START = "<!-- wire-sagan:start -->"
 
 
 def sh(args, cwd):
@@ -79,9 +79,9 @@ def main():
     git_ok = code == 0
     kind, target, host = probe_entry_point(root)
 
-    fleet_dir = os.path.join(root, ".fleet")
+    fleet_dir = os.path.join(root, ".sagan")
     fleet = {"present": os.path.isdir(fleet_dir), "template_version": None}
-    fy = os.path.join(fleet_dir, "fleet.yaml")
+    fy = os.path.join(fleet_dir, "sagan.yaml")
     if os.path.isfile(fy):
         try:
             body = open(fy, encoding="utf-8", errors="replace").read()
@@ -100,12 +100,12 @@ def main():
         "git": {"is_repo": git_ok, "toplevel": top if git_ok else None},
         "entry_point": {"kind": kind, "wire_target": target,
                         "claude_host": host},
-        "fleet": fleet,
+        "sagan": fleet,
         "gates": detect_gates(root),
         "marker_present": marker,
     }
     print(f"probe: {kind} · git={'yes' if git_ok else 'NO'} · "
-          f".fleet={'present' if fleet['present'] else 'absent'}",
+          f".sagan={'present' if fleet['present'] else 'absent'}",
           file=sys.stderr)
     print(json.dumps(payload, indent=2))
 

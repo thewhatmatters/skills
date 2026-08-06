@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Readiness check for wire-fleet (spec A6).
+"""Readiness check for wire-sagan (spec A6).
 
 I/O: stdout JSON {overall, checks, summary} · stderr human board · exit 1 only on `down`.
 States per check: ready | degraded | gated | down  (with a gate id).
@@ -14,7 +14,7 @@ RANK = {"ready": 0, "degraded": 1, "gated": 2, "down": 3}
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             "..", "assets", "template")
-REQUIRED = ["fleet.yaml", "MEMORY.md", "gitignore-fragment",
+REQUIRED = ["sagan.yaml", "MEMORY.md", "gitignore-fragment",
             os.path.join("roles", "frontend.md"),
             os.path.join("roles", "critic.md"),
             os.path.join("roles", "verify.md"),
@@ -47,7 +47,7 @@ def main():
     for s, _g, _d in checks.values():
         if RANK[s] > RANK[overall]:
             overall = s
-    print("wire-fleet readiness", file=sys.stderr)
+    print("wire-sagan readiness", file=sys.stderr)
     for n, (s, g, d) in checks.items():
         suffix = f"  [{g}]" if g else ""
         print(f"  {MARK[s]} {n:<8} {d}{suffix}", file=sys.stderr)

@@ -16,7 +16,7 @@ Nothing more — no scope invention, no self-approval.
 2. A build note appended to the ticket's `## Frontend` block: what was
    built, key choices, anything the AC left ambiguous (flag it, don't
    guess silently).
-3. A retro file `.fleet/memory/<ticket-id>-frontend.md`: 3–6 bullets,
+3. A retro file `.sagan/memory/<ticket-id>-frontend.md`: 3–6 bullets,
    what went well / what fought you / what the role spec or AC should say
    next time.
 
