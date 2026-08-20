@@ -8,7 +8,7 @@ Provider precedence (by which key is present; hard errors fail over to the next)
   3. DuckDuckGo (no key)        — keyless last resort
 
 Keys are loaded by scripts/_env.py from: real env -> ~/.claude/.env ->
-~/.claude/skills/.env. Keys are sent in request HEADERS only, never in URLs,
+~/.cursor/skills/.env. Keys are sent in request HEADERS only, never in URLs,
 so they cannot leak into the stderr lines this script prints.
 
 Usage: python3 web.py "<topic>" [QUERY_TYPE] [--days=N]   (N defaults to 30)

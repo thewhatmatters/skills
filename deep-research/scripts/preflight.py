@@ -93,7 +93,7 @@ def check_keys():
     if exa:
         return ("ready", None, "EXA available (TAVILY optional)")
     return ("gated", "KEYS_MISSING",
-            "neither TAVILY_API_KEY nor EXA_API_KEY set in ~/.claude/skills/.env "
+            "neither TAVILY_API_KEY nor EXA_API_KEY set in ~/.cursor/skills/.env "
             "— NATIVE mode (built-in WebSearch) is automatic")
 
 

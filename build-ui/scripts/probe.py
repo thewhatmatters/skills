@@ -148,9 +148,9 @@ DEFERRAL_TARGETS = ("shadcn", "next-best-practices")
 
 
 def detect_user_skill(name):
-    """True iff ~/.claude/skills/<name>/SKILL.md is discoverable with that name.
+    """True iff ~/.cursor/skills/<name>/SKILL.md is discoverable with that name.
 
-    Follows symlinks (the installer drops a symlink at ~/.claude/skills/<name>
+    Follows symlinks (the installer drops a symlink at ~/.cursor/skills/<name>
     pointing into .agents/skills/<name>), so a symlinked install resolves the
     same as a real directory.
     """

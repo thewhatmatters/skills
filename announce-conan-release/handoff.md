@@ -11,7 +11,7 @@ changelog, the in-app "What's New" popup, and a draft buyer email, from one set
 of version + highlights.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Notable:
 - A1 (progressive disclosure): the per-surface detail lives in
   `references/surfaces.md`; SKILL.md stays lean.
 - Docs-only skill (no `scripts/`): it orchestrates existing files + an existing

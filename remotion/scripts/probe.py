@@ -17,7 +17,7 @@ What it detects (each may be null/false if absent):
     npx               : bool — npx resolvable on PATH
     package_manager   : npm | pnpm | yarn | bun | null
     tailwind          : bool — tailwindcss present (informs the "no Tailwind animation" caveat)
-    external_skills   : { "remotion-best-practices": bool } — installed under ~/.claude/skills
+    external_skills   : { "remotion-best-practices": bool } — installed under ~/.cursor/skills
 
 I/O:
     stdin  : —
@@ -87,7 +87,7 @@ def node_version():
 
 
 def detect_user_skill(name):
-    """True iff ~/.claude/skills/<name>/SKILL.md declares `name: <name>`.
+    """True iff ~/.cursor/skills/<name>/SKILL.md declares `name: <name>`.
 
     Follows symlinks (skills.sh drops a symlink into .agents/skills/<name>),
     so a symlinked install resolves the same as a real directory.

@@ -90,6 +90,6 @@ final diff for human review; NEVER commit, push, or merge.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Keyless — the critic CLI carries its own auth; this skill never handles or logs credentials.

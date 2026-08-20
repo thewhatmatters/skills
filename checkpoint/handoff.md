@@ -13,7 +13,7 @@ context-rotted, and maintain the status-line task label. The model-driven core
 of a "context-hygiene" system (status line + hooks + lower auto-compact).
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Notable points:
 - **A1 progressive disclosure:** the HANDOFF.md structure and the one-time
   config setup live in `references/`; SKILL.md stays a lean flow.
 - **A8 composition by reference:** complements the file-based memory system

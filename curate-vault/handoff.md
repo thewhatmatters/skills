@@ -12,7 +12,7 @@ vault, behind a mandatory per-article human confirmation gate.
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A13;
+This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A13;
 deliberate deviations:
 
 - **A7b vs the mandatory HITL gate.** `--agent` cannot bypass the

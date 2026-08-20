@@ -80,7 +80,7 @@ fall back to the working dir with a note (curate-vault's `SYNC_UNMOUNTED`
 rule). The vault is markdown-native, so also persist the report you just
 displayed as `<vault>/research/synthesis/trends-<slug>.md` (no re-research —
 same content), with the HTML as its companion at `trends-<slug>.html`. Per
-`~/.claude/skills/curate-vault/references/okf-conventions.md`:
+`~/.cursor/skills/curate-vault/references/okf-conventions.md`:
 
 1. Prepend OKF frontmatter to the md: `type: Research`, `title`,
    `description` (one sentence), `tags`, `timestamp` (ISO 8601). Link the
@@ -90,7 +90,7 @@ same content), with the HTML as its companion at `trends-<slug>.html`. Per
    `<vault>/research/index.md` (reuse the frontmatter `description`).
 3. Append a `**Creation**` entry under today's date in `<vault>/log.md`
    (newest-first).
-4. Verify: `python3 ~/.claude/skills/curate-vault/scripts/verify_bundle.py --vault=<vault>`.
+4. Verify: `python3 ~/.cursor/skills/curate-vault/scripts/verify_bundle.py --vault=<vault>`.
    If curate-vault is absent (steps 1–3 are self-contained), skip the verify
    and say so in the summary.
 

@@ -25,7 +25,7 @@ import re
 import sys
 
 PROJECTS_DIR = os.path.expanduser("~/.claude/projects")
-SKILLS_DIR = os.path.expanduser("~/.claude/skills")
+SKILLS_DIR = os.path.expanduser("~/.cursor/skills")
 
 # A bash command that wrangles data inline usually means the skill's own scripts
 # left work for Claude to finish by hand — the strongest "skill bug" signal.

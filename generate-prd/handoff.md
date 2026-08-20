@@ -10,7 +10,7 @@ Turn a conversational product discussion into a structured PRD (markdown +
 optional HTML).
 
 ## 2. Reusable patterns (link to spec A1..A13)
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A13;
+This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A13;
 note here any deliberate deviations.
 
 Notable choices:
@@ -43,7 +43,7 @@ Notable choices:
   invocation, second run).
 - 2026-05-19: prior attempt at this skill was deleted on user request after
   some confusion about which generator was used; this iteration is the
-  clean rebuild. Old `~/.claude/skills/prd/` (Jan 11) had been deleted
+  clean rebuild. Old `~/.cursor/skills/prd/` (Jan 11) had been deleted
   earlier under the "Replace it" path and is not being restored.
 - 2026-05-19: three findings from that prior audit baked in here as design
   choices, not deferred — `--dry-run` implementation, report.py brace

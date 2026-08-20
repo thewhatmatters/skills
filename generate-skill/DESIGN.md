@@ -15,7 +15,7 @@ exists; this completes the pair.
 Scaffold a new Claude Code skill that satisfies our house conventions, using
 **two inputs reconciled**:
 
-- **In-house truth:** `~/.claude/skills/skill-architecture.md` — the same spec
+- **In-house truth:** `~/.cursor/skills/skill-architecture.md` — the same spec
   `audit-skill` checks against. Generator *emits* against it; auditor *checks*
   against it. One spec, both directions.
 - **Upstream truth:** the official Claude docs (✅ *Official Claude docs*),
@@ -150,7 +150,7 @@ spec changes — same reason the handoff added Recoverable Setup Gates.
 > "10 reusable patterns in handoff.md §3"); the `.gitignore` opt-in line is
 > gone — the skills repo is commit-by-default, the emit step shows a
 > `git add` reminder; and Step 1 now also runs the shared dependency check
-> (`~/.claude/scripts/preflight-deps.py --skills=audit-skill`, A15) with an
+> (`~/.cursor/skills/scripts/preflight-deps.py --skills=audit-skill`, A15) with an
 > A7c gate and a ships-unaudited degrade.
 
 ## 7. Flags (consistent with scan-trends handoff §3.7)

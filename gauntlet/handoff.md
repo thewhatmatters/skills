@@ -13,7 +13,7 @@ per round, hard caps and oscillation detection so it always terminates.
 
 ## 2. Reusable patterns (link to spec A1..A15)
 
-Follows `~/.claude/skills/skill-architecture.md` A1–A15. Deliberate notes:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Deliberate notes:
 - A5 (shared key loader): N/A — keyless by design; the Grok CLI carries its
   own auth (`~/.grok/auth.json`), this skill never touches credentials.
 - A15b: Agent tool (fresh builder subagent) and automate-browser (quality

@@ -65,7 +65,7 @@ a *live page* does not survive between separate processes. Implications:
 **One-shot (CLI)** — navigate + discover what's on the page:
 
 ```bash
-cd ~/.claude/skills/automate-browser && python3 scripts/browser.py \
+cd ~/.cursor/skills/automate-browser && python3 scripts/browser.py \
   goto "https://example.com" --mode interactive
 ```
 
@@ -78,7 +78,7 @@ output only).
 **Multi-step (inline library script)** — interaction on one live page:
 
 ```bash
-cd ~/.claude/skills/automate-browser && python3 <<'EOF'
+cd ~/.cursor/skills/automate-browser && python3 <<'EOF'
 from scripts.browser import launch, wait_for_load, interactive_outline
 
 with launch(headless=False) as (ctx, page):
@@ -147,4 +147,4 @@ just need to *understand* a page — screenshots cost vision tokens.
 - No unguarded paths (A11): browser cache + profile resolved per-OS with an
   env override; no hard-coded external install path.
 - No secrets: browser automation needs none here; no `_env.py`.
-- Self-contained: everything lives under `~/.claude/skills/automate-browser/`.
+- Self-contained: everything lives under `~/.cursor/skills/automate-browser/`.

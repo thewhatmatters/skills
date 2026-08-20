@@ -18,7 +18,7 @@ scratch. Sibling skills from the same pass: `codebase-design`, `grilling`.
 ## Decisions
 
 - **Hard-dep preflight via the shared helper (2026-07-16).** Step 0 now runs
-  `~/.claude/scripts/preflight-deps.py --skills=codebase-design,grilling`
+  `~/.cursor/skills/scripts/preflight-deps.py --skills=codebase-design,grilling`
   (spec A15): both siblings are hard deps — vocabulary source and the Step-3
   loop — gated with an A7c fix offer and documented degrades (inline
   vocabulary + drift flag; plain interview). Step 1 gained the
@@ -36,7 +36,7 @@ scratch. Sibling skills from the same pass: `codebase-design`, `grilling`.
 - **`disable-model-invocation: true`, kept from the source.** This is a
   deliberate first real use of that field in this skill suite — as of this
   session, every other skill here is model-invoked (confirmed via grep: no
-  skill in `~/.claude/skills/*/SKILL.md` sets this field before now). The
+  skill in `~/.cursor/skills/*/SKILL.md` sets this field before now). The
   reasoning: this skill spawns an Explore subagent over the whole codebase
   and can spawn 3+ more via design-it-twice, writes a file, and opens it in
   the browser — a real-token-cost, real-side-effect operation that

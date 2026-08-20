@@ -48,7 +48,7 @@ You can also tune the run:
 
 Optional but recommended:
 
-- **`TAVILY_API_KEY`** and/or **`EXA_API_KEY`** in `~/.claude/skills/.env`.
+- **`TAVILY_API_KEY`** and/or **`EXA_API_KEY`** in `~/.cursor/skills/.env`.
   Either one unlocks SCRIPTS mode and higher-quality search.
 - **`python3`** — same.
 

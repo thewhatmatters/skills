@@ -51,7 +51,7 @@ recommends running it every few days as an ongoing habit, not just once.
 
 No secrets and no network access (the `--html` report's Tailwind/Mermaid
 CDN links load in your browser, not here). A Step-0 check runs the shared
-`~/.claude/scripts/preflight-deps.py` helper: `codebase-design`
+`~/.cursor/skills/scripts/preflight-deps.py` helper: `codebase-design`
 (vocabulary) and `grilling` (the post-selection interview) are hard
 sibling dependencies — if one is missing the skill says so and degrades
 (inline vocabulary with a drift flag; a plain interview at Step 3). It

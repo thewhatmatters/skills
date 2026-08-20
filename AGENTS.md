@@ -1,11 +1,11 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Project instructions for Cursor (and any Agent Skills–compatible tool) working in this repository.
 
 ## What this repo is
 
-A personal collection of Claude Code **skills**, version-controlled. Each top-level
-directory (except dotfiles) is one skill Claude can invoke. There is no app to build
+A personal collection of **skills**, version-controlled. Each top-level
+directory (except dotfiles) is one skill the agent can invoke. There is no app to build
 or deploy — the "product" is the skills themselves. `README.md` is the user-facing
 index of the tracked skills; `skill-architecture.md` is the canonical spec they're all
 built to.
@@ -27,8 +27,9 @@ elsewhere; reference it.
 - **`SKILL.md`** — loaded on every invocation, so keep it **lean**. YAML frontmatter is
   `name` (must equal the directory) + a trigger-rich `description`. Conservative
   frontmatter is `name` + `description` only; never invent a frontmatter field —
-  `generate-skill` validates against the live Claude-docs field list (`scripts/docs.py`,
-  `scripts/reconcile.py`).
+  `generate-skill` still validates against the Claude-docs field list (`scripts/docs.py`,
+  `scripts/reconcile.py`) — intersection with Cursor is `name`, `description`, and
+  `disable-model-invocation`. See `skill-architecture.md` A2.
 - **`references/`** — progressive disclosure (A1): bulky detail (templates, long tables,
   syntax guides) lives here and is pulled in *only when SKILL.md routes Claude to it*. A
   reference file the skill never points to is dead weight.
@@ -66,7 +67,7 @@ elsewhere; reference it.
 ## Secrets
 
 Shared loader `scripts/_env.py` (copied verbatim into skills that need keys). Precedence
-**real env → `~/.claude/.env` → `~/.claude/skills/.env`**; empty values skipped; keys go
+**real env → `~/.cursor/skills/.env` → `~/.claude/.env`** (legacy fallback); empty values skipped; keys go
 in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitignored;
 **`.env.example` is committed** with a "Used by:" note per key. Do not create per-skill
 `.env.example` files.
@@ -83,7 +84,7 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
 - **Never commit `node_modules`.** Node tools run via `npx` on demand; if a pinned
   install is ever needed, commit a `package.json` and keep `node_modules` gitignored.
 - **Generated artifacts stay out of the repo.** Skills write reports / rendered HTML to
-  the user's home dir or `/tmp`, never into `~/.claude/skills/` (it's commit-by-default).
+  the user's home dir or `/tmp`, never into this repo (it's commit-by-default).
 - **Reports default to markdown; HTML is opt-in.** A report-emitting skill presents
   markdown (in-conversation or as a `.md` file) by default and offers HTML behind a flag
   (`--html`, or an explicit render step like `render-html`) — never HTML-only (e.g.
@@ -97,9 +98,8 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
   1. **Commit `skills-lock.json`** at the repo root (version + hash pin; reproducible install).
   2. **Gitignore the install artifacts**: `/.agents/`, `/.claude/skills/`, and the top-level
      symlink each skill needs (see `.gitignore` for the pattern).
-  3. **Add a user-global symlink** at `~/.claude/skills/<name> → .agents/skills/<name>` so the
-     skill is discovered from any project, not just when cwd is here. The installer's
-     `.claude/skills/<name>` is project-scoped and won't surface elsewhere.
+  3. **Add a top-level gitignored symlink** `<name> → .agents/skills/<name>` in this repo
+     (this folder *is* `~/.cursor/skills`). Cursor also loads `~/.agents/skills` directly.
   4. **Probe-gate the deferral.** `build-ui/scripts/probe.py` reports
      `external_skills[<name>]` (boolean). A skill's `SKILL.md` branches on the gate: defer
      when installed; surface the install command + fall back to general knowledge with a

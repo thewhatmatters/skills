@@ -7,7 +7,7 @@ skill's name + description + scope, so decompose-prd can embed the *right*,
 source of truth for "skill-aware" task generation.
 
 Scanned (deduped, project shadows global on name collision):
-    global   : ~/.claude/skills/<name>/SKILL.md
+    global   : ~/.cursor/skills/<name>/SKILL.md
     project  : <root>/.claude/skills/<name>/SKILL.md   (--project, default cwd;
                walks up to the nearest ancestor containing .claude/)
 
@@ -66,7 +66,7 @@ def find_project_root(start):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--project", default=".", help="project root (default: cwd)")
-    ap.add_argument("--global-dir", default="~/.claude/skills",
+    ap.add_argument("--global-dir", default="~/.cursor/skills",
                     help="global skills dir (override for testing)")
     ap.add_argument("--agent", action="store_true")
     args = ap.parse_args()

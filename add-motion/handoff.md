@@ -11,7 +11,7 @@ Add motion to web UI as a deliberate craft — premium-feeling animation without
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Deliberate shape notes:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Deliberate shape notes:
 
 - **A1**: per-tier craft in `references/` (css-animations / motion-library /
   view-transitions); SKILL.md holds only routing + guardrails.

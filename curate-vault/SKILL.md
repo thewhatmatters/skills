@@ -120,7 +120,7 @@ patterns. Filter OUT anything the repo already records (code structure, git
 history, CLAUDE.md content) and anything only relevant to this conversation.
 Draft each candidate's full article body, not just a title. Bodies follow
 the house markdown style spec at
-`~/.claude/skills/format-markdown/references/markdown-style.md` (read it
+`~/.cursor/skills/format-markdown/references/markdown-style.md` (read it
 before drafting); OKF rules (frontmatter, absolute links, reserved files)
 win where they overlap — see the deference table in that spec.
 
@@ -181,7 +181,7 @@ action; wire-vault has its own consent gates. Skip under `--agent`.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Keyless — no secrets, no network.
 - The vault's own OKF rules are mirrored at `<vault>/reference/okf-spec-v0.1.md`;

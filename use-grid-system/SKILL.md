@@ -74,8 +74,8 @@ mode in one line.
 1. **Preflight** — `python3 scripts/preflight.py [--agent]`. Read the JSON; only
    `down` stops a run (nothing here is network-bound). Then the dependency
    check for Step 7's verification pair:
-   `python3 ~/.claude/scripts/preflight-deps.py --skills=audit-ui,automate-browser`
-   (NATIVE without python3: check the two `~/.claude/skills/<name>/SKILL.md`
+   `python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=audit-ui,automate-browser`
+   (NATIVE without python3: check the two `~/.cursor/skills/<name>/SKILL.md`
    paths exist with built-in file tools instead) — `gated` → proceed, but
    announce now that Step 7 degrades to the manual pass in
    `references/verification.md` §"Degraded" instead of the measured
@@ -110,7 +110,7 @@ mode in one line.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Dual-mode + degraded ladder (A3); probe-gated, no-monoculture (A7/A8): never
   impose Tailwind, never silently re-scale a project's `--spacing`.

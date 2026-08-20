@@ -117,7 +117,7 @@ yt-dlp by hand per `references/youtube.md`, persistence by hand per
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure / time-bounded
   network (spec A4).
 - Composition by reference, not import — delegates hostile pages to
@@ -130,5 +130,5 @@ yt-dlp by hand per `references/youtube.md`, persistence by hand per
   `GEMINI_API_KEY` in the `x-goog-api-key` header only, never in URLs/logs.
   Keyless tiers work with no key — the key is a gate, not a blocker (spec A7).
 - Persists into the **user's project** and/or — only via `curate-vault`'s
-  gate — the OKF vault; never into `~/.claude/skills/` (commit-by-default
+  gate — the OKF vault; never into `~/.cursor/skills/` (commit-by-default
   repo). Generated artifacts stay out of this repo.

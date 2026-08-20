@@ -1,11 +1,11 @@
 ---
 name: generate-skill
-description: Scaffold a new Claude Code skill against the house spec at ~/.claude/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a Claude skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Claude docs (offline fallback), validates frontmatter against the upstream field list, follows the 15 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
+description: Scaffold a new Claude Code skill against the house spec at ~/.cursor/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a Claude skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Claude docs (offline fallback), validates frontmatter against the upstream field list, follows the 15 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
 ---
 
 # generate-skill
 
-Scaffold a new skill that satisfies `~/.claude/skills/skill-architecture.md`,
+Scaffold a new skill that satisfies `~/.cursor/skills/skill-architecture.md`,
 using the live Claude docs as the upstream contract. Generator ↔ auditor share
 the spec — generator emits against it; auditor checks against it. Last step
 runs `audit-skill` on what was just produced.
@@ -15,7 +15,7 @@ runs `audit-skill` on what was just produced.
 | Flag | Meaning |
 |------|---------|
 | `--name=<kebab>` | name of the new skill (≤64 chars, lowercase + digits + hyphens) |
-| `--out=PATH` | parent dir for the new skill (default: `~/.claude/skills`) |
+| `--out=PATH` | parent dir for the new skill (default: `~/.cursor/skills`) |
 | `--refresh-docs` | force `scripts/docs.py --refresh` before scaffolding |
 | `--no-scripts` | scaffold a docs-only skill (no `scripts/` dir) |
 | `--dry-run` | print the plan + file tree, write nothing |
@@ -39,13 +39,13 @@ SCRIPTS: `python3 scripts/preflight.py --out=<destination>`. Read the JSON.
 | `gated` (e.g. `DOCS_STALE`) | interactive: *Refresh / Use as-is / Cancel*. `--agent`: proceed and record the gate. **Graceful dead-end (spec A7d):** if *Refresh* fails, `docs.py`'s own fallback chain (cache → snapshot) covers it — the gate never blocks. |
 | `down` | STOP. Show the ⛔ item; do not scaffold. |
 
-NATIVE: confirm `~/.claude/skills/skill-architecture.md` is readable and the
+NATIVE: confirm `~/.cursor/skills/skill-architecture.md` is readable and the
 snapshot is present; otherwise STOP.
 
 Both modes — dependency check (shared helper):
 
 ```bash
-python3 ~/.claude/scripts/preflight-deps.py --skills=audit-skill --files="~/.claude/skills/skill-architecture.md"
+python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=audit-skill --files="~/.cursor/skills/skill-architecture.md"
 ```
 
 `gated` on `audit-skill` → interactive: offer *Fix it for me (git pull in
@@ -54,7 +54,7 @@ and always under `--agent` — still scaffold, but say up front that Step 6's
 self-audit will be skipped and the result ships unaudited (degrade, never
 block — spec A7d). The spec file missing is already a STOP above. NATIVE
 without python3: run the same check with built-in file tools instead — do
-`~/.claude/skills/audit-skill/SKILL.md` and the spec file exist?
+`~/.cursor/skills/audit-skill/SKILL.md` and the spec file exist?
 
 ## Step 2 — Docs
 
@@ -153,7 +153,7 @@ This skill does **not** run git.
 
 ## Conventions this skill itself follows
 
-- Single source of truth: `~/.claude/skills/skill-architecture.md`. Editing it
+- Single source of truth: `~/.cursor/skills/skill-architecture.md`. Editing it
   changes both the generator and the auditor (spec A1).
 - Scripts: stdout = JSON, stderr = diagnostics, single concern, graceful
   failure, never hang (spec A4).

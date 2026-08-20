@@ -9,7 +9,7 @@ Created: 2026-05-19  ·  Generator: generate-skill @ CC 2.1.145
 Render a Markdown file into one self-contained, on-brand (anthropic.com) HTML page.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` patterns A1–A13. Notable points:
+Follows `~/.cursor/skills/skill-architecture.md` patterns A1–A13. Notable points:
 - **A1** progressive disclosure: the brand identity lives in `DESIGN.md` (the
   Google-Labs DESIGN.md format) and rendering behavior in
   `references/rendering.md`, not SKILL.md.

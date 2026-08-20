@@ -12,7 +12,7 @@ synthesizes a cited markdown report — optionally with a self-contained HTML
 companion.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A15;
+This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A15;
 note here any deliberate deviations.
 
 Notable choices:
@@ -80,7 +80,7 @@ Notable choices:
   proxy, --out bypass, scan-trends if-available guard) fixed same day.
 - 2026-05-19: scaffolded by generate-skill (formal `/generate-skill`
   invocation).
-- 2026-05-19: Tavily/Exa keys both present in `~/.claude/skills/.env`
+- 2026-05-19: Tavily/Exa keys both present in `~/.cursor/skills/.env`
   (verified at scaffold time via `_env.load()` + `os.environ` presence
   check — no values printed). Both will be available in SCRIPTS mode.
 - 2026-05-19: self-audited via audit-skill (--agent): 0 critical, 1
@@ -122,12 +122,12 @@ this skill:
   depth.
 - **Setup Gate (A7)** — `KEYS_MISSING` is a real gate, but spec A7d
   graceful-dead-end is automatic via NATIVE mode. No "fix it for me" auto-
-  install option for keys (the user must add them to `~/.claude/skills/.env`
+  install option for keys (the user must add them to `~/.cursor/skills/.env`
   themselves; the skill prints a paste-ready block).
 
 ## 6. Notes
 Composes with `/scan-trends` for recency; uses Tavily/Exa via the shared
-`~/.claude/skills/.env`; NATIVE fallback via built-in `WebSearch` keeps the
+`~/.cursor/skills/.env`; NATIVE fallback via built-in `WebSearch` keeps the
 skill working keyless.
 
 The shared `.env.example`'s `TAVILY_API_KEY` / `EXA_API_KEY` "Used by:"

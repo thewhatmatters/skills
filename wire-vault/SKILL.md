@@ -43,7 +43,7 @@ native file reads.
    `name`, the git remote basename, the directory name. Confirm it with the
    user (`--project=` or `--agent` skips the confirmation).
 2. **Preflight by composition (spec A6/A8)** — run
-   `python3 ~/.claude/skills/curate-vault/scripts/preflight.py --vault=<vault>`
+   `python3 ~/.cursor/skills/curate-vault/scripts/preflight.py --vault=<vault>`
    for the vault checks (its gates apply: `VAULT_MISSING` → offer to run
    curate-vault's fix path or stop; `VAULT_READONLY` → stop). If python3
    is absent, degrade to a native existence/writability check of the vault
@@ -75,7 +75,7 @@ native file reads.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Composition by reference (spec A8): curate-vault owns all vault writes
   and the vault preflight; craft-claude owns project CLAUDE.md authoring
   beyond this skill's own marker block.

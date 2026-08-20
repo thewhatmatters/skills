@@ -22,7 +22,7 @@ What it detects (each may be null/false if absent):
     package_manager      : npm | pnpm | yarn | bun | null
     external_skills      : { "motion": bool, "transitions-dev": bool } — the
                            external skills SKILL.md defers to
-                           installed under ~/.claude/skills
+                           installed under ~/.cursor/skills
 
 I/O:
     stdin  : —
@@ -72,7 +72,7 @@ def detect_pkg_manager(root):
 
 
 def detect_user_skill(name):
-    """True iff ~/.claude/skills/<name>/SKILL.md declares `name: <name>`.
+    """True iff ~/.cursor/skills/<name>/SKILL.md declares `name: <name>`.
 
     Follows symlinks, so a symlinked install resolves the same as a real dir.
     """

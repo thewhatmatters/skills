@@ -27,7 +27,7 @@ Trigger with "convert this PRD to prd.json", "decompose this PRD into agent-loop
 
 ## Step 0 — Mode probe (spec A3)
 
-Run `python3 --version`. If python3 + `scripts/` are present → **SCRIPTS** (use the scripts below). Otherwise → **NATIVE**: do skill discovery by listing `~/.claude/skills/*/SKILL.md` and `<project>/.claude/skills/*/SKILL.md` yourself, decompose by hand per `references/conversion-rules.md`, and hand-check the JSON. Announce the mode in one line.
+Run `python3 --version`. If python3 + `scripts/` are present → **SCRIPTS** (use the scripts below). Otherwise → **NATIVE**: do skill discovery by listing `~/.cursor/skills/*/SKILL.md` and `<project>/.claude/skills/*/SKILL.md` yourself, decompose by hand per `references/conversion-rules.md`, and hand-check the JSON. Announce the mode in one line.
 
 ## Steps
 
@@ -40,7 +40,7 @@ Run `python3 --version`. If python3 + `scripts/` are present → **SCRIPTS** (us
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Composition by reference, not import — consumes `generate-prd`'s PRD; names `automate-browser` for browser verification; runs neither's code (spec A8 family convention).
 - Skill references are **discovered, not hard-coded** — never assume a project skill exists; embed only what `list_skills.py` actually found.
 - Keyless; stdlib scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).

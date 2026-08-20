@@ -15,7 +15,7 @@ tier.
 
 ## 2. Reusable patterns (link to spec A1..A15)
 
-Follows `~/.claude/skills/skill-architecture.md` A1–A15. Deliberate notes:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Deliberate notes:
 - A5/A7: keyless, no network, no external binaries → no setup gates at
   all; a failing preflight means a broken install (`down`), not a gap.
 - A15c: draw-diagram and render-html are soft composes (routing/handoff

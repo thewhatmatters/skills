@@ -39,7 +39,7 @@ This is a model-driven writing skill — no mode probe and no per-run scripts. (
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Composition by reference — complements CLAUDE.md (project rules) and `curate-vault` (durable insights → the OKF vault; offered at the session boundary in step 5). The checkpoint entry lives *inside* the file-based memory system but is deliberately ephemeral: one `project`-type entry, overwritten per checkpoint, holding *this task's* working state — unlike the durable one-fact-per-file entries around it. Setup of the status line + hooks is delegated to `update-config` / `statusline-setup` (see `references/setup.md`).
 - Honest scope (spec A12): the model writes the checkpoint because hooks run shell commands, not the model. Memory's native loading is the index line + relevance recall only — the SessionStart hook is what guarantees the *full* checkpoint lands in the next session's context; keep the entry fresh so there's always something good to inject, and the PreCompact hook snapshots it (to `~/.claude/.cache/checkpoint/`) so compaction never eats the only copy.
 - Git: checkpoint *records* git state and may *offer* to commit, but bundles no git script and never runs git itself or pushes — consistent with the house rule that skills don't run git. The commit (if any) is the user-confirmed, project-aware exception, done the normal way.

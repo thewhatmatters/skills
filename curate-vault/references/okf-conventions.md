@@ -33,7 +33,7 @@ Conventional headings when applicable: # Schema, # Examples, # Citations.
   updates, merges, or grooms — audit-vault reads the pair to split document
   age from freshness.
 - Body structure/formatting follows the house markdown style spec:
-  `~/.claude/skills/format-markdown/references/markdown-style.md`. Where it
+  `~/.cursor/skills/format-markdown/references/markdown-style.md`. Where it
   and OKF overlap (frontmatter, absolute links, reserved `index.md`/`log.md`),
   OKF — this file — wins; the style spec's own deference table agrees.
 - `resource:` only when the concept describes one canonical asset (URI).

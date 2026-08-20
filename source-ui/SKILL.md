@@ -43,7 +43,7 @@ Docs-only skill — no Python, no `scripts/`. The mode probe is **native**: chec
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Composition by reference, not import — names render-html / generate-prd; runs neither's code (spec A8 family convention).
 - Keyless: the MCP servers own their own auth; this skill loads no secrets.
 - Degrades rather than blocks (spec A3/A7): MCP → WebSearch/WebFetch fallback.

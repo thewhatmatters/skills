@@ -58,10 +58,10 @@ Scope precedence: `--agent` → all non-gated dimensions, no prompt. `--dims=` �
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - **Report-only, like `audit-skill`** — same severity grammar, same offer-don't-act ending. Fixing is `build-ui`'s job (composition by reference, spec A8).
 - **Deterministic gate + judgment layer**: tools (axe, Lighthouse, drift scan) provide the floor; the model's judgment pass covers what they can't. Never present the tool layer alone as a complete audit (A12 honesty).
 - **Layered resolution (A11)**: axe-core `$AXE_JS → .cache/axe.min.js → CDN (one-time, cached)`; Lighthouse `$LIGHTHOUSE_BIN → lighthouse on PATH → npx`. Node optional; never a committed `node_modules`.
 - **Scripts (A4)**: one concern each, JSON stdout / stderr diagnostics, time-bounded, graceful failure. Keyless — no secrets, no `_env.py`.
-- Screenshots and reports are written to `--out` / the working dir — never into `~/.claude/skills/` (commit-by-default repo).
+- Screenshots and reports are written to `--out` / the working dir — never into `~/.cursor/skills/` (commit-by-default repo).
 - Tauri carryover: point the live dimensions at the dev-server URL a Tauri webview loads; vitals budgets matter less there, a11y/visual/tokens apply unchanged.

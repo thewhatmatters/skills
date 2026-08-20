@@ -26,14 +26,14 @@ Trigger phrases: "make a Remotion video", "turn this script into video scenes", 
 
 ## Step 0 — Mode probe (spec A3)
 
-Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use `probe.py` + `preflight.py`). Otherwise → **NATIVE**: do the probe by hand (read `package.json` for a `remotion` dep, look for `remotion.config.ts`, `src/Root.tsx`/`src/index.ts`, check `node`/`npx`, and whether `~/.claude/skills/remotion-best-practices/SKILL.md` exists), then follow `references/` directly. Announce the mode in one line.
+Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use `probe.py` + `preflight.py`). Otherwise → **NATIVE**: do the probe by hand (read `package.json` for a `remotion` dep, look for `remotion.config.ts`, `src/Root.tsx`/`src/index.ts`, check `node`/`npx`, and whether `~/.cursor/skills/remotion-best-practices/SKILL.md` exists), then follow `references/` directly. Announce the mode in one line.
 
 ## Steps
 
 1. **Preflight** — `python3 scripts/preflight.py --project=<root>`. `down` → stop and report. `gated` (`NODE_MISSING`) → you can still author code; surface that rendering/Studio need Node and offer the install path; under `--agent` proceed in author-only mode. Else proceed.
 2. **Probe** — unless `--no-probe`, run `python3 scripts/probe.py --project=<root>` → JSON `{project_root, is_remotion, remotion_version, has_config, root_file, node, npx, package_manager, tailwind, external_skills}` (full shape in the script docstring). This is the source of truth — don't guess.
 3. **Route on the official skill** — branch on `external_skills["remotion-best-practices"]`:
-   - **`true`** (installed at `~/.claude/skills/remotion-best-practices`): **defer all Remotion API/domain knowledge to it** — animation, timing, sequencing, transitions, audio, audio-visualization, captions, 3d, gifs, fonts, lottie, maps, voiceover, Zod parameters, etc. Read [`references/compose.md`](references/compose.md) for the coordination layer (routing table + what `remotion` still owns). Do **not** re-derive what that skill knows.
+   - **`true`** (installed at `~/.cursor/skills/remotion-best-practices`): **defer all Remotion API/domain knowledge to it** — animation, timing, sequencing, transitions, audio, audio-visualization, captions, 3d, gifs, fonts, lottie, maps, voiceover, Zod parameters, etc. Read [`references/compose.md`](references/compose.md) for the coordination layer (routing table + what `remotion` still owns). Do **not** re-derive what that skill knows.
    - **`false`** (not installed — fresh machine): degraded path. Surface the install command before doing the work: `npx skills add remotion-dev/skills` (open-source at `remotion-dev/remotion/packages/skills`; agent variant `npx -y skills@latest add remotion-dev/skills -g -y`). Until installed, fall back to general knowledge for the task and **flag the caveat plainly**: Remotion's current API/components and best-practice rules may post-date the training cutoff. Still read [`references/guardrails.md`](references/guardrails.md) — the determinism rules and core concepts there are load-bearing and stable.
 4. **Decide project state (no-monoculture)** — from the probe:
    - `is_remotion == true` → work in place.
@@ -48,7 +48,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use `prob
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - **Compose, don't vendor** (CLAUDE.md 5-step external-skill convention; spec A3/A7/A8): defer Remotion API knowledge to `remotion-best-practices`; probe-gate it; keep local references thin so they don't drift each release. `remotion` owns the *workflow*; the official skill owns the *API*.
 - **No-monoculture**: never introduce Remotion into a project that doesn't use it without explicit consent.
 - **Determinism guardrails are non-negotiable** — they're cheap, stable, and exactly what agents get wrong (spec A12 honesty).

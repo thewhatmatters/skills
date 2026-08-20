@@ -25,7 +25,7 @@ Trigger phrases: "animate this card/list/page", "add a transition", "stagger the
 
 ## Step 0 — Mode probe (spec A3)
 
-Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use `probe.py` + `preflight.py`). Otherwise → **NATIVE**: probe by hand (read `package.json` for `motion`/`framer-motion`/`@formkit/auto-animate`/other animation deps, check for Tailwind and the framework, check whether `~/.claude/skills/motion/SKILL.md` and `~/.claude/skills/transitions-dev/SKILL.md` exist), then follow `references/` directly. Announce the mode in one line.
+Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use `probe.py` + `preflight.py`). Otherwise → **NATIVE**: probe by hand (read `package.json` for `motion`/`framer-motion`/`@formkit/auto-animate`/other animation deps, check for Tailwind and the framework, check whether `~/.cursor/skills/motion/SKILL.md` and `~/.cursor/skills/transitions-dev/SKILL.md` exist), then follow `references/` directly. Announce the mode in one line.
 
 ## Steps
 
@@ -50,7 +50,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use `prob
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - **Compose, don't vendor** (CLAUDE.md external-skill convention): the official `/motion` skill owns Motion API knowledge when installed; `/transitions-dev` (when installed) owns the tuned CSS-tier recipes for its 18 named patterns; this skill owns tier routing + guardrails. The Motion deferral is opportunistic (Motion+ is paid) — never gate on it, never nag.
 - **Composition by reference** (spec A8): `build-ui` owns general UI execution (it names add-motion for animation asks); `frontend-design` owns taste; `source-ui` finds motion precedent; `remotion` owns video. Compose by naming, not importing.
 - **No-monoculture**: adding an animation dependency is a separate, explicit user decision.

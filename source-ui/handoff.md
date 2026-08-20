@@ -9,7 +9,7 @@ Created: 2026-05-24  ·  Generator: generate-skill @ CC 2.1.145
 Source real UI references — screens, components, flows, and visual styles — by routing a design need to Mobbin or Refero with the right tool.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Deliberate notes:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Deliberate notes:
 - **A1 progressive disclosure:** the library/tool decision table lives in `references/routing.md`, loaded only when a request arrives; `SKILL.md` stays lean.
 - **A3 dual-mode + degraded ladder:** mode probe is *native* (inspect the tool list for `mcp__mobbin__*` / `mcp__refero__*`), not a Python script — Python cannot see harness-provided MCP tools. Ladder: both servers → one server → WebSearch/WebFetch fallback.
 - **No `scripts/` (A4/A6):** like `audit-skill`, this is an orchestration/routing skill. A Python preflight would be hollow (it can't probe MCP connectivity), so the readiness check is folded into the native Step 0.

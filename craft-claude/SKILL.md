@@ -94,7 +94,7 @@ CLAUDE.md content yourself. Announce the mode in one line.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`; the **CLAUDE.md** canon is
+- Spec is `~/.cursor/skills/skill-architecture.md`; the **CLAUDE.md** canon is
   `references/claude-md-spec.md` (do not duplicate its rubric in this file —
   reference it, A1).
 - Scripts: JSON stdout / diagnostics stderr / graceful failure / time-bounded
@@ -102,5 +102,5 @@ CLAUDE.md content yourself. Announce the mode in one line.
 - Composition by reference, not import (spec A8): defers hooks/settings.json to
   `update-config`, the auto-memory system to its own loader, branded reports to
   `render-html`; runs none of their code.
-- Operates on the **user's project**, never persists into `~/.claude/skills/`
+- Operates on the **user's project**, never persists into `~/.cursor/skills/`
   (commit-by-default repo). Never edits a CLAUDE.md without a consent gate.

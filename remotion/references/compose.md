@@ -19,7 +19,7 @@ animate/sequence/caption/transition X" → that's the official skill's job. If i
 
 ## Install gate (the probe's `external_skills["remotion-best-practices"]`)
 
-- **`true`** — installed at `~/.claude/skills/remotion-best-practices`. Defer all
+- **`true`** — installed at `~/.cursor/skills/remotion-best-practices`. Defer all
   API/domain questions to it; don't re-derive its rules here. Use this skill for
   the workflow spine and the guardrails.
 - **`false`** — not installed on this machine. Before doing API-heavy work, surface

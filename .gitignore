@@ -1,5 +1,5 @@
 # =============================================================================
-# Commit everything under ~/.claude/skills EXCEPT secrets and generated junk.
+# Commit everything under ~/.cursor/skills EXCEPT secrets and generated junk.
 # (Switched from the earlier opt-in whitelist — all skills are now tracked.)
 # =============================================================================
 
@@ -32,7 +32,7 @@ automate-browser/tmp/
 
 # --- Symlinked third-party skills (not ours to commit) -----------------------
 # Skills installed by other apps (Conan, Orca, etc.) sometimes drop a symlink
-# into ~/.claude/skills. Their source lives elsewhere; ignore the symlink here.
+# into ~/.cursor/skills. Their source lives elsewhere; ignore the symlink here.
 /conan-change-radio
 /orca-cli
 /orchestration

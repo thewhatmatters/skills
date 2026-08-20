@@ -75,7 +75,7 @@ preflight checks with built-in tools. Announce the mode in one line.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Composition by reference, not import (A8): writing skills read this
   skill's style spec; this skill routes content-quality work to

@@ -32,7 +32,7 @@ a description — so it asks before spending.
 
 ## What it needs
 
-The canonical spec file must exist: `~/.claude/skills/skill-architecture.md`.
+The canonical spec file must exist: `~/.cursor/skills/skill-architecture.md`.
 That file *is* the standard — the auditor reads it in full and checks the
 target skill against it (structure, reliability, secret hygiene, setup gates,
 preflight, conventions). The two ship together for this reason.

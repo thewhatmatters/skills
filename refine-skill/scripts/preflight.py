@@ -16,7 +16,7 @@ import sys
 MARK = {"ready": "✅", "degraded": "⚠ ", "gated": "🔒", "down": "⛔"}
 RANK = {"ready": 0, "degraded": 1, "gated": 2, "down": 3}
 
-SKILLS_DIR = os.path.expanduser("~/.claude/skills")
+SKILLS_DIR = os.path.expanduser("~/.cursor/skills")
 PROJECTS_DIR = os.path.expanduser("~/.claude/projects")
 
 

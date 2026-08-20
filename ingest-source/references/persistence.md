@@ -3,7 +3,7 @@
 Loaded by `SKILL.md` Steps 5–6 (progressive disclosure, spec A1). This is the
 contract that makes ingestions *project knowledge* instead of loose files.
 
-## Layout (in the user's project, never in ~/.claude/skills)
+## Layout (in the user's project, never in ~/.cursor/skills)
 
 ```
 <project root>/
@@ -15,7 +15,7 @@ contract that makes ingestions *project knowledge* instead of loose files.
 
 `--docs-dir` overrides `docs/sources`; `--project-root` (default cwd) is where
 CLAUDE.md is looked for. The project root is the directory the user is working
-in — **never** persist into `~/.claude/skills/` (commit-by-default repo).
+in — **never** persist into `~/.cursor/skills/` (commit-by-default repo).
 
 ## The ingestion file
 

@@ -11,7 +11,7 @@ Make a real Müller-Brockmann modular grid load-bearing in a web project — one
 a toggleable overlay, and runtime optical alignment — then prove it adheres.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A15. Notable applications:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
 
 - **A15 (2026-07-16):** audit-ui + automate-browser promoted from soft composes
   to a preflighted hard pair (`preflight-deps.py` in Step 1) — Step 7's

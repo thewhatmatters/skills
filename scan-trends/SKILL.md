@@ -31,7 +31,7 @@ routes you there:
   override `X_PROFILE_DIR`). No valid auth → `[]` + `NO_SESSION`; the skill falls
   back to a web `site:x.com` search.
 - **Search keys (`.env`)** — `scripts/_env.py` loads keys in order: real env →
-  `~/.claude/.env` → `~/.claude/skills/.env` (first hit wins; `chmod 600` the file,
+  `~/.claude/.env` → `~/.cursor/skills/.env` (first hit wins; `chmod 600` the file,
   preflight warns if looser). Web search auto-selects **Tavily** (`TAVILY_API_KEY`) →
   **Exa** (`EXA_API_KEY`) → **DuckDuckGo** (no key, weak last resort).
 - All other sources use public APIs, no credentials required.

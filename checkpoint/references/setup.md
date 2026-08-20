@@ -36,7 +36,7 @@ task. It reads `context_window.used_percentage` (provided on stdin) and
 {
   "statusLine": {
     "type": "command",
-    "command": "python3 ~/.claude/skills/checkpoint/assets/statusline.py"
+    "command": "python3 ~/.cursor/skills/checkpoint/assets/statusline.py"
   }
 }
 ```
@@ -56,7 +56,7 @@ current checkpoint entry to a timestamped archive under
   "hooks": {
     "PreCompact": [
       { "hooks": [ { "type": "command",
-        "command": "python3 ~/.claude/skills/checkpoint/assets/precompact_checkpoint.py" } ] }
+        "command": "python3 ~/.cursor/skills/checkpoint/assets/precompact_checkpoint.py" } ] }
     ]
   }
 }
@@ -73,7 +73,7 @@ in the cwd until the first `/checkpoint` migrates it). Add:
   "hooks": {
     "SessionStart": [
       { "hooks": [ { "type": "command",
-        "command": "python3 ~/.claude/skills/checkpoint/assets/sessionstart_checkpoint.py" } ] }
+        "command": "python3 ~/.cursor/skills/checkpoint/assets/sessionstart_checkpoint.py" } ] }
     ]
   }
 }

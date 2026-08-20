@@ -13,7 +13,7 @@ from a script, preview them in Studio, and render them to MP4. The skill owns th
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Closest sibling is
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Closest sibling is
 `build-ui` — same **compose-with-external-skill** posture (A3/A7/A8) and the same
 `detect_user_skill` probe pattern. Deliberate notes:
 

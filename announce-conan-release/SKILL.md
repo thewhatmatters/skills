@@ -76,7 +76,7 @@ fields, commands, and gotchas of each step.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Commit/push only in a release context or when asked; **confirm before pushing
   the marketing repo** (it deploys on push) and **before any outward send**.
   Under `--agent`, never push/send unattended — stage and report instead.

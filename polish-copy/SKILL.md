@@ -43,7 +43,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use the s
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - **The skill is machinery; taste is the project's.** Voice lives in the checked-in spec (DESIGN.md `## Voice` / VOICE.md), exactly like visual tokens live in DESIGN.md — never hard-coded here (the refine-skill principle: preferences don't get baked into shared skills).
 - **Reviews, never authors.** Per the research record: premium copy needs human tone-ownership; this skill audits and refines, the bootstrap drafts a *spec* (not copy) and even that is propose-only.
 - **Composition by reference (A8)**: `design-md` produces the DESIGN.md this reads; `audit-ui` covers a11y aspects of copy (label presence) — polish-copy covers *quality*; `build-ui`/`generate-prd` surfaces feed it; `render-html` brands the report.

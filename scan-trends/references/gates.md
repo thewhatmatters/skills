@@ -32,7 +32,7 @@ SKILL.md; this file holds the full anatomy plus the per-gate walkthroughs.
 - **Fix it for me:** not applicable — cookies can't be read from your browser
   automatically (and X blocks automated logins).
 - **I'll do it myself:** tell the user to add `X_AUTH_TOKEN` and `X_CT0` to
-  `~/.claude/skills/.env` — copy `auth_token`/`ct0` from a logged-in x.com tab
+  `~/.cursor/skills/.env` — copy `auth_token`/`ct0` from a logged-in x.com tab
   (DevTools → Application/Storage → Cookies → x.com). `chmod 600` the file. (Or, if
   they can complete it, `python3 scripts/x.py --login` for the profile path.) Wait
   for their go-ahead, then re-run `python3 scripts/x.py "{TOPIC}" --days={DAYS}`.

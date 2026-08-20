@@ -11,7 +11,7 @@ structured, cited markdown summary, and persist it as project knowledge in
 `docs/sources/` with an INDEX.md that the project's CLAUDE.md `@`-imports.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Notable points:
 - **A1:** four reference files, each loaded at a distinct step — acquisition
   split per source type (`youtube.md`, `web-docs.md`) so a PDF ingestion never
   loads the YouTube ladder.

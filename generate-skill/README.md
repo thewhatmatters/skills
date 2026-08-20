@@ -6,7 +6,7 @@ so you start from a structure that's known to be solid.
 
 ## What you get
 
-A new folder under `~/.claude/skills/<name>/` (or wherever you point it),
+A new folder under `~/.cursor/skills/<name>/` (or wherever you point it),
 containing:
 
 - `SKILL.md` — Claude's operating instructions, with valid YAML frontmatter
@@ -33,7 +33,7 @@ takes the documented defaults and never prompts.
 
 ## What it needs
 
-- `~/.claude/skills/skill-architecture.md` — the house spec it scaffolds
+- `~/.cursor/skills/skill-architecture.md` — the house spec it scaffolds
   against. The generator and the auditor share this file.
 - Optional but recommended: network access on first run, so it can pull the
   latest Claude docs. Offline still works — it falls back to the committed

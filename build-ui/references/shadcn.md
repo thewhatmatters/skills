@@ -1,13 +1,13 @@
 # shadcn — the build-ui complement to the official skill
 
 Loaded when `probe.components == "shadcn"`. The **official `shadcn` skill**
-(pinned in `skills-lock.json`, symlinked at `~/.claude/skills/shadcn`) owns the
+(pinned in `skills-lock.json`, symlinked at `~/.cursor/skills/shadcn`) owns the
 execution surface: `add`, presets, registry search, `npx shadcn@latest info
 --json`, current primitives, smart-merge. **Defer to it.** This file is kept
 intentionally small so it doesn't drift from upstream.
 
 > **Install gate.** The probe reports `external_skills.shadcn` — `true` if
-> `~/.claude/skills/shadcn/SKILL.md` is discoverable, `false` otherwise.
+> `~/.cursor/skills/shadcn/SKILL.md` is discoverable, `false` otherwise.
 > If it's `false` (a fresh clone, a new machine), install it before deferring:
 > ```
 > npx skills add https://github.com/shadcn/ui --skill shadcn

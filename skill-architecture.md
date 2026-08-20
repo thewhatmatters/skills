@@ -23,14 +23,20 @@ deviations should be deliberate, not accidental.
    pointer.
 2. **YAML frontmatter.** `name` matches the directory; `description` is
    trigger-rich (verbs + example phrases the model will see) and accurate to
-   current capability.
+   current capability. Required Cursor/Agent-Skills fields are `name` +
+   `description`. `disable-model-invocation` is shared. Cursor-only extras
+   (`paths`, `icon`, `color`, `metadata`) are valid in Cursor but **not** in
+   the Claude-docs field list `generate-skill` validates against — omit them
+   unless you are authoring by hand; do not invent Claude-only fields
+   (`allowed-tools`, `arguments`, `context: fork`, `user-invocable`) for
+   Cursor.
 3. **Mode probe + degraded path.** A Step 0 probe picks an execution mode; every
    capability has a functional fallback path when the preferred one is absent.
 4. **One concern per script.** Each script does one thing, has a docstring
    stating its I/O contract, writes its payload to **stdout as JSON** and
    diagnostics to **stderr**, and fails gracefully (never hangs the run).
 5. **Shared key loader.** Secrets via a single loader with precedence
-   `real env → ~/.claude/.env → ~/.claude/skills/.env`; empty values skipped so
+   `real env → ~/.cursor/skills/.env → ~/.claude/.env` (legacy fallback); empty values skipped so
    a placeholder never shadows a real key; keys sent in **headers only**, never
    in URLs or logs; no heavyweight dependency. `.env` is `chmod 600` and
    gitignored; `.env.example` is committed with a "Used by:" note per key.
@@ -85,7 +91,7 @@ deviations should be deliberate, not accidental.
     (a) **Hard, script-checkable** — a sibling skill, agent definition, or
     shared file without which the run can't fulfill its contract. Declare and
     check alongside the A6 preflight via the shared helper:
-    `python3 ~/.claude/scripts/preflight-deps.py --skills=… --agents=… --files=…`.
+    `python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=… --agents=… --files=…`.
     A missing dep gates as `DEPS_MISSING` — full A7 applies: interactive
     runs offer the A7c menu when the fix is actionable (*Fix it for me* —
     usually one `git pull` — */ I'll do it myself / Skip*); announce-then-

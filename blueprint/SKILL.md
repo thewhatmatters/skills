@@ -71,7 +71,7 @@ source of truth.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4); pure stdlib, keyless, no network.
 - The visual identity lives in `DESIGN.md` (house brand); scripts hard-code the token values to stay stdlib — change both together.
 - Composes with draw-diagram (quick Mermaid tier) and render-html (documents); blueprint owns only the presentation-grade architecture artifact.

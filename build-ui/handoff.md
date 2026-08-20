@@ -10,7 +10,7 @@ Implement UI in a real project, following its existing stack and conventions
 instead of imposing new ones. Owns the *execution* axis of frontend work.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A15. Notable points:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable points:
 - **A1 progressive disclosure:** per-stack guidance (Tailwind, shadcn, vanilla
   CSS, a11y) lives in `references/`, loaded only for the libraries the project
   actually uses. SKILL.md stays a lean flow.
@@ -89,7 +89,7 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A15. Notable points:
   Without this, a fresh clone of the skills repo would have `skills-lock.json`
   + this repo's references but no installed shadcn skill, and build-ui's
   "defer to shadcn" pointer would silently break. `probe.py` now reports
-  `external_skills.shadcn` (boolean: is `~/.claude/skills/shadcn/SKILL.md`
+  `external_skills.shadcn` (boolean: is `~/.cursor/skills/shadcn/SKILL.md`
   discoverable with `name: shadcn`?). SKILL.md Step 3 branches on it:
   installed → defer; not installed → surface the install command
   (`npx skills add https://github.com/shadcn/ui --skill shadcn` from

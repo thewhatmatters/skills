@@ -12,7 +12,7 @@ proposing before→after rewrites the user approves.
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Deliberate shape notes:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Deliberate shape notes:
 
 - **A1**: two references = the two layers; both load at the review step.
 - **A3**: NATIVE = read the scoped files by eye; the scripts are convenience

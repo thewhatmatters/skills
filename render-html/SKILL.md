@@ -66,7 +66,7 @@ yourself, and wrap it in that documented shell. Announce the mode in one line.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Self-contained artifact records the source file + render date (spec A10).
 - Keyless: no secrets, no `_env.py`. No network by default; network only when

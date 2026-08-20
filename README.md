@@ -1,10 +1,10 @@
 # skills
 
-Personal [Claude Code](https://claude.com/claude-code) skills, version-controlled.
+Personal Agent Skills, version-controlled. Canonical clone:
+`~/Development/skills`. Cursor discovery: `~/.cursor/skills` → this folder.
 
-This repo lives at `~/.claude/skills/`. Each subdirectory is a skill Claude can
-invoke. **Everything here is committed except secrets and generated junk** —
-drop a new skill into the folder and it's tracked automatically.
+Each subdirectory is a skill. **Everything here is committed except secrets
+and generated junk** — drop a new skill in and it's tracked.
 
 ## Tracked skills
 
@@ -55,7 +55,7 @@ as `node_modules` + a lockfile. Pinned: **`shadcn`** (shadcn/ui),
 **`next-best-practices`** (vercel-labs/next-skills), **`design-md`**
 (google-labs-code/stitch-skills), and **`remotion-best-practices`**
 (remotion-dev/skills). Our skills defer to them through probe gates; the full
-5-step convention is in [`CLAUDE.md`](CLAUDE.md).
+5-step convention is in [`AGENTS.md`](AGENTS.md).
 
 ## Setup
 
@@ -63,10 +63,10 @@ Some skills need API keys. Keys live in a single shared `.env` file that is
 **never committed** (`.gitignore` blocks it). `.env.example` is the template:
 
 ```sh
-cp ~/.claude/skills/.env.example ~/.claude/skills/.env
-chmod 600 ~/.claude/skills/.env
+cp ~/.cursor/skills/.env.example ~/.cursor/skills/.env
+chmod 600 ~/.cursor/skills/.env
 # then fill in the keys you need
 ```
 
-Resolution order (first hit wins): real env var → `~/.claude/.env` →
-`~/.claude/skills/.env`. Empty values are skipped.
+Resolution order (first hit wins): real env var → `~/.cursor/skills/.env` →
+`~/.claude/.env` (legacy). Empty values are skipped.

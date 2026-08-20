@@ -11,7 +11,7 @@ USAGE
     python3 scripts/preflight.py [--out=PATH] [--agent]
 
     --out=PATH  destination dir for the skill to be generated
-                (default: the skills dir, ~/.claude/skills)
+                (default: the skills dir, ~/.cursor/skills)
     --agent     non-interactive; report only, never prompt
 
 I/O CONTRACT
@@ -39,7 +39,7 @@ sys.path.insert(0, str(SCRIPT_DIR))
 import docs  # noqa: E402 - sibling module, intentional path insert
 
 SKILL_ROOT = SCRIPT_DIR.parent
-SKILLS_DIR = SKILL_ROOT.parent  # ~/.claude/skills
+SKILLS_DIR = SKILL_ROOT.parent  # ~/.cursor/skills
 SPEC = SKILLS_DIR / "skill-architecture.md"
 NET_PROBE_URL = "https://code.claude.com/docs/en/skills.md"
 NET_TIMEOUT = 3  # seconds; keeps preflight fast

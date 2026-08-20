@@ -12,7 +12,7 @@ token drift, severity-grouped, report-only.
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Deliberate shape notes:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Deliberate shape notes:
 
 - **A1**: one reference per dimension, loaded only for scoped dimensions.
 - **A3**: NATIVE mode = static dimensions only (tokens by hand-grep + judgment

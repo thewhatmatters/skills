@@ -27,7 +27,7 @@ Examples:
 ## What it needs (one-time)
 
 Nothing is strictly required, but more keys = more sources. Put what you have in
-`~/.claude/skills/.env` (`chmod 600`; see `.env.example`):
+`~/.cursor/skills/.env` (`chmod 600`; see `.env.example`):
 
 - `TAVILY_API_KEY` (or `EXA_API_KEY`) — better web results
 - `X_AUTH_TOKEN` / `X_CT0` — include X/Twitter

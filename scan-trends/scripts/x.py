@@ -255,7 +255,7 @@ def main():
         # on the literal token "NO_SESSION" on stderr.
         how = ("cookies invalid/expired — refresh X_AUTH_TOKEN/X_CT0"
                if x_cookies() else
-               "no auth — add X_AUTH_TOKEN and X_CT0 to ~/.claude/skills/.env "
+               "no auth — add X_AUTH_TOKEN and X_CT0 to ~/.cursor/skills/.env "
                "(copy from a logged-in x.com browser via DevTools → Cookies), "
                "or run `python3 scripts/x.py --login`")
         print(f"[x] NO_SESSION — {how}.", file=sys.stderr)

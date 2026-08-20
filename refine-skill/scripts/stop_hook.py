@@ -14,7 +14,7 @@ Design choices:
 - Offers, never forces: exit 0 + systemMessage (not decision:block / exit 2).
 - Once per session: a marker file under the temp dir suppresses repeats so the
   notice is not shown on every turn.
-- Scoped: only suggests skills that exist as directories under ~/.claude/skills
+- Scoped: only suggests skills that exist as directories under ~/.cursor/skills
   (the user's own), excluding refine-skill itself; stays silent if refine-skill
   was already used this session.
 - Fails silent: any error → exit 0 with no output (never break the session).
@@ -24,7 +24,7 @@ import os
 import sys
 import tempfile
 
-SKILLS_DIR = os.path.expanduser("~/.claude/skills")
+SKILLS_DIR = os.path.expanduser("~/.cursor/skills")
 MARKER_DIR = os.path.join(tempfile.gettempdir(), "refine-skill-hook")
 
 

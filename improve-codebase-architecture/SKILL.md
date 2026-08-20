@@ -35,7 +35,7 @@ shared design vocabulary:
 ### 0. Preflight dependencies
 
 ```bash
-python3 ~/.claude/scripts/preflight-deps.py --skills=codebase-design,grilling
+python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=codebase-design,grilling
 ```
 
 Both siblings are hard dependencies (the vocabulary source; the Step-3

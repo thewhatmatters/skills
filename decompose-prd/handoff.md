@@ -11,7 +11,7 @@ Turn a PRD into iteration-sized, dependency-ordered, skill-aware user stories as
 fresh-context agent looped over a task list until every story passes.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Notable points:
 - **A1 progressive disclosure:** the conversion craft (schema, sizing/ordering
   rules, splitting, worked example) lives in `references/conversion-rules.md`,
   loaded only at Step 3; SKILL.md stays lean.
@@ -76,7 +76,7 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable points:
 - `list_skills.py` reports skills present *now* in the named project; if the
   loop later runs in a different checkout, re-generate so references match.
 - Plugin-namespaced skills (`plugin:skill`) are not scanned — only global
-  `~/.claude/skills` and `<root>/.claude/skills`.
+  `~/.cursor/skills` and `<root>/.claude/skills`.
 
 ## 5. Audit rubric coverage
 See `skill-architecture.md` §B; this skill targets every PASS that applies.

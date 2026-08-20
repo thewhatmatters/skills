@@ -81,7 +81,7 @@ See `skill-architecture.md` §B. Items expected to be N/A for this skill:
   and extracted JSON are the artifacts.
 
 ## 6. Notes
-Self-contained under `~/.claude/skills/automate-browser/`. Profile lives at
+Self-contained under `~/.cursor/skills/automate-browser/`. Profile lives at
 `.cache/profile` (gitignored). Browsers resolved from the shared ms-playwright
 cache (per-OS path, `PLAYWRIGHT_BROWSERS_PATH` override). Composes naturally
 with `/scan-trends` (which has its own authenticated-X browser path) and

@@ -13,7 +13,7 @@ an optional `projects/<name>/` vault area via curate-knowledge.
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-Follows `~/.claude/skills/skill-architecture.md` A1–A13; deliberate deviations:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13; deliberate deviations:
 
 - **No scripts (A4/A6 by composition).** The only external dependency is the
   vault, and curate-knowledge's `preflight.py` already checks it — reused by

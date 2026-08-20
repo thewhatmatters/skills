@@ -10,7 +10,7 @@ Author, audit, and maintain a project's CLAUDE.md and its memory/rules
 ecosystem against verified Claude Code mechanics.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A13.
+This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A13.
 Mirrors the repo's **spec-bound** pattern: just as `skill-architecture.md` is
 the canon for `audit-skill`/`generate-skill`, `references/claude-md-spec.md` is
 the canon both AUTHOR and AUDIT modes reference (do not duplicate its rubric in

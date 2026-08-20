@@ -16,7 +16,7 @@ library and the slice of the Playwright Page API you'll use most.
 ## 1. `browser.py` library
 
 Import in an inline script run from the skill dir
-(`cd ~/.claude/skills/automate-browser`).
+(`cd ~/.cursor/skills/automate-browser`).
 
 ### `launch(headless=False, viewport=(1280, 800))`
 Context manager. Yields `(ctx, page)` where `ctx` is a Playwright

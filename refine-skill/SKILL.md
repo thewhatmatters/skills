@@ -89,7 +89,7 @@ extract the signals by hand. Announce the mode in one line.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Composition by reference, not import — runs `audit-skill`'s documented entry
   point, routes preferences to the memory system, emits markdown for `render-html`;
   imports none of their code (spec A8).

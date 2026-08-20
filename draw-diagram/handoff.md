@@ -10,7 +10,7 @@ Turn intent into a Mermaid diagram and render it through a graceful degraded
 ladder (fenced block → mmdc SVG/PNG → Kroki → fenced block).
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.claude/skills/skill-architecture.md` A1–A13. Notable:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Notable:
 - **A1** progressive disclosure: types/guards/brand theme in
   `references/mermaid-reference.md`, not SKILL.md.
 - **A3** degraded path: the fenced ```mermaid block is the always-works core;

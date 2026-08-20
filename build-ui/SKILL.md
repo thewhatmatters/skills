@@ -93,7 +93,7 @@ Run `python3 --version`. If python3 + `scripts/` are present → **SCRIPTS** (us
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - **Stable contract, per-project brief.** This SKILL.md is the reusable production contract (the role a versioned PROMPT.txt plays in prompt-kit workflows); everything project-specific lives in the run's brief (`docs/briefs/<slug>.md` for showcase). Change the contract deliberately, never per-project.
 - **Composition by reference, not import** (spec A8): `frontend-design` owns aesthetic direction; `add-motion` owns animation craft; `grilling` owns the interview loop; `source-ui` finds visual precedent; `use-grid-system` owns Müller-Brockmann grid discipline. build-ui owns *execution and process*. Compose by naming, not by including their logic.
 - **The art gate exists because verified-but-ugly ships without it.** A technically clean build the user hates is a failed build; taste is checked on one cheap frame before the spend, not after.

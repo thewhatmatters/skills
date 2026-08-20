@@ -10,7 +10,7 @@ Read-only health report for the OKF vault — conformance, links, staleness,
 growth, structure — ending in groom handoffs, with zero writes to the vault.
 
 ## 2. Reusable patterns (link to spec A1..A15)
-This skill follows `~/.claude/skills/skill-architecture.md` A1–A15. Notable:
+This skill follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable:
 - **A1:** report structure lives in `references/report-template.md`, loaded
   only at write time.
 - **A3:** NATIVE mode degrades to a partial, honestly-labeled report (no

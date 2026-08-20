@@ -17,7 +17,7 @@ window and synthesizes a grounded, cited report + a self-contained HTML file.
   (Bluesky and TikTok were removed — see Decision Log.)
 - **Two execution modes:** `SCRIPTS` (Python scrapers/APIs, preferred) and
   `NATIVE` (built-in `web_search` fallback), chosen by a Step 0 probe.
-- **Install:** symlink `~/.claude/skills/scan-trends` → `~/Downloads/scan-trends`
+- **Install:** symlink `~/.cursor/skills/scan-trends` → `~/Downloads/scan-trends`
   (edit the working copy; live via symlink; skill registry hot-reloads).
 
 ## 2. File inventory
@@ -37,7 +37,7 @@ scripts/
   report.py                  # JSON → self-contained results.html (NOT a source)
 handoff.md                   # this file
 ```
-Key store: `~/.claude/.env` and/or `~/.claude/skills/.env` (the latter is canonical;
+Key store: `~/.claude/.env` and/or `~/.cursor/skills/.env` (the latter is canonical;
 `.env.example` is the committable template). `chmod 600`.
 
 ## 3. Reusable patterns (the transferable IP)
@@ -50,7 +50,7 @@ These are the generalizable conventions any skill in this family should follow.
    docstring stating its I/O contract; stdout = JSON payload, stderr = diagnostics.
    This keeps failures isolated and the pieces independently testable.
 3. **Shared key loader (`_env.py`).** Precedence: real env → `~/.claude/.env` →
-   `~/.claude/skills/.env`. Empty values skipped (a placeholder never shadows a
+   `~/.cursor/skills/.env`. Empty values skipped (a placeholder never shadows a
    real key). Keys sent in **headers only**, never URLs/logs. `chmod 600`; warn
    on looser perms. No `python-dotenv` dependency.
 4. **Preflight readiness check.** A `preflight.py` probes every dependency before
@@ -159,7 +159,7 @@ A skill in this family passes if:
 
 - Run: `/scan-trends <topic> [--days=N] [--sources=a,b,c|--all] [--agent] [--out=PATH]`
 - One-time setup: put `TAVILY_API_KEY` (and optionally `EXA_API_KEY`,
-  `X_AUTH_TOKEN`/`X_CT0`) in `~/.claude/skills/.env` (`chmod 600`).
+  `X_AUTH_TOKEN`/`X_CT0`) in `~/.cursor/skills/.env` (`chmod 600`).
 - Health check anytime: `python3 scripts/preflight.py`.
 - Editing the skill: edit `~/Downloads/scan-trends/*`; live via symlink; SKILL.md
   body reloads per invocation (registry/description at session start).

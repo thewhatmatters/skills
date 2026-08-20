@@ -5,7 +5,7 @@ It is the only place that holds scaffold templates; everything else stays
 lean.
 
 The 15 architecture patterns are NOT duplicated here. They live in
-`~/.claude/skills/skill-architecture.md` (A1–A15). The recipe references them
+`~/.cursor/skills/skill-architecture.md` (A1–A15). The recipe references them
 by id (e.g. "spec A6 = preflight") so a future spec edit changes both the
 generator and the auditor automatically.
 
@@ -45,7 +45,7 @@ must be emitted verbatim into the generated script.
 | `needs_secrets` | interactive | bool (false if `needs_scripts` false) |
 | `needs_design` | inferred / interactive | bool — true iff the skill emits **styled visual output** (see criterion below) |
 | `deps_notes` | interactive (optional) | free text — used in handoff seed |
-| `out_dir` | `--out=` (default `~/.claude/skills`) | parent for `<name>/` |
+| `out_dir` | `--out=` (default `~/.cursor/skills`) | parent for `<name>/` |
 | `live_fields` | docs.py JSON Step 2 | set of valid frontmatter field names |
 | `cc_version` | docs.py JSON Step 2 | string (e.g. `2.1.144`) |
 | `dry_run` | flag | bool |
@@ -136,7 +136,7 @@ paragraphs of instruction; their adoption is verifiable in reasoning traces
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 <<SECRETS_NOTE_OR_BLANK>>
 ```
@@ -159,7 +159,7 @@ paragraphs of instruction; their adoption is verifiable in reasoning traces
 ## What it needs
 
 (One-time setup, if any. If `needs_secrets`: point at the shared
-`~/.claude/skills/.env` and the keys this skill expects.)
+`~/.cursor/skills/.env` and the keys this skill expects.)
 
 ## How it works (high level)
 
@@ -189,7 +189,7 @@ Created: <<TODAY>>  ·  Generator: generate-skill @ CC <<CC_VERSION>>
 <<ONE_LINER>>
 
 ## 2. Reusable patterns (link to spec A1..A15)
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A15;
+This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A15;
 note here any deliberate deviations.
 
 ## 3. Decision log
@@ -361,7 +361,7 @@ values to match (no YAML parser) — note that in the skill's handoff.
 ## Secrets — shared `.env` convention (when `needs_secrets`)
 
 Do NOT create a per-skill `.env.example`. The convention (scan-trends handoff
-§3.3) is: edit the shared `~/.claude/skills/.env.example` and add a block:
+§3.3) is: edit the shared `~/.cursor/skills/.env.example` and add a block:
 
 ```
 # === Used by: <<NAME>> ===
@@ -392,8 +392,8 @@ created tree:
 verdict: <line from Step 6 self-audit>
 
 to publish this skill, run:
-  git -C ~/.claude/skills add <<NAME>>
-  git -C ~/.claude/skills commit -m "Add <<NAME>>"
+  git -C ~/.cursor/skills add <<NAME>>
+  git -C ~/.cursor/skills commit -m "Add <<NAME>>"
 ```
 
 (If `dry_run` was true: print everything above with the heading "DRY RUN —
@@ -402,9 +402,9 @@ no files written".)
 ## Non-goals (so the generator does not creep)
 
 - Does NOT `git add` or commit anything.
-- Does NOT edit `~/.claude/skills/skill-architecture.md` (reconcile.py flags
+- Does NOT edit `~/.cursor/skills/skill-architecture.md` (reconcile.py flags
   drift; the human owns spec edits — DESIGN.md §5).
-- Does NOT edit the shared `~/.claude/skills/.env.example` (prints the
+- Does NOT edit the shared `~/.cursor/skills/.env.example` (prints the
   paste-ready block in the summary instead).
 - Does NOT clobber an existing target directory.
 - Does NOT invent frontmatter fields outside the live set from docs.py.

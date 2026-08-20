@@ -2,14 +2,14 @@
 
 Loaded when `probe.framework == "next"`. The **official `next-best-practices`
 skill** (pinned in `skills-lock.json`, symlinked at
-`~/.claude/skills/next-best-practices`) owns Next-specific patterns:
+`~/.cursor/skills/next-best-practices`) owns Next-specific patterns:
 file conventions, RSC boundaries, async APIs (Next 15+), runtime selection,
 directives, navigation hooks, error files, data patterns, route handlers,
 metadata, `next/image`, `next/font`, bundling, and scripts. **Defer to it.**
 This file is kept intentionally small so it doesn't drift from upstream.
 
 > **Install gate.** The probe reports `external_skills["next-best-practices"]`
-> — `true` if `~/.claude/skills/next-best-practices/SKILL.md` is discoverable,
+> — `true` if `~/.cursor/skills/next-best-practices/SKILL.md` is discoverable,
 > `false` otherwise. If it's `false` (fresh clone, new machine), install it
 > before deferring:
 > ```

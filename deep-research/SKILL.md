@@ -219,7 +219,7 @@ explicit path is the per-write human confirmation). First confirm the vault
 root actually exists — if it's absent (sync client not running), NEVER
 create it: fall back to the working dir with a note (curate-vault's
 `SYNC_UNMOUNTED` rule). Then land the file conformant (see
-`~/.claude/skills/curate-vault/references/okf-conventions.md`):
+`~/.cursor/skills/curate-vault/references/okf-conventions.md`):
 
 1. Prepend OKF frontmatter to the md: `type: Research`, `title`,
    `description` (one sentence), `tags`, `timestamp` (ISO 8601). If the HTML
@@ -229,7 +229,7 @@ create it: fall back to the working dir with a note (curate-vault's
    `<vault>/research/index.md` (reuse the frontmatter `description`).
 3. Append a `**Creation**` entry under today's date in `<vault>/log.md`
    (newest-first).
-4. Verify: `python3 ~/.claude/skills/curate-vault/scripts/verify_bundle.py
+4. Verify: `python3 ~/.cursor/skills/curate-vault/scripts/verify_bundle.py
    --vault=<vault>` — fix anything this write introduced. If curate-vault's
    files are missing (steps 1–3 above are self-contained), skip the verify
    and say so in the summary.

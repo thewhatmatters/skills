@@ -64,7 +64,7 @@ Each criterion is something the agent can CHECK, not a vibe.
 ## Rule #4 — make stories skill-aware (discovered, never hard-coded)
 
 `scripts/list_skills.py` returns the skills the executing agent will actually
-have (global `~/.claude/skills` + project `<root>/.claude/skills`), each with a
+have (global `~/.cursor/skills` + project `<root>/.claude/skills`), each with a
 description. Match each story's intent to that inventory and embed the relevant
 skill **only if it is present**:
 

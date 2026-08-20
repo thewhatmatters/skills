@@ -10,7 +10,7 @@ Improve a skill by learning from one real session that used it — propose an
 evidence-grounded, validated diff for the user to approve.
 
 ## 2. Reusable patterns (link to spec A1..A14)
-Follows `~/.claude/skills/skill-architecture.md` A1–A14. Notable:
+Follows `~/.cursor/skills/skill-architecture.md` A1–A14. Notable:
 - **A1 progressive disclosure** — the judgement layer (taxonomy, evidence signals,
   validation ladder, overfit guard) lives in `references/reflection-model.md`;
   SKILL.md stays lean and routes to it.
@@ -45,7 +45,7 @@ Follows `~/.claude/skills/skill-architecture.md` A1–A14. Notable:
   `{"systemMessage": ...}` to surface a non-blocking offer — never `decision:block`
   / exit 2 (which would force continuation). Gated to **once per session** via a
   `/tmp/refine-skill-hook/<session_id>.seen` marker so it isn't noisy; only suggests
-  skills that exist under `~/.claude/skills` (excludes refine-skill itself; silent if
+  skills that exist under `~/.cursor/skills` (excludes refine-skill itself; silent if
   refine-skill was already used). Fails silent (always exit 0) so a trigger can never
   disrupt a session. Registered in `~/.claude/settings.json` (user scope, so it fires
   wherever skills are used); the handler script is versioned here, the wiring just

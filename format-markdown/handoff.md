@@ -13,7 +13,7 @@ tight bullets, a TOC threshold).
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-This skill follows `~/.claude/skills/skill-architecture.md` patterns A1–A13;
+This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A13;
 deliberate shape notes:
 
 - A1: the style spec (`references/markdown-style.md`) IS the skill's core
@@ -76,7 +76,7 @@ target; mode + `--out` are the scope).
 ## 6. Notes
 
 Composition line for writing skills to adopt (one line, by reference):
-"Author markdown per `~/.claude/skills/format-markdown/references/markdown-style.md`."
+"Author markdown per `~/.cursor/skills/format-markdown/references/markdown-style.md`."
 Candidates: curate-knowledge (article bodies), ingest-source (summaries),
 handoff (HANDOFF.md), deep-research / generate-prd (reports). Adopt on next
 touch of each skill rather than a big-bang edit.

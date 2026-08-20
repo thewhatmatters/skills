@@ -6,7 +6,7 @@ description: Audit a Claude skill against the canonical skill-architecture spec.
 # audit-skill
 
 Audit a target skill against the canonical spec at
-`~/.claude/skills/skill-architecture.md`. Report only — never fix unless asked.
+`~/.cursor/skills/skill-architecture.md`. Report only — never fix unless asked.
 
 ## Modes
 
@@ -21,16 +21,16 @@ with built-in tools. Only `--triggers` uses `scripts/`.
 ## Step 0: Resolve the target skill
 
 Determine the skill directory:
-- Explicit path/name in the request → use it (`~/.claude/skills/<name>`,
+- Explicit path/name in the request → use it (`~/.cursor/skills/<name>`,
   following symlinks).
 - A `SKILL.md` in the current working directory → that.
-- Otherwise list `~/.claude/skills/*/SKILL.md` and ask which to audit.
+- Otherwise list `~/.cursor/skills/*/SKILL.md` and ask which to audit.
 
 Resolve symlinks to the real source dir before reading. State the target.
 
 ## Step 1: Load the rubric (source of truth)
 
-Read `~/.claude/skills/skill-architecture.md` in full — sections A (patterns),
+Read `~/.cursor/skills/skill-architecture.md` in full — sections A (patterns),
 B (rubric), C (severity). If it is missing, STOP and say so: the audit has no
 spec to check against. Do not audit from memory.
 
@@ -89,7 +89,7 @@ expand scope.
 ## Suite sweep (audit all skills)
 
 When asked to audit the whole suite ("audit all skills", `--all`): enumerate
-`~/.claude/skills/*/SKILL.md`, then **fan out** — spawn one agent per ~3 skills
+`~/.cursor/skills/*/SKILL.md`, then **fan out** — spawn one agent per ~3 skills
 (or per skill), each running Steps 0–5 against the spec and returning a compact
 severity-grouped report. Aggregate into a single table (per skill: 🔴/🟠/🟡
 counts + the Name & Description verdict), then list the findings worth acting on.
@@ -131,7 +131,7 @@ Output the full report and stop. No interactive offer, no edits.
 ## Conventions this skill itself follows
 
 The rubric is NOT duplicated here — it lives once in
-`~/.claude/skills/skill-architecture.md` (spec A1: progressive disclosure /
+`~/.cursor/skills/skill-architecture.md` (spec A1: progressive disclosure /
 single source of truth). Editing the spec changes both this auditor and any
 future generator.
 

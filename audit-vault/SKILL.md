@@ -53,7 +53,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS**. Otherwise
    - `VAULT_TOOLS_MISSING` (degraded) — curate-vault's `verify_bundle.py` not found: skip the conformance section, mark it "not measured" in the report, continue.
    - `STATE_UNWRITABLE` (degraded) — `~/.claude/.cache/audit-vault/` not writable: report without growth deltas, continue.
    - `DEEP_UNAVAILABLE` (degraded) — `vault-verifier` agent not installed: `--deep` skips the Claim spot-check and the report labels it not measured.
-2. **Conformance + broken links** — run curate-vault's documented entry point: `python3 ~/.claude/skills/curate-vault/scripts/verify_bundle.py --vault=<vault>`, capturing stdout to `~/.claude/.cache/audit-vault/verify.json` (the state dir — NEVER into the vault or the skills repo); pass that path to the engine. (Composition by reference: verify_bundle stays the single conformance authority; this skill never reimplements its rules.)
+2. **Conformance + broken links** — run curate-vault's documented entry point: `python3 ~/.cursor/skills/curate-vault/scripts/verify_bundle.py --vault=<vault>`, capturing stdout to `~/.claude/.cache/audit-vault/verify.json` (the state dir — NEVER into the vault or the skills repo); pass that path to the engine. (Composition by reference: verify_bundle stays the single conformance authority; this skill never reimplements its rules.)
 3. **Metrics engine** — `python3 scripts/healthscan.py --vault=<vault> [--verify=<verify.json>] [--folder=SUB] [--no-snapshot]` → one JSON payload: totals by type/folder, staleness heat, orphan + index-coverage rates, hubs/isolates, log cadence, citation coverage, growth deltas vs the latest snapshot, and ranked groom suggestions. The engine is read-only by contract: it opens vault files only for reading and writes solely to the state dir.
 4. **`--deep` (opt-in)** — if the `vault-verifier` agent is available (preflight `deep` check; otherwise skip and label the section not measured): take the engine's `deep_candidates` list (stalest-suspect × most-inbound-linked); fan out one `vault-verifier` agent per concept (batch ≤ N), each returning structured claim verdicts. Merge verdicts into the report's Claim spot-check section. Ignored under `--agent`/cron; requires the explicit flag in an interactive run.
 5. **Write the report** — compose the markdown per [`references/report-template.md`](references/report-template.md): verdict line first, then sections in template order; every number from the JSON, no invented figures (spec A12 — sections not measured say so). To `--out` if given, else present in-conversation. `--html`: hand the written file to the `render-html` skill (if installed; otherwise say so and leave the markdown).
@@ -61,7 +61,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS**. Otherwise
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - **Read-only is the contract**: no file inside the vault is ever created, modified, or deleted by this skill — that includes "harmless" fixes. All writes belong to curate-vault's gated flow (composition by reference, spec A8).
 - Scripts: JSON stdout / diagnostics stderr / graceful failure, never hang (spec A4).
 - State (snapshots) lives in `~/.claude/.cache/audit-vault/` — gitignored, outside the vault, safe to delete (first run after deletion simply has no deltas).

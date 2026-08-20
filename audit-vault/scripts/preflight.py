@@ -19,7 +19,7 @@ RANK = {"ready": 0, "degraded": 1, "gated": 2, "down": 3}
 DEFAULT_VAULT = os.path.expanduser(
     "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN")
 VERIFY = os.path.expanduser(
-    "~/.claude/skills/curate-vault/scripts/verify_bundle.py")
+    "~/.cursor/skills/curate-vault/scripts/verify_bundle.py")
 
 
 def check_vault(vault):

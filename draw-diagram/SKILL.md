@@ -74,7 +74,7 @@ the zero-dependency path needs no script. Announce the mode in one line.
 
 ## Conventions this skill follows
 
-- Spec is `~/.claude/skills/skill-architecture.md`.
+- Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Degraded path (A3) + layered binary resolution (A11): `$MMDC_BIN` → `mmdc` →
   `npx @mermaid-js/mermaid-cli` → Kroki → fenced block.
