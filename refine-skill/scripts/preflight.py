@@ -17,24 +17,48 @@ MARK = {"ready": "✅", "degraded": "⚠ ", "gated": "🔒", "down": "⛔"}
 RANK = {"ready": 0, "degraded": 1, "gated": 2, "down": 3}
 
 SKILLS_DIR = os.path.expanduser("~/.cursor/skills")
-PROJECTS_DIR = os.path.expanduser("~/.claude/projects")
+CURSOR_PROJECTS = os.path.join(os.path.expanduser("~"), ".cursor", "projects")
+CLAUDE_PROJECTS = os.path.expanduser("~/.claude/projects")
 
 
-def _encode(path):
-    return os.path.join(PROJECTS_DIR, path.replace("/", "-").replace(".", "-"))
-
-
-def project_transcript_dir(cwd=None):
-    """Transcript dir for the session's project (cwd encoded with '/' and '.'
-    as '-'). Walk cwd then ancestors so it resolves from a subdirectory too."""
-    cwd = cwd or os.getcwd()
+def _cursor_transcript_dir(cwd=None):
+    cwd = os.path.abspath(cwd or os.getcwd())
     while True:
-        d = _encode(cwd)
-        if os.path.isdir(d) and any(f.endswith(".jsonl") for f in os.listdir(d)):
+        slug = cwd.lstrip("/").replace("/", "-")
+        d = os.path.join(CURSOR_PROJECTS, slug, "agent-transcripts")
+        if os.path.isdir(d):
             return d
         parent = os.path.dirname(cwd)
         if parent == cwd:
-            return _encode(cwd or os.getcwd())
+            return None
+        cwd = parent
+
+
+def _jsonls_under(root):
+    out = []
+    if not root or not os.path.isdir(root):
+        return out
+    for dirpath, _dirs, files in os.walk(root):
+        for f in files:
+            if f.endswith(".jsonl"):
+                out.append(os.path.join(dirpath, f))
+    return out
+
+
+def project_transcript_dir(cwd=None):
+    d = _cursor_transcript_dir(cwd)
+    if d:
+        return d
+    cwd = os.path.abspath(cwd or os.getcwd())
+    while True:
+        encoded = os.path.join(
+            CLAUDE_PROJECTS, cwd.replace("/", "-").replace(".", "-")
+        )
+        if os.path.isdir(encoded):
+            return encoded
+        parent = os.path.dirname(cwd)
+        if parent == cwd:
+            return encoded
         cwd = parent
 
 
@@ -48,10 +72,7 @@ def check_transcript(explicit):
             return ("ready", None, f"transcript: {os.path.basename(explicit)}")
         return ("down", "TRANSCRIPT_MISSING", f"--transcript not found: {explicit}")
     d = project_transcript_dir()
-    try:
-        jsonls = [f for f in os.listdir(d) if f.endswith(".jsonl")]
-    except OSError:
-        jsonls = []
+    jsonls = _jsonls_under(d)
     if jsonls:
         return ("ready", None, f"{len(jsonls)} transcript(s) in {os.path.basename(d)}")
     return ("down", "TRANSCRIPT_MISSING",
@@ -68,18 +89,18 @@ def check_audit_skill():
 def check_hook():
     """Is the opt-in Stop hook wired in user settings? Informational only —
     the manual command works without it (so this never blocks)."""
-    settings = os.path.expanduser("~/.claude/settings.json")
+    settings = os.path.expanduser("~/.cursor/hooks.json")
     try:
         with open(settings, encoding="utf-8") as fh:
             data = json.load(fh)
     except (OSError, json.JSONDecodeError, ValueError):
         data = {}
-    stop = (data.get("hooks") or {}).get("Stop") or []
+    stop = ((data.get("hooks") or {}).get("stop") or [])
     text = json.dumps(stop)
     if "stop_hook.py" in text:
         return ("ready", None, "Stop hook wired")
     return ("degraded", "HOOK_NOT_INSTALLED",
-            "Stop hook not wired — run scripts/install_hook.py (manual /refine-skill still works)")
+            "stop hook not wired — run scripts/install_hook.py (manual /refine-skill still works)")
 
 
 def main():

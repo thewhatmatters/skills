@@ -3,7 +3,7 @@
 
 One concern: turn the JSON payload from SKILL.md Step 4 into a single
 dependency-free HTML document — inline CSS, escaped content, light/dark
-friendly. The markdown path is handled by Claude directly; this script
+friendly. The markdown path is handled by the agent directly; this script
 exists only to produce the optional HTML companion.
 
 USAGE

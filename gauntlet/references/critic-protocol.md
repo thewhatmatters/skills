@@ -117,7 +117,7 @@ diagnostic. Do not spend a third round on the same set.
 ## Fallback critic (degrade path)
 
 When Grok is missing/unauthenticated/persistently invalid: run the critic as
-an isolated Claude subagent (Agent tool, fresh context, same packet, same
+an isolated subagent (Agent tool, fresh context, same packet, same
 JSON contract enforced by prompt). Isolation is preserved; vendor diversity
 is lost — say so in the report's disclosures. Never run the critic inline in
 the builder's own conversation; that forfeits isolation, the load-bearing

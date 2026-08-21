@@ -3,7 +3,8 @@
 
 Checks that declared cross-dependencies exist on disk before a skill run:
   --skills=a,b   each must have ~/.cursor/skills/<name>/SKILL.md
-  --agents=c,d   each must have ~/.claude/agents/<name>.md
+  --agents=c,d   each must have ~/.cursor/agents/<name>.md
+    (falls back to ~/.claude/agents/<name>.md if that file exists)
   --files=p,q    each literal path must exist (~ expanded)
 
 Contract: JSON to stdout, human board to stderr, always exits 0. Overall is
@@ -34,8 +35,11 @@ def main():
         path = HOME / ".cursor/skills" / name.strip() / "SKILL.md"
         deps.append(("skill", name.strip(), path))
     for name in filter(None, args.agents.split(",")):
-        path = HOME / ".claude/agents" / f"{name.strip()}.md"
-        deps.append(("agent", name.strip(), path))
+        n = name.strip()
+        path = HOME / ".cursor/agents" / f"{n}.md"
+        if not path.exists():
+            path = HOME / ".claude/agents" / f"{n}.md"
+        deps.append(("agent", n, path))
     for raw in filter(None, args.files.split(",")):
         path = Path(raw.strip().replace("~", str(HOME), 1))
         deps.append(("file", raw.strip(), path))

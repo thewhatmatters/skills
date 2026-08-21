@@ -22,7 +22,7 @@ cross-project vault at `<vault>/projects/<name>/`
 
 Rules:
 
-- Insert at the END of an existing CLAUDE.md (least disruptive to the
+- Insert at the END of an existing `AGENTS.md` (least disruptive to the
   project's own rules), or as the sole content of a new one.
 - On update, replace only marker-to-marker; never touch anything outside.
 - If the user renames the project, re-run wire-vault — the block updates in

@@ -26,7 +26,7 @@ Run `python3 scripts/preflight.py`. Read the JSON:
 - `workspace` **down** → STOP; the profile/out dir isn't writable.
 
 If `python3` itself is unavailable → **NATIVE** mode: you can only *read*
-pages via Claude's built-in `WebFetch` (no clicking/filling/JS). Say so.
+pages via the agent's built-in `WebFetch` (no clicking/filling/JS). Say so.
 
 ## Step 1 — Setup gate (recoverable, never blocks — spec A7)
 

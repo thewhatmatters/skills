@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 """Stop-hook handler for refine-skill — the opt-in reflection offer (spec A7/A8).
 
-Registered as a Claude Code `Stop` hook. When a session used a skill from the
-user's own collection, it surfaces a ONE-LINE, non-blocking suggestion to run
-`/refine-skill <skill>` — it never blocks the stop and never runs anything.
-
-Contract (Claude Code Stop hook):
-  stdin  : JSON {session_id, transcript_path, cwd, stop_hook_active, ...}
-  stdout : JSON {"systemMessage": "..."} to show the user a notice (exit 0)
-  exit   : always 0 — a trigger must never disrupt or block the session.
+Registered as a Cursor `stop` hook (also understands legacy Stop stdin).
+When a session used a skill from the user's own collection, it surfaces a
+ONE-LINE, non-blocking suggestion to run `/refine-skill <skill>`.
 
 Design choices:
 - Offers, never forces: exit 0 + systemMessage (not decision:block / exit 2).
@@ -21,11 +16,15 @@ Design choices:
 """
 import json
 import os
+import re
 import sys
 import tempfile
 
 SKILLS_DIR = os.path.expanduser("~/.cursor/skills")
 MARKER_DIR = os.path.join(tempfile.gettempdir(), "refine-skill-hook")
+_SKILL_MD_RE = re.compile(
+    r"(?:^|/)(?:\.cursor/skills|skills)/([a-z][a-z0-9-]*)/SKILL\.md$"
+)
 
 
 def _own_skills():
@@ -56,11 +55,19 @@ def _skills_used(transcript_path):
                 if not isinstance(content, list):
                     continue
                 for blk in content:
-                    if (isinstance(blk, dict) and blk.get("type") == "tool_use"
-                            and blk.get("name") == "Skill"):
-                        name = (blk.get("input") or {}).get("skill")
-                        if name:
-                            used.append(name)
+                    if not isinstance(blk, dict) or blk.get("type") != "tool_use":
+                        continue
+                    name = blk.get("name")
+                    inp = blk.get("input") or {}
+                    if name == "Skill":
+                        sk = inp.get("skill")
+                        if sk:
+                            used.append(sk)
+                    elif name == "Read":
+                        p = (inp.get("path") or "").replace("\\", "/")
+                        m = _SKILL_MD_RE.search(p)
+                        if m:
+                            used.append(m.group(1))
     except OSError:
         pass
     return used

@@ -12,7 +12,7 @@ Args:
   --verify PATH       optional verify_bundle JSON (adds conformance section)
   --folder SUB        scope report metrics to one vault-relative folder
                       (link graph is still computed vault-wide)
-  --state-dir PATH    snapshot dir (default ~/.claude/.cache/audit-vault)
+  --state-dir PATH    snapshot dir (default ~/.cursor/cache/audit-vault)
   --no-snapshot       do not record this run
   --deep-candidates N size of the deep_candidates list (default 10)
 
@@ -112,7 +112,7 @@ def main():
     ap.add_argument("--verify")
     ap.add_argument("--folder")
     ap.add_argument("--state-dir",
-                    default=os.path.expanduser("~/.claude/.cache/audit-vault"))
+                    default=os.path.expanduser("~/.cursor/cache/audit-vault"))
     ap.add_argument("--no-snapshot", action="store_true")
     ap.add_argument("--deep-candidates", type=int, default=10)
     args = ap.parse_args()

@@ -1,21 +1,24 @@
 ---
 name: generate-skill
-description: Scaffold a new Claude Code skill against the house spec at ~/.cursor/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a Claude skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Claude docs (offline fallback), validates frontmatter against the upstream field list, follows the 15 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
+description: Scaffold a new Cursor Agent Skill against the house spec at ~/.cursor/skills/skill-architecture.md, then self-audit it. Use when the user wants to create, scaffold, generate, bootstrap, or seed a new skill — "create a new skill", "make me a skill that …", "scaffold a skill", "generate a skill that does X", "skeleton a skill", "spin up a skill", "I want a skill for Y". Pulls the live Cursor skills docs (offline fallback), validates frontmatter against that field list, follows the 15 architecture patterns, and runs audit-skill on the output. Reports honestly — never claims success when the auditor finds high-severity issues.
 ---
 
 # generate-skill
 
 Scaffold a new skill that satisfies `~/.cursor/skills/skill-architecture.md`,
-using the live Claude docs as the upstream contract. Generator ↔ auditor share
-the spec — generator emits against it; auditor checks against it. Last step
-runs `audit-skill` on what was just produced.
+using the live Cursor skills docs as the upstream field list. Generator ↔
+auditor share the spec — generator emits against it; auditor checks against
+it. Last step runs `audit-skill` on what was just produced. Cursor's built-in
+`/create-skill` defaults `disable-model-invocation: true`; this family keeps
+spec A14 (model-invoked unless the skill is side-effectful).
 
 ## Flags
 
 | Flag | Meaning |
 |------|---------|
 | `--name=<kebab>` | name of the new skill (≤64 chars, lowercase + digits + hyphens) |
-| `--out=PATH` | parent dir for the new skill (default: `~/.cursor/skills`) |
+| `--out=PATH` | parent dir (default: `~/.cursor/skills`; or `<cwd>/.cursor/skills` with `--location=project`) |
+| `--location=personal\|project` | personal = user-global `~/.cursor/skills`; project = repo `.cursor/skills` |
 | `--refresh-docs` | force `scripts/docs.py --refresh` before scaffolding |
 | `--no-scripts` | scaffold a docs-only skill (no `scripts/` dir) |
 | `--dry-run` | print the plan + file tree, write nothing |
@@ -25,7 +28,7 @@ runs `audit-skill` on what was just produced.
 
 Try `python3 --version`. If python3 works and `scripts/` is present, mode =
 **SCRIPTS**. Otherwise mode = **NATIVE** (no Python; read the committed
-`references/claude-docs-snapshot/` directly via your built-in file tools).
+`references/cursor-docs-snapshot/` directly via your built-in file tools).
 Announce the mode in one line.
 
 ## Step 1 — Preflight
@@ -49,7 +52,7 @@ python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=audit-skill --files=
 ```
 
 `gated` on `audit-skill` → interactive: offer *Fix it for me (git pull in
-~/.claude) / I'll do it myself / Skip* (spec A7c); on Skip or fix failure —
+~/Development/skills) / I'll do it myself / Skip* (spec A7c); on Skip or fix failure —
 and always under `--agent` — still scaffold, but say up front that Step 6's
 self-audit will be skipped and the result ships unaudited (degrade, never
 block — spec A7d). The spec file missing is already a STOP above. NATIVE
@@ -59,11 +62,11 @@ without python3: run the same check with built-in file tools instead — do
 ## Step 2 — Docs
 
 SCRIPTS: `python3 scripts/docs.py` (add `--refresh` if the flag was passed).
-Capture the JSON manifest from stdout — you need `claude_code_version`,
-`source`, and the per-doc set later.
+Capture the JSON manifest from stdout — you need `docs_version`, `source`,
+and the per-doc set later.
 
-NATIVE: use the snapshot. Parse the version from
-`references/claude-docs-snapshot/changelog.md` (first `\d+\.\d+\.\d+` token).
+NATIVE: use `references/cursor-docs-snapshot/skills.md`. Version is
+`"snapshot"` when offline.
 
 ## Step 3 — Reconcile against the spec
 
@@ -86,11 +89,12 @@ Required (any not supplied via flags):
 - **trigger mode** (spec A14) — model-invoked (default) or user-invoked
   (`disable-model-invocation: true`). Heuristic: side-effectful / outward /
   timing-sensitive skills (deploy, announce, send) → user-invoked.
+- **location** — personal (`~/.cursor/skills`, default) or project
+  (`<cwd>/.cursor/skills`). Never write into `~/.cursor/skills-cursor/`.
 - **description** — for model-invoked skills: trigger-rich, verbs + example
-  phrases users may say; this is what Claude sees in the skill listing.
+  phrases users may say; this is what the agent sees in the skill listing.
   For user-invoked skills the description never enters the model's context —
-  write it for the human `/`-list instead. Combined `description` +
-  `when_to_use` ≤ 1536 chars (live docs).
+  write it for the human `/`-list instead. `description` ≤ 1024 chars.
 
 Optional:
 - needs **scripts**? (if no → `--no-scripts`)
@@ -106,7 +110,8 @@ prompt.
 
 Open `references/generation-recipe.md` and follow it. The recipe enforces the
 15 architecture patterns and uses the LIVE frontmatter field list from Step 2
-— **never invent a field that is not in the live docs**.
+— **never invent a field that is not in the live docs**, and never emit
+non-Cursor keys even if some other doc set lists them (spec A2).
 
 Files created under `<out>/<name>/`:
 
@@ -159,6 +164,6 @@ This skill does **not** run git.
   failure, never hang (spec A4).
 - Keyless. `scripts/_env.py` here is a **template** the recipe copies into
   generated skills that need secrets; this skill itself does not load it.
-- Live docs from `code.claude.com` are pinned in `scripts/docs.py`. Changes
-  upstream require either `--refresh-docs` at the user's request or a
+- Live docs from `cursor.com/docs/skills.md` are pinned in `scripts/docs.py`.
+  Changes upstream require either `--refresh-docs` at the user's request or a
   `reconcile.py` drift review — never silently re-aligned (DESIGN.md §5).

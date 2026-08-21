@@ -6,7 +6,7 @@ the `playwright` Python package is importable, its Chromium browser is
 installed, and the workspace (persistent profile + screenshot out dir) is
 writable. Per the skill's dual-mode design (spec A3), a missing package or
 browser does NOT hard-block — it gates with a one-line install fix, and the
-skill can still do read-only work via Claude's built-in WebFetch (NATIVE).
+skill can still do read-only work via the agent's built-in WebFetch (NATIVE).
 
 USAGE
     python3 scripts/preflight.py [--out=PATH] [--agent]

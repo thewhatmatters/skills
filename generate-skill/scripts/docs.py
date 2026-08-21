@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Fetch, cache, and version-stamp the canonical Claude skill-authoring docs.
+"""Fetch, cache, and version-stamp the canonical Cursor skill-authoring docs.
 
-One concern: make Anthropic's *current* skill docs available locally so the
-generator scaffolds against what Claude Code expects today — and say which
-Claude Code version they reflect. It does NOT judge them against our in-house
-spec (that is reconcile.py).
+One concern: make Cursor's *current* skill docs available locally so the
+generator scaffolds against what Cursor expects today. It does NOT judge
+them against our in-house spec (that is reconcile.py).
 
 USAGE
     python3 scripts/docs.py [--refresh] [--agent]
@@ -28,7 +27,8 @@ JSON KEYS
                          offline   — live failed AND no cache; snapshot returned
                          no-docs   — nothing available (exit 1)
     source               live | cache | snapshot | null   (null only with no-docs)
-    claude_code_version  e.g. "2.1.144"  (parsed from changelog.md; may be null)
+    docs_version         ISO date of the fetch (Cursor has no CC semver here)
+    claude_code_version  alias of docs_version (compat for older SKILL.md steps)
     fetched_at           ISO-8601 UTC of this run's content, or null
     cache_age_days       float age of the cache used, or null
     docs                 [{slug, filename, sha256, bytes, http_status}]
@@ -39,7 +39,7 @@ RESOLUTION ORDER (dual-mode, mirrors scan-trends SCRIPTS vs NATIVE)
        via certifi when present, else default verification)
     2. local .cache/docs/ if a live fetch fails, or if the cache is fresh
        and --refresh was not given
-    3. committed references/claude-docs-snapshot/ if fully offline
+    3. committed references/cursor-docs-snapshot/ if fully offline
 """
 
 import argparse
@@ -55,7 +55,7 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_ROOT = SCRIPT_DIR.parent
-SNAPSHOT_DIR = SKILL_ROOT / "references" / "claude-docs-snapshot"
+SNAPSHOT_DIR = SKILL_ROOT / "references" / "cursor-docs-snapshot"
 CACHE_DIR = SKILL_ROOT / ".cache" / "docs"
 MANIFEST = CACHE_DIR / "manifest.json"
 
@@ -65,15 +65,7 @@ FETCH_TIMEOUT = 15  # seconds per doc; bounds total runtime, never hangs
 # (slug, filename, url) — the pinned canonical docs (DESIGN.md §2).
 DOCS = [
     ("skills", "skills.md",
-     "https://code.claude.com/docs/en/skills.md"),
-    ("changelog", "changelog.md",
-     "https://code.claude.com/docs/en/changelog.md"),
-    ("plugins-reference", "plugins-reference.md",
-     "https://code.claude.com/docs/en/plugins-reference.md"),
-    ("claude-directory", "claude-directory.md",
-     "https://code.claude.com/docs/en/claude-directory.md"),
-    ("agent-sdk-skills", "agent-sdk-skills.md",
-     "https://code.claude.com/docs/en/agent-sdk/skills.md"),
+     "https://cursor.com/docs/skills.md"),
 ]
 
 _VERSION_RE = re.compile(r"\b\d+\.\d+\.\d+\b")
@@ -193,7 +185,10 @@ def main():
             emit({
                 "status": "fresh",
                 "source": "cache",
-                "claude_code_version": manifest.get("claude_code_version"),
+                "docs_version": manifest.get("docs_version")
+                or manifest.get("claude_code_version"),
+                "claude_code_version": manifest.get("docs_version")
+                or manifest.get("claude_code_version"),
                 "fetched_at": manifest.get("fetched_at"),
                 "cache_age_days": round(age, 2),
                 "docs": manifest.get("docs", []),
@@ -203,7 +198,7 @@ def main():
         notes.append("manifest fresh but cache files unreadable — re-fetching")
 
     # 2. Attempt a live fetch of every pinned doc.
-    log("fetching canonical docs from code.claude.com ...")
+    log("fetching canonical docs from cursor.com ...")
     fetched, docs_meta, failed = {}, [], []
     for slug, filename, url in DOCS:
         try:
@@ -222,8 +217,8 @@ def main():
             log(f"  FAIL  {filename}  ({e.__class__.__name__}: {e})")
 
     if not failed:
-        version = parse_version(fetched.get("changelog.md", ""))
         stamp = iso(now_utc())
+        version = stamp[:10]
         # The live content is in hand — never crash if persisting it fails
         # (read-only home, denied perms, full disk). Honest degrade: still
         # emit the manifest with a note that the cache wasn't updated.
@@ -233,12 +228,13 @@ def main():
                 (CACHE_DIR / filename).write_text(text, "utf-8")
             new_manifest = {
                 "fetched_at": stamp,
+                "docs_version": version,
                 "claude_code_version": version,
                 "source_urls": {f: u for _s, f, u in DOCS},
                 "docs": docs_meta,
             }
             MANIFEST.write_text(json.dumps(new_manifest, indent=2), "utf-8")
-            log(f"refreshed cache; Claude Code version = {version}")
+            log(f"refreshed cache; docs_version = {version}")
         except OSError as e:
             notes.append(f"cache write failed ({e.__class__.__name__}: {e}); "
                          "live content used this run but not cached")
@@ -246,6 +242,7 @@ def main():
         emit({
             "status": "refreshed",
             "source": "live",
+            "docs_version": version,
             "claude_code_version": version,
             "fetched_at": stamp,
             "cache_age_days": 0.0,
@@ -258,10 +255,13 @@ def main():
     cached = read_dir(CACHE_DIR)
     if cached:
         log("falling back to existing cache (stale-but-usable)")
+        ver = (manifest or {}).get("docs_version") or (manifest or {}).get(
+            "claude_code_version")
         emit({
             "status": "stale",
             "source": "cache",
-            "claude_code_version": (manifest or {}).get("claude_code_version"),
+            "docs_version": ver,
+            "claude_code_version": ver,
             "fetched_at": (manifest or {}).get("fetched_at"),
             "cache_age_days": round(age, 2) if age is not None else None,
             "docs": (manifest or {}).get("docs", []),
@@ -271,11 +271,12 @@ def main():
 
     snap = read_dir(SNAPSHOT_DIR)
     if snap:
-        version = parse_version(snap.get("changelog.md", ""))
+        version = "snapshot"
         log("falling back to committed offline snapshot")
         emit({
             "status": "offline",
             "source": "snapshot",
+            "docs_version": version,
             "claude_code_version": version,
             "fetched_at": None,
             "cache_age_days": None,
@@ -290,7 +291,8 @@ def main():
 
     log("FATAL: no live docs, no cache, no snapshot — cannot proceed")
     emit({
-        "status": "no-docs", "source": None, "claude_code_version": None,
+        "status": "no-docs", "source": None, "docs_version": None,
+        "claude_code_version": None,
         "fetched_at": None, "cache_age_days": None, "docs": [],
         "notes": notes + ["no docs available by any path"],
     }, 1)

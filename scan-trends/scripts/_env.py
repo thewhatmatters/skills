@@ -3,8 +3,8 @@ Shared API-key loader for skill scripts.
 
 Resolution order for any key (first hit wins):
   1. real process environment variable (explicit export always overrides)
-  2. ~/.cursor/skills/.env     (canonical after the Cursor migration)
-  3. ~/.claude/.env            (legacy fallback)
+  2. ~/.cursor/skills/.env
+  3. ~/.claude/.env  (if still present from the old toolchain)
 
 The .env format is plain `KEY=VALUE` lines; blank lines and `#` comments are
 ignored, surrounding quotes on the value are stripped. Values are loaded into
@@ -22,6 +22,7 @@ _ENV_FILES = [
     os.path.expanduser("~/.cursor/skills/.env"),
     os.path.expanduser("~/.claude/.env"),
 ]
+
 
 def _parse(path):
     pairs = {}

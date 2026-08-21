@@ -33,7 +33,7 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A13. Closest sibling is
 - 2026-06-03: scaffolded by generate-skill.
 - 2026-06-03: **Compose, don't vendor** (the load-bearing call). Remotion ships an
   official, maintained Claude Code skill, `remotion-best-practices`
-  (`npx skills add remotion-dev/skills`; 1 SKILL.md + ~37 rules). Per CLAUDE.md's
+  (`npx skills add remotion-dev/skills`; 1 SKILL.md + ~37 rules). Per AGENTS.md's
   5-step external-skill convention, `remotion` probe-gates and defers all API
   knowledge to it, keeping local references thin to avoid per-release drift. Chosen
   over standalone (drifts) and hybrid (double maintenance). User asked "what do you

@@ -1,4 +1,4 @@
-# Persistence — docs/sources/, INDEX.md, and the CLAUDE.md gate
+# Persistence — docs/sources/, INDEX.md, and the AGENTS.md gate
 
 Loaded by `SKILL.md` Steps 5–6 (progressive disclosure, spec A1). This is the
 contract that makes ingestions *project knowledge* instead of loose files.
@@ -7,14 +7,14 @@ contract that makes ingestions *project knowledge* instead of loose files.
 
 ```
 <project root>/
-  CLAUDE.md                  ← gets the marker block ONCE, with consent
+  AGENTS.md                  ← gets the marker block ONCE, with consent
   docs/sources/
-    INDEX.md                 ← one line per ingestion; @-imported by CLAUDE.md
+    INDEX.md                 ← one line per ingestion; pointed to from AGENTS.md
     <slug>.md                ← one ingestion: YAML frontmatter + summary
 ```
 
 `--docs-dir` overrides `docs/sources`; `--project-root` (default cwd) is where
-CLAUDE.md is looked for. The project root is the directory the user is working
+`AGENTS.md` is looked for. The project root is the directory the user is working
 in — **never** persist into `~/.cursor/skills/` (commit-by-default repo).
 
 ## The ingestion file
@@ -47,21 +47,21 @@ The hook is the retrieval cue ("when would a future task need this?") supplied
 via `--hook`. `persist.py` creates INDEX.md with its header on first run and
 upserts lines after that — never edit it by hand mid-run.
 
-## The CLAUDE.md gate (spec A7 — all four parts)
+## The AGENTS.md gate (spec A7 — all four parts)
 
-`persist.py` only *reports* wiring status in its JSON (`claude_md.status`) and
-emits the exact `claude_md.block` to insert. The edit itself is consent-gated:
+`persist.py` only *reports* wiring status in its JSON (`agents_md.status`) and
+emits the exact `agents_md.block` to insert. The edit itself is consent-gated:
 
 - **(a) Trigger** — unambiguous: `status` is `absent` or `no-file` (marker
   `<!-- ingest-source:start -->` not found). `present` → say nothing, done.
-- **(b) `--agent` bypass** — never edit CLAUDE.md unattended. Skip the edit,
+- **(b) `--agent` bypass** — never edit `AGENTS.md` unattended. Skip the edit,
   and include in the run report: the status, the block, and one line telling
   the user to re-run interactively or paste it themselves.
 - **(c) Ask, don't degrade** — interactive: offer
   *Wire it up (insert the block) / I'll add it myself (print the block) /
-  Skip*. On "wire it up": append `claude_md.block` to the end of CLAUDE.md
+  Skip*. On "wire it up": append `agents_md.block` to the end of `AGENTS.md`
   (create the file containing only the block if `no-file`) using Edit/Write —
-  scripts never touch CLAUDE.md.
+  scripts never touch `AGENTS.md`.
 - **(d) Graceful dead-end** — if the edit fails or is declined, the ingestion
   is still complete and said so; print the block for manual pasting. Never
   block, never retry silently.
@@ -69,26 +69,23 @@ emits the exact `claude_md.block` to insert. The edit itself is consent-gated:
 Ask **once per project per run** — if the user declines, do not re-raise the
 gate for subsequent ingestions in the same session; note it in the report.
 
-The block (canonical copy lives in `persist.py:claude_md_block()`; always use
-the JSON's `claude_md.block`, which has the correct relative path baked in):
+Cursor does not auto-inline `@path` the way some other tools do. The block
+tells the agent to **Read** `INDEX.md` when a task relates to captured
+sources (progressive disclosure — not the full bodies).
+
+The block (canonical copy lives in `persist.py:agents_md_block()`; always use
+the JSON's `agents_md.block`):
 
 ```markdown
 <!-- ingest-source:start -->
 ## Ingested sources
 
 Captured source material (videos, articles, PDFs, images) lives in
-`docs/sources/`, ingested by the ingest-source skill. The index below
-is imported every session; read the underlying file when a listed source
-is relevant to the task at hand.
-
-@docs/sources/INDEX.md
+`docs/sources/`, ingested by the ingest-source skill. When a task
+relates to captured sources, Read `docs/sources/INDEX.md` and then
+the linked file — do not dump every ingestion into context.
 <!-- ingest-source:end -->
 ```
-
-Why `@`-import: CLAUDE.md `@path` imports inline the file at session start, so
-the *index* (one line per source) is always in context while the ingestion
-bodies load on demand — the same index-vs-body split as the typed-memory
-system's MEMORY.md.
 
 ## NATIVE-mode persistence (no python3)
 

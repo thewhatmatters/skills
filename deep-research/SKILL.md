@@ -8,7 +8,7 @@ description: Conduct deep, structured research on any topic — markets, product
 Conduct deep, structured research on a topic — a multi-pass loop that scopes,
 searches broadly, fills gaps, and synthesizes a cited report. Synthesis is
 model-driven; the script layer handles search and HTML render. Spec A3
-dual-mode: SCRIPTS-with-keys is preferred, NATIVE (Claude's built-in
+dual-mode: SCRIPTS-with-keys is preferred, NATIVE (the agent's built-in
 `WebSearch`/`WebFetch`) is a real fallback that produces the same artifact.
 
 The detailed templates and rules live in `references/` and are loaded only
@@ -130,7 +130,7 @@ one-line notice — degrade, never block (spec A3).
   [--n=10]` — returns `[{url, title, snippet, score, provider}, ...]` on
   stdout as JSON. Defaults to Tavily; falls back to Exa if Tavily key
   missing.
-- **NATIVE:** use Claude's built-in `WebSearch` with the same query.
+- **NATIVE:** use the agent's built-in `WebSearch` with the same query.
 
 **Fan-out sweep** — load
 [`references/agent-fanout.md`](references/agent-fanout.md) and follow it. In

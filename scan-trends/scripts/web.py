@@ -7,7 +7,7 @@ Provider precedence (by which key is present; hard errors fail over to the next)
   2. Exa      (EXA_API_KEY)     — neural search, exact published-date range
   3. DuckDuckGo (no key)        — keyless last resort
 
-Keys are loaded by scripts/_env.py from: real env -> ~/.claude/.env ->
+Keys are loaded by scripts/_env.py from: real env -> ~/.cursor/skills/.env ->
 ~/.cursor/skills/.env. Keys are sent in request HEADERS only, never in URLs,
 so they cannot leak into the stderr lines this script prints.
 

@@ -36,7 +36,7 @@ deliberate deviations:
   blueprint (which embeds fenced files inside 4-backtick fences) produced 13
   spurious info-level broken links from example paths inside embeds.
 - 2026-07-02: **Step 8 suggests `/wire-vault`** when a run files articles
-  under `projects/<name>/` and the current project's CLAUDE.md lacks the
+  under `projects/<name>/` and the current project's AGENTS.md lacks the
   marker block. Placed HERE, not in handoff — this skill is the one that
   knows where articles landed (compose-over-extend, again). Suggestion only;
   interactive only.
@@ -46,7 +46,7 @@ deliberate deviations:
   forward links woven into drafts freely, reverse links only for hub
   relationships, each reverse edit individually gated. `--relink` sweeps
   existing articles for missing links as a batch.
-- 2026-07-02: **`CLAUDE.md`/`HANDOFF.md` are tool files**, exempt from the
+- 2026-07-02: **`AGENTS.md`/`HANDOFF.md` are tool files**, exempt from the
   frontmatter rule (added to RESERVED in `verify_bundle.py`, skipped by
   `scan_vault.py`). Deliberate deviation from strict OKF §9 rule 1 —
   frontmatter on these files would be overwritten by the tools that own
@@ -91,7 +91,7 @@ deliberate deviations:
 ## 4. Known limitations / environment caveats
 
 - **Gotcha (observed 2026-07-02):** macOS's case-insensitive filesystem means
-  a Write to `CLAUDE.md` lands in a pre-existing `claude.md` and keeps the
+  a Write to `AGENTS.md` lands in a pre-existing `claude.md` and keeps the
   lowercase on-disk name — which case-sensitive filename checks then miss
   (it got inventoried as a knowledge concept and failed conformance). Tool-
   file comparisons are now case-insensitive in both scripts; if a tool file
@@ -114,8 +114,8 @@ Secrets/env items are N/A (keyless, no network).
 
 ## 6. Notes
 
-Composes with: `handoff` (session-boundary harvest point), `ingest-source`
-(external sources → vault `reference/`). The vault's own format documentation
+Composes with: `ingest-source`
+  (external sources → vault `reference/`). The vault's own format documentation
 is the OKF wiki inside the vault itself, including the mirrored spec at
 `reference/okf-spec-v0.1.md`. Generated while upstream docs showed additive
 frontmatter drift vs spec baseline (`disallowed-tools` added in CC 2.1.181);

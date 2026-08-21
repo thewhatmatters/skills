@@ -11,7 +11,7 @@ generator and the auditor automatically.
 
 ## Substitution convention
 
-Placeholders in the templates below use **`<<TOKEN>>` syntax**. Claude does a
+Placeholders in the templates below use **`<<TOKEN>>` syntax**. The model does a
 plain textual replacement of every `<<TOKEN>>` with the value from §"Input
 contract" when writing each file. **Do NOT touch any `{ }` you see** — those
 are literal Python (f-strings, dict literals, `.format()` placeholders) and
@@ -23,7 +23,7 @@ must be emitted verbatim into the generated script.
 | `<<ONE_LINER>>` | input `one_liner` |
 | `<<DESCRIPTION>>` | input `description` (full trigger-rich text) |
 | `<<TODAY>>` | today's date, ISO (e.g. `2026-05-19`) |
-| `<<CC_VERSION>>` | input `cc_version` from `docs.py` |
+| `<<DOCS_VERSION>>` | input `docs_version` from `docs.py` |
 | `<<DEPS_NOTES_OR_EMPTY>>` | input `deps_notes` or empty |
 | `<<EXTRA_FLAG_ROWS_OR_BLANK>>` | extra rows in SKILL.md flags table (or empty) |
 | `<<DISABLE_MODEL_INVOCATION_LINE_OR_BLANK>>` | `disable-model-invocation: true` when `trigger_mode` is `user`; blank (no line) when `model` |
@@ -39,15 +39,15 @@ must be emitted verbatim into the generated script.
 |---|---|---|
 | `name` | `--name=` or interactive | `^[a-z][a-z0-9-]*$`, ≤ 64 chars (live skills.md) |
 | `one_liner` | interactive | one sentence, ≤ ~140 chars |
-| `description` | interactive | trigger-rich if model-invoked, human-oriented if user-invoked; combined with `when_to_use` ≤ 1536 chars (live skills.md) |
+| `description` | interactive | trigger-rich if model-invoked, human-oriented if user-invoked; ≤ 1024 chars (Cursor docs) |
 | `trigger_mode` | interactive / inferred | `model` (default) or `user` (spec A14); side-effectful / manual-timing skills default to `user` |
 | `needs_scripts` | flag / inferred | bool |
 | `needs_secrets` | interactive | bool (false if `needs_scripts` false) |
 | `needs_design` | inferred / interactive | bool — true iff the skill emits **styled visual output** (see criterion below) |
 | `deps_notes` | interactive (optional) | free text — used in handoff seed |
-| `out_dir` | `--out=` (default `~/.cursor/skills`) | parent for `<name>/` |
+| `out_dir` | `--out=` (default `~/.cursor/skills` personal, or `<cwd>/.cursor/skills` if `--location=project`) | parent for `<name>/` |
 | `live_fields` | docs.py JSON Step 2 | set of valid frontmatter field names |
-| `cc_version` | docs.py JSON Step 2 | string (e.g. `2.1.144`) |
+| `docs_version` | docs.py JSON Step 2 | fetch date or `"snapshot"` |
 | `dry_run` | flag | bool |
 
 ### When to scaffold a `DESIGN.md` (`needs_design`)
@@ -75,14 +75,16 @@ what this flag scaffolds.)
 
 1. `name` matches the regex above and `<out_dir>/<name>` does not already
    exist. If it exists, STOP with a clobber error; do not merge.
-2. Every frontmatter key you intend to write is in `live_fields`. The
-   conservative minimum is **`name` + `description`** — these are documented
-   in every Claude Code version we've seen. Optional adds (only if useful and
-   present in `live_fields`): `when_to_use`, `allowed-tools`, `argument-hint`,
-   and — when `trigger_mode` is `user` — `disable-model-invocation: true`
-   (substitute the `<<DISABLE_MODEL_INVOCATION_LINE_OR_BLANK>>` slot; blank
-   for model-invoked skills). **Never** invent a key.
-3. `len(description + when_to_use_if_any)` ≤ 1536.
+2. Every frontmatter key you intend to write is in `live_fields` **and** in
+   the house allow-list (spec A2): `name`, `description`,
+   `disable-model-invocation`, `paths`, `icon`, `color`, `metadata`.
+   Conservative default: **`name` + `description`**. Optional:
+   `disable-model-invocation: true` when `trigger_mode` is `user`; `paths`
+   only if the skill is file-scoped. **Never** emit non-Cursor keys
+   (`allowed-tools`, `arguments`, `argument-hint`, `when_to_use`, `context`,
+   `user-invocable`) even if they appear in some other snapshot. **Never**
+   emit `globs` (legacy; use `paths`).
+3. `len(description)` ≤ 1024 (Cursor docs).
 4. If `needs_secrets` and not `needs_scripts` → contradiction; ask once or
    set `needs_scripts = true`.
 
@@ -168,7 +170,7 @@ external dependencies named once.)
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `handoff.md` — design decisions and the "why".
 <<REFERENCES_LINK_OR_BLANK>>
 ```
@@ -183,7 +185,7 @@ Seed only — the user expands it as decisions are made.
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).
 
-Created: <<TODAY>>  ·  Generator: generate-skill @ CC <<CC_VERSION>>
+Created: <<TODAY>>  ·  Generator: generate-skill @ <<DOCS_VERSION>>
 
 ## 1. Purpose
 <<ONE_LINER>>
@@ -319,7 +321,7 @@ Layout, Shapes, Components, Do's and Don'ts. Then **reference it from the new
 skill's `SKILL.md`** ("the brand/visual identity lives in `DESIGN.md`") so the
 generator-emitted skill actually points at it.
 
-Seed template (Claude fills tokens to the skill's intended look — do NOT copy
+Seed template (The model fills tokens to the skill's intended look — do NOT copy
 render-html's palette unless that's the intended brand):
 
 ```

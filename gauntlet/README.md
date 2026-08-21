@@ -1,6 +1,6 @@
 # gauntlet
 
-**What it is:** an adversarial refinement loop — Claude builds, an isolated
+**What it is:** an adversarial refinement loop — the agent builds, an isolated
 cross-vendor critic (Grok) reviews with a structured verdict, and the loop
 runs until the work passes or a hard cap stops it.
 
@@ -23,7 +23,7 @@ the gauntlet against the PRD".
 
 - The Grok CLI (`grok`) installed and logged in (`grok login`) — it is the
   cross-vendor critic. If it's missing, the skill still works using an
-  isolated Claude subagent as critic (and tells you so).
+  isolated subagent as critic (and tells you so).
 - A git repo for diff-based (correctness) runs; quality runs on a live
   artifact work anywhere.
 
@@ -44,6 +44,6 @@ the gauntlet against the PRD".
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `handoff.md` — design decisions and the "why".
 - `references/critic-protocol.md` — packet templates, findings schema, rubric shapes.

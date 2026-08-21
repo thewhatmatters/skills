@@ -33,7 +33,7 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Deliberate notes:
 - 2026-07-16: **Isolation by construction** — the critic gets a packet file
   via `--prompt-file` and needs no repo/tool access; research says context
   isolation (not vendor diversity) is the load-bearing property, so the
-  fallback critic is an isolated Claude subagent, and inline critique is
+  fallback critic is an isolated subagent, and inline critique is
   forbidden.
 - 2026-07-16: **Design source**: vault articles
   `/research/synthesis/agent-reviewer-refinement-loops.md` and

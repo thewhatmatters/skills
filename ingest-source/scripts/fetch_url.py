@@ -4,7 +4,7 @@
 One concern: turn a URL into ingestable content without any API key. Default
 mode fetches an HTML page and extracts readable text (title, headings,
 paragraphs, list items — scripts/styles/nav stripped). --raw mode downloads
-the response body verbatim to --out (for remote PDFs/images, which Claude
+the response body verbatim to --out (for remote PDFs/images, which the agent
 then reads natively).
 
 Transport ladder (audit-ui lesson: macOS stdlib Python often has no CA bundle):

@@ -5,7 +5,7 @@ One concern: confirm everything is in place to run a research pass. Four
 checks: target dir writable, search-provider keys loadable, network
 reachable, HTML render available. Per the skill's dual-mode design (spec A3),
 missing keys do NOT block — they downgrade to NATIVE via SKILL.md Step 2's
-gate, and NATIVE mode produces the same artifact via Claude's built-in
+gate, and NATIVE mode produces the same artifact via the agent's built-in
 WebSearch/WebFetch.
 
 USAGE

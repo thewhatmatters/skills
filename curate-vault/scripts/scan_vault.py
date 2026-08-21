@@ -6,7 +6,7 @@ requires. Nested/unknown keys are ignored, not errors. Tags are parsed from
 the inline form only (`tags: [a, b]`); block-style YAML lists yield no tags.
 Also extracts each concept's outgoing links (absolute + relative, outside
 fenced code blocks, .md targets only) so backlinks are computable by the
-consumer. Tool files (CLAUDE.md, HANDOFF.md) are infrastructure, not
+consumer. Tool files (AGENTS.md, HANDOFF.md) are infrastructure, not
 knowledge — skipped like reserved files.
 I/O: stdout JSON {vault, count, concepts:[{path, concept_id, type, title,
 description, tags, timestamp, links}]} · stderr diagnostics · exit 0 unless

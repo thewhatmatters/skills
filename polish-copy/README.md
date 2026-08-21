@@ -25,11 +25,11 @@ Say "polish the copy", "review the microcopy on the settings page", "fix these e
 
 1. Preflight locates your voice spec (DESIGN.md `## Voice` → VOICE.md → none) and detects which copy sources exist.
 2. A script extracts user-facing strings — JSX/HTML text and attributes, iOS String Catalogs (`.xcstrings`/`.strings`) — each with `file:line`.
-3. Claude reviews every string against the floor, then against your voice attributes, and writes one rewrite per finding.
+3. The agent reviews every string against the floor, then against your voice attributes, and writes one rewrite per finding.
 4. You approve findings (all, by severity, or per item); only approved rewrites are written, and nothing is ever committed.
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `handoff.md` — design decisions and the "why".
 - `references/` — `floor.md` (the universal rules), `voice-pass.md` (the voice attribute set, audit method, bootstrap recipe, luxury baseline).

@@ -92,7 +92,7 @@ def detect_user_skill(name):
     Follows symlinks (skills.sh drops a symlink into .agents/skills/<name>),
     so a symlinked install resolves the same as a real directory.
     """
-    sk = Path.home() / ".claude" / "skills" / name / "SKILL.md"
+    sk = Path.home() / ".cursor" / "skills" / name / "SKILL.md"
     try:
         text = sk.read_text("utf-8", errors="replace")
     except OSError:

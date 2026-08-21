@@ -5,7 +5,7 @@
 ## What you get
 
 - A markdown health report: verdict line, per-folder staleness heat table, link-graph hubs and isolates, growth since the last run, activity cadence — every number computed, none invented.
-- Growth tracking over time via local snapshots (stored in `~/.claude/.cache/audit-vault/`, never inside the vault; delete anytime — you only lose deltas).
+- Growth tracking over time via local snapshots (stored in `~/.cursor/cache/audit-vault/`, never inside the vault; delete anytime — you only lose deltas).
 - A ranked to-do of groom commands (`run /curate-vault --groom=<folder>`) so fixes go through curate-vault's confirmation gate, not behind your back.
 
 ## How to run
@@ -26,6 +26,6 @@ Nothing to set up — Python standard library only. It reuses curate-vault's `ve
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `handoff.md` — design decisions and the "why".
 - `references/report-template.md` — the report structure.

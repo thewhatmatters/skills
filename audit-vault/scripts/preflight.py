@@ -40,7 +40,7 @@ def check_tools():
 
 
 def check_deep():
-    agent = os.path.expanduser("~/.claude/agents/vault-verifier.md")
+    agent = os.path.expanduser("~/.cursor/agents/vault-verifier.md")
     if os.path.isfile(agent):
         return ("ready", None, "vault-verifier agent found (--deep available)")
     return ("degraded", "DEEP_UNAVAILABLE",
@@ -65,7 +65,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--vault", default=DEFAULT_VAULT)
     ap.add_argument("--state-dir",
-                    default=os.path.expanduser("~/.claude/.cache/audit-vault"))
+                    default=os.path.expanduser("~/.cursor/cache/audit-vault"))
     ap.add_argument("--agent", action="store_true")
     args = ap.parse_args()
 

@@ -73,7 +73,7 @@ Identical to the Tailwind path — see `optical-alignment.md`; the module is
 framework-agnostic (reads CSS variables, measures the loaded font).
 
 ## Verification
-Same four checks via `audit-ui` / `automate-browser` — see `verification.md`.
+Same four checks — see `verification.md`.
 
 The only thing that changes off-Tailwind is the **delivery** (`:root` + hand-written
 classes vs `@theme` + utilities). The discipline, the overlay, the optical module,

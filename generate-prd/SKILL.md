@@ -1,6 +1,6 @@
 ---
 name: generate-prd
-description: Synthesize a conversational product discussion into a structured Product Requirements Document covering problem, solution, UX flow, technical architecture, data model, pricing, roadmap, risks, and open questions. Use when the user wants to turn a chat-style brainstorm or product conversation into a written PRD — "turn this discussion into a PRD", "write a PRD from our conversation", "create a PRD for X based on what we've been discussing", "spec this product idea out", "document this product idea as a PRD", "I've been thinking about a product — make a PRD". Outputs a markdown file (for Claude Code consumption) and optionally a self-contained HTML version.
+description: Synthesize a conversational product discussion into a structured Product Requirements Document covering problem, solution, UX flow, technical architecture, data model, pricing, roadmap, risks, and open questions. Use when the user wants to turn a chat-style brainstorm or product conversation into a written PRD — "turn this discussion into a PRD", "write a PRD from our conversation", "create a PRD for X based on what we've been discussing", "spec this product idea out", "document this product idea as a PRD", "I've been thinking about a product — make a PRD". Outputs a markdown file (markdown for the project) and optionally a self-contained HTML version.
 ---
 
 # generate-prd

@@ -16,7 +16,7 @@ note here any deliberate deviations.
 Notable choices:
 
 - **Synthesis layer is model-driven, not scripted.** The PRD is composed by
-  Claude from the discussion in JSON shape; only the HTML render is a
+  the agent from the discussion in JSON shape; only the HTML render is a
   Python script (`report.py`). Rationale: synthesis is fundamentally about
   interpreting conversational context — not something a script does better.
 - **Markdown path is NATIVE; HTML path is SCRIPTS.** Spec A3 dual-mode:

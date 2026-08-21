@@ -19,14 +19,12 @@ WHAT IS COMPARED
     "live"     = the most recent fetched copy in .cache/docs/ (what docs.py
                  left behind). If absent, falls back to the committed snapshot
                  (no drift can exist in that case).
-    "baseline" = the committed `references/claude-docs-snapshot/` — the docs
+    "baseline" = the committed `references/cursor-docs-snapshot/` — the docs
                  as of the last time we audited `skill-architecture.md` against
                  upstream.
 
-    Drift is computed on two axes:
-      1. Frontmatter field set in `skills.md` (the structural contract).
-      2. Changelog entries mentioning "skill" between baseline and live
-         versions (the upstream signal that something skill-relevant moved).
+    Drift is computed on the frontmatter field set in `skills.md`.
+    Changelog comparison is skipped (Cursor skills.md has no CC changelog).
 
 JSON KEYS
     status                    aligned | drift | no-live | no-baseline
@@ -145,10 +143,10 @@ def main():
                             "added": [], "removed": []},
             "changelog_skill_mentions": [],
             "notes": ["committed snapshot missing — re-add "
-                      "references/claude-docs-snapshot/"],
+                      "references/cursor-docs-snapshot/"],
         }, 1)
 
-    baseline_ver = docs.parse_version(baseline_docs.get("changelog.md", ""))
+    baseline_ver = None
     baseline_fields = parse_frontmatter_fields(baseline_docs["skills.md"])
 
     if not live_docs:
@@ -166,7 +164,7 @@ def main():
                       "current upstream against snapshot"],
         }, 0)
 
-    live_ver = docs.parse_version(live_docs.get("changelog.md", ""))
+    live_ver = None
     live_fields = parse_frontmatter_fields(live_docs["skills.md"])
 
     if not baseline_fields or not live_fields:
@@ -175,15 +173,12 @@ def main():
 
     added = sorted(set(live_fields) - set(baseline_fields))
     removed = sorted(set(baseline_fields) - set(live_fields))
-    skill_lines = changelog_skill_lines_between(
-        live_docs.get("changelog.md", ""), baseline_ver, live_ver
-    )
-
-    drifted = bool(added or removed or skill_lines)
+    skill_lines = []
+    drifted = bool(added or removed)
     status = "drift" if drifted else "aligned"
 
-    log(f"baseline CC = {baseline_ver}  ({len(baseline_fields)} fields)")
-    log(f"live     CC = {live_ver}  ({len(live_fields)} fields)")
+    log(f"baseline  ({len(baseline_fields)} fields)")
+    log(f"live      ({len(live_fields)} fields)")
     if added:
         log(f"  + added fields:   {', '.join(added)}")
     if removed:

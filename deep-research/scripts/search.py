@@ -160,7 +160,7 @@ def main():
     exa_set = bool(os.environ.get("EXA_API_KEY"))
     if not (tav_set or exa_set):
         log("FATAL: neither TAVILY_API_KEY nor EXA_API_KEY set — "
-            "use NATIVE mode (Claude's built-in WebSearch) instead")
+            "use NATIVE mode (the agent's built-in WebSearch) instead")
         sys.exit(1)
 
     # Provider resolution. `auto` prefers Tavily, falls back to Exa.

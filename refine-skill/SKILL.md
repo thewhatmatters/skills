@@ -1,6 +1,6 @@
 ---
 name: refine-skill
-description: Improve an existing Claude skill by learning from one real session that used it. Use after a task leveraged a skill and you want to capture what worked and fix what didn't — "refine the X skill", "reflect on this session and improve X", "what should we improve in skill X", "self-improve X from this run", "post-mortem this skill usage", "tune X based on what just happened", "/refine-skill X". Extracts evidence-grounded friction from the session transcript and proposes a validated diff for approval — never auto-commits. Do NOT use to create a new skill (that's generate-skill) or to check spec compliance (that's audit-skill).
+description: Improve an existing skill by learning from one real session that used it. Use after a task leveraged a skill and you want to capture what worked and fix what didn't — "refine the X skill", "reflect on this session and improve X", "what should we improve in skill X", "self-improve X from this run", "post-mortem this skill usage", "tune X based on what just happened", "/refine-skill X". Extracts evidence-grounded friction from the session transcript and proposes a validated diff for approval — never auto-commits. Do NOT use to create a new skill (that's generate-skill) or to check spec compliance (that's audit-skill).
 ---
 
 # refine-skill
@@ -12,7 +12,7 @@ evidence-grounded, validated diff for the user to approve.
 
 Turns a finished task into a targeted improvement to the skill it used. It reads
 the session transcript, extracts concrete friction signals (one-off workarounds
-Claude wrote, gates/degrades, output fixups, errors), and reasons about each as a
+the agent wrote, gates/degrades, output fixups, errors), and reasons about each as a
 **classified, evidence-cited finding**. Skill bugs become a proposed diff;
 user/task preferences are routed to **memory** (never baked into a shared skill);
 routing/description gaps are handed to `audit-skill`. Every proposed code change
@@ -30,12 +30,12 @@ With no skill named, infer the most-recently-invoked skill from the transcript a
 confirm. Output is a markdown findings report; pass it to `render-html` for a
 branded page.
 
-An opt-in **Stop hook** (`scripts/stop_hook.py`) surfaces a one-line,
-once-per-session offer to run `/refine-skill <skill>` when a session used a skill —
-it only offers; you decide. Wire it (e.g. after cloning to a new machine) with
-`python3 scripts/install_hook.py`; it edits the user-global `~/.claude/settings.json`
-(which is outside this repo, so it doesn't travel with a clone). `preflight.py`
-reports `HOOK_NOT_INSTALLED` until it's wired; the manual command works regardless.
+An opt-in **stop hook** (`scripts/stop_hook.py`) surfaces a one-line,
+once-per-session offer to run `/refine-skill <skill>` when a session used a
+skill — it only offers; you decide. Wire it with
+`python3 scripts/install_hook.py`; it edits `~/.cursor/hooks.json` (user-global,
+outside this repo). `preflight.py` reports `HOOK_NOT_INSTALLED` until it's
+wired; the manual command works regardless.
 
 ## Flags
 
@@ -51,7 +51,7 @@ reports `HOOK_NOT_INSTALLED` until it's wired; the manual command works regardle
 
 Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use the
 scripts below). Otherwise → **NATIVE**: locate the transcript yourself (newest
-`*.jsonl` under `~/.claude/projects/<cwd-with-/-and-.-as-dashes>/`), read it, and
+`*.jsonl` under `~/.cursor/projects/<cwd-slug>/agent-transcripts/`), read it, and
 extract the signals by hand. Announce the mode in one line.
 
 ## Steps
@@ -60,10 +60,11 @@ extract the signals by hand. Announce the mode in one line.
    Read the JSON. `down` (`TRANSCRIPT_MISSING`) → stop and report. `degraded`
    (`AUDIT_SKILL_ABSENT`) → proceed but note that the spec-compliance check in
    Step 5 is unavailable.
-2. **Resolve target + session** — pick the skill (`--skill`, else the transcript's
-   last `Skill` invocation; confirm if inferred — under `--agent`, take the
-   inferred skill without prompting) and the transcript (`--transcript`, else
-   newest for the project). Confirm the target skill directory exists.
+2. **Resolve target + session** — pick the skill (`--skill`, else the
+   transcript's last skill use: a Read of `<skill>/SKILL.md`, or a nested
+   `Skill` tool call if present). Confirm if inferred; under `--agent`, take
+   the inferred skill without prompting. Transcript: `--transcript`, else
+   newest for the project. Confirm the target skill directory exists.
 3. **Extract evidence** — `python3 scripts/extract_evidence.py --transcript=PATH
    [--skill=NAME]` → JSON `{skill_invocations, signals:[{i,kind,detail,path}],
    summary}`. Each signal carries a message index `i` for citation. The script

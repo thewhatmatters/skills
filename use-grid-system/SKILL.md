@@ -13,8 +13,7 @@ description: >-
   the front-end engineering to make the grid real, visible, and verified: one
   Tailwind @theme source of truth, subgrid bands that place by column LINE, a
   toggleable column+baseline overlay (the g key), runtime optical alignment so
-  display ink (not its box) lands on the line, and verification composed via
-  audit-ui/automate-browser. Two profiles: editorial (strict fields) and app
+  display ink (not its box) lands on the line. Two profiles: editorial (strict fields) and app
   (column-line + baseline, relaxed rows). Probes the project first and never
   imposes Tailwind on a non-Tailwind codebase. Composes with build-ui
   (execution), frontend-design (taste), design-md (owns the token spec),
@@ -46,7 +45,7 @@ to a vanilla `:root` scaffold rather than impose Tailwind (no-monoculture, spec 
 Trigger with "put this on a grid", "set up our grid system", "add a column +
 baseline grid", "Müller-Brockmann / Swiss layout", "grid overlay toggle", or
 `/use-grid-system [path] [--profile=app|editorial]`. Hand the emitted tokens +
-patterns to **build-ui** for execution; verify with **audit-ui**.
+patterns to **build-ui** for execution (if available).
 
 ## Flags
 
@@ -72,14 +71,7 @@ mode in one line.
 ## Steps
 
 1. **Preflight** — `python3 scripts/preflight.py [--agent]`. Read the JSON; only
-   `down` stops a run (nothing here is network-bound). Then the dependency
-   check for Step 7's verification pair:
-   `python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=audit-ui,automate-browser`
-   (NATIVE without python3: check the two `~/.cursor/skills/<name>/SKILL.md`
-   paths exist with built-in file tools instead) — `gated` → proceed, but
-   announce now that Step 7 degrades to the manual pass in
-   `references/verification.md` §"Degraded" instead of the measured
-   audit-ui/automate-browser pass (spec A7d).
+   `down` stops a run (nothing here is network-bound).
 2. **Probe the project** — `python3 scripts/probe.py [path]` → JSON: Tailwind
    v4/v3/none, framework (React/Vue/none), existing `DESIGN.md ## Grid`, current
    `--spacing` base. This picks the path and prevents silently re-scaling a live
@@ -99,11 +91,11 @@ mode in one line.
    overlay (same content box) and the runtime ink-alignment JS
    (`references/optical-alignment.md`); compose `tailwindcss-react-grid-overlay`
    where React is present rather than rebuild.
-7. **Verify** — don't trust, measure. Run the four adherence checks
-   (`references/verification.md`) through **audit-ui / automate-browser**, at
-   widths above and below `--maxw`. Report `col / overlay / baseline / ink`
-   deltas. If Step 1's dependency check gated, follow the "Degraded (deps
-   gated): manual pass" section there instead.
+7. **Verify** — don't trust, measure. Run the four adherence checks in
+   [`references/verification.md`](references/verification.md) at widths above
+   and below `--maxw`. Report `col / overlay / baseline / ink` deltas. Optional:
+   drive `automate-browser` if it is installed; otherwise the manual overlay
+   pass in that file.
 8. **Hand off** — give the tokens + patterns to **build-ui** to implement
    (if installed); **frontend-design** for taste; **source-ui** for
    reference layouts — all "if available", never assumed.
@@ -115,8 +107,9 @@ mode in one line.
 - Dual-mode + degraded ladder (A3); probe-gated, no-monoculture (A7/A8): never
   impose Tailwind, never silently re-scale a project's `--spacing`.
 - Composition by reference, not import (A8): build-ui (execution), frontend-design
-  (taste), audit-ui/automate-browser (verification), design-md (token spec),
-  source-ui (reference). Runs none of their code.
+  (taste), design-md (token spec), source-ui (reference) — all if available.
+  Verification is this skill's own four checks (`references/verification.md`);
+  `automate-browser` is optional.
 - The canon stays branded **Müller-Brockmann** internally (`references/canon.md`),
   citing *Grid Systems in Graphic Design* (Niggli, 1981) by printed page.
 - Keyless; no secrets; writes only the scaffold the user asks for.

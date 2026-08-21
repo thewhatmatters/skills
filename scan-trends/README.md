@@ -49,5 +49,5 @@ Two modes: **SCRIPTS** (fast Python scrapers/APIs, preferred) and **NATIVE**
 
 ## Where to look next
 
-- `SKILL.md` — the instructions Claude follows when running it.
+- `SKILL.md` — the instructions the agent follows when running it.
 - `handoff.md` — the design decisions and the "why" behind them.

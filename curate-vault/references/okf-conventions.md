@@ -32,18 +32,17 @@ Conventional headings when applicable: # Schema, # Examples, # Citations.
   New articles set both (identical at birth). Never rewrite `created` during
   updates, merges, or grooms — audit-vault reads the pair to split document
   age from freshness.
-- Body structure/formatting follows the house markdown style spec:
-  `~/.cursor/skills/format-markdown/references/markdown-style.md`. Where it
-  and OKF overlap (frontmatter, absolute links, reserved `index.md`/`log.md`),
-  OKF — this file — wins; the style spec's own deference table agrees.
+- Body structure is markdown with a clear heading per section. Where
+  formatting would fight OKF (frontmatter, absolute links, reserved
+  `index.md`/`log.md`), OKF — this file — wins.
 - `resource:` only when the concept describes one canonical asset (URI).
 - Citations: numbered list under `# Citations`; targets may be URLs,
   vault-absolute paths, or mirrors under `/reference/`.
 
 ## Tool files (producer deviation)
 
-`CLAUDE.md` and `HANDOFF.md` at the vault root are Claude Code infrastructure
-with externally-defined formats — treated like reserved files (no OKF
+`claude.md` / `handoff.md` at the vault root (legacy tool files, matched
+case-insensitively) are treated like reserved files (no OKF
 frontmatter required, never concepts, excluded from the knowledge inventory).
 Their links are still verified. A strict external OKF consumer may flag them;
 accepted trade-off for a personal vault, recorded in the handoff decision log.

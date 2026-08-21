@@ -5,7 +5,7 @@
 One concern: turn the JSON payload from SKILL.md Step 6 into a single
 dependency-free HTML document — inline CSS, escaped content, light/dark
 friendly, citations rendered as clickable links. The markdown path is
-handled by Claude directly; this script exists only for the optional HTML.
+handled by the agent directly; this script exists only for the optional HTML.
 
 USAGE
     python3 scripts/report.py [--out=PATH] < research.json

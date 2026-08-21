@@ -53,7 +53,7 @@ Optional but recommended:
 - **`python3`** — same.
 
 If neither key is present, the skill falls back to **NATIVE mode** using
-Claude's built-in `WebSearch` / `WebFetch`. The artifact is the same; the
+the agent's built-in `WebSearch` / `WebFetch`. The artifact is the same; the
 result quality may be lower because you lose Tavily's relevance ranking
 and Exa's semantic search. The skill never blocks on missing keys.
 
@@ -84,7 +84,7 @@ and Exa's semantic search. The skill never blocks on missing keys.
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `references/research-templates.md` — the 8 type templates (one section
   structure per research type).
 - `references/synthesis-rules.md` — citation discipline and honesty rules.

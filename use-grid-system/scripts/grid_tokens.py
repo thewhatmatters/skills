@@ -100,7 +100,7 @@ def tailwind_css(cfg):
      <figure class="col-start-6 col-end-13">…</figure>   <!-- height = ×leading -->
    </div></div>
    Overlay (the g-key toggle) + optical-alignment JS: see references/optical-alignment.md
-   and references/tailwind.md. Verify via audit-ui: see references/verification.md. */
+   and references/tailwind.md. Verify: see references/verification.md. */
 """
 
 

@@ -154,7 +154,7 @@ def _require_playwright():
         raise SystemExit(
             "FATAL: `playwright` not installed. Fix: pip install playwright "
             "&& python3 -m playwright install chromium. (Until then, use "
-            "NATIVE read-only via Claude's built-in WebFetch.)"
+            "NATIVE read-only via the agent's built-in WebFetch.)"
         ) from e
 
 

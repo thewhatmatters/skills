@@ -40,7 +40,7 @@ This skill follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable:
   and can never damage the vault (per the compose-over-extend vault
   decision: separate skill + suggestion hook, not a new mode on
   curate-vault).
-- 2026-07-18: **Snapshots live in `~/.claude/.cache/audit-vault/`** — outside
+- 2026-07-18: **Snapshots live in `~/.cursor/cache/audit-vault/`** — outside
   the vault (a report must not mutate its subject), gitignored in the repo
   (`**/.cache/`), disposable (deleting state only resets deltas).
 - 2026-07-18: **Own read-only walker instead of scan_vault.py dependency.**

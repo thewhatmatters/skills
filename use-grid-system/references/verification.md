@@ -1,10 +1,9 @@
-# Verification — don't trust, measure (composed, not bespoke)
+# Verification — don't trust, measure
 
-The canon's demand is to *learn and prove* the grid (p. 174). We **do not** ship a
-bespoke Puppeteer harness (the prior export's was platform-foreign). Instead the
-four adherence checks run as a **grid-adherence dimension through `audit-ui`**
-(which already hosts the Playwright engine) or via an `automate-browser` recipe —
-composition by reference (spec A8).
+The canon's demand is to *learn and prove* the grid (p. 174). The four
+adherence checks live **in this skill**. Drive them in the running page
+(DevTools, or `automate-browser` if it is installed). Do not invent a second
+verifier skill.
 
 Render the page and assert at **several widths including above and below
 `--grid-maxw`** (e.g. 1440 / 1180 / 900) to catch centered-container drift.
@@ -26,20 +25,13 @@ Render the page and assert at **several widths including above and below
 
 A clean run reads: `col=0px overlay=0px baseline≤4px ink=0px → PASS`.
 
-## How to run it (audit-ui dimension)
-- Hand audit-ui the running dev-server URL and ask for the **grid-adherence**
-  pass; it drives Playwright, evaluates the four checks in-page, and screenshots a
-  **top-left zoom crop** (masthead vs body vs column line) for the fastest human
-  eyeball.
-- Or drive `automate-browser` directly: `goto` the URL at each width, `evaluate`
-  the check functions, print the deltas, and read back the crop with the
-  image-capable Read tool.
+## How to run it
+- Evaluate the four checks in-page at each width; screenshot a **top-left zoom
+  crop** (masthead vs body vs column line) for a human eyeball.
+- Optional: `automate-browser` — `goto` the URL at each width, `evaluate` the
+  checks, print the deltas, Read the crop.
 
-## Degraded (deps gated): manual pass
-
-When Step 1's dependency check gated on audit-ui/automate-browser, verify by
-hand and report honestly what wasn't measured:
-
+## Manual pass (no browser automation)
 - Toggle the `g`-key overlay at widths above and below `--grid-maxw`.
 - **Check 1 (col)** — eyeball both edges of each band against the overlay's
   column lines; any visible gap at either edge fails.
@@ -50,7 +42,7 @@ hand and report honestly what wasn't measured:
 - **Check 4 (ink)** — CANNOT be eyeballed reliably (sub-pixel font-metric
   offsets); report it as `ink=unmeasured` — never guess a PASS.
 - Verdict format stays the same, e.g.
-  `col≈0 overlay≈0 baseline≈ok ink=unmeasured → PASS (manual, degraded)`.
+  `col≈0 overlay≈0 baseline≈ok ink=unmeasured → PASS (manual)`.
 
 ## The measurement gotchas (carry verbatim)
 - **Embed the real webfont for offline/headless runs** or the ink check is wrong

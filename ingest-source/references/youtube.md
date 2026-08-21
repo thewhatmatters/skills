@@ -81,7 +81,7 @@ every ~30s) and read them as images:
 <yt-dlp> -f 'bestvideo[height<=480]' -o frames-src.%(ext)s <url>
 <ffmpeg> -i frames-src.* -vf fps=1/30 frames/%04d.jpg
 ```
-Feed the frames to Claude as images; pair each with its timestamp. Coarse —
+Feed the frames to the agent as images; pair each with its timestamp. Coarse —
 label the summary accordingly.
 
 ## Tier 5 — metadata only

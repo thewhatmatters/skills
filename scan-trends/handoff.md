@@ -10,7 +10,7 @@ Last updated: 2026-05-18.
 
 ## 1. What scan-trends is
 
-A Claude Code skill that researches any topic across a recent, configurable
+A skill that researches any topic across a recent, configurable
 window and synthesizes a grounded, cited report + a self-contained HTML file.
 
 - **Sources (6, final):** Reddit, X/Twitter, YouTube, Hacker News, Polymarket, Web.
@@ -37,7 +37,7 @@ scripts/
   report.py                  # JSON → self-contained results.html (NOT a source)
 handoff.md                   # this file
 ```
-Key store: `~/.claude/.env` and/or `~/.cursor/skills/.env` (the latter is canonical;
+Key store: `~/.cursor/skills/.env` and/or `~/.cursor/skills/.env` (the latter is canonical;
 `.env.example` is the committable template). `chmod 600`.
 
 ## 3. Reusable patterns (the transferable IP)
@@ -49,7 +49,7 @@ These are the generalizable conventions any skill in this family should follow.
 2. **One concern per script.** Each source/function is its own file with a
    docstring stating its I/O contract; stdout = JSON payload, stderr = diagnostics.
    This keeps failures isolated and the pieces independently testable.
-3. **Shared key loader (`_env.py`).** Precedence: real env → `~/.claude/.env` →
+3. **Shared key loader (`_env.py`).** Precedence: real env → `~/.cursor/skills/.env` →
    `~/.cursor/skills/.env`. Empty values skipped (a placeholder never shadows a
    real key). Keys sent in **headers only**, never URLs/logs. `chmod 600`; warn
    on looser perms. No `python-dotenv` dependency.

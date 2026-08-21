@@ -21,10 +21,9 @@ proposes the fix.
 ## What it needs
 
 Nothing to set up for the manual command — it is keyless and reads only local
-files: your session transcripts under `~/.claude/projects/<project>/` and the
-target skill's own directory. `audit-skill` should be present so proposed code
-changes can be checked for spec compliance; without it, that one validation step
-is skipped (and said so).
+files: Cursor session transcripts under
+`~/.cursor/projects/<project>/agent-transcripts/`
+and the target skill's own directory.
 
 **To enable the optional Stop-hook offer** (e.g. after cloning to a new machine):
 
@@ -33,7 +32,7 @@ python3 refine-skill/scripts/install_hook.py        # wire it
 python3 refine-skill/scripts/install_hook.py --remove   # unwire it
 ```
 
-This edits `~/.claude/settings.json` — user-global config that lives *outside* this
+This edits `~/.cursor/hooks.json` — user-global config that lives *outside* this
 repo, so it does not travel with a clone. The installer is idempotent, preserves
 your other settings, backs up before writing, and computes the handler's absolute
 path from its own location (portable across machines/users — no hardcoded home
@@ -42,7 +41,7 @@ dir). `preflight.py` reports `HOOK_NOT_INSTALLED` when it isn't wired.
 ## How it works (high level)
 
 1. Find the session transcript and the skill it used.
-2. Extract concrete friction: one-off workarounds Claude wrote, gates that fired,
+2. Extract concrete friction: one-off workarounds the agent wrote, gates that fired,
    output that needed hand-fixing, errors.
 3. Classify each finding as a skill bug, a routing/description gap, or a user/task
    preference — and resist changing the skill on the strength of a single session.
@@ -53,7 +52,7 @@ dir). `preflight.py` reports `HOOK_NOT_INSTALLED` when it isn't wired.
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `handoff.md` — design decisions and the "why".
 - `references/reflection-model.md` — the classification taxonomy, evidence signals,
   validation ladder, and the n=1 overfitting guard.

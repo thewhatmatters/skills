@@ -47,7 +47,7 @@ Two problems motivated the rewrite:
   Playwright's built-in. These keep the original's cheap-discovery advantage
   over screenshots.
 - **Dual-mode (A3) with an honest NATIVE path.** SCRIPTS = Playwright (full
-  automation). NATIVE = read-only via Claude's built-in `WebFetch` — it can
+  automation). NATIVE = read-only via the agent's built-in `WebFetch` — it can
   fetch/read a page but cannot click or fill. NATIVE is honestly labelled as
   read-only, not pretended to be equivalent.
 - **Setup gates never block (A7d).** `PLAYWRIGHT_MISSING` /

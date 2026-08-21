@@ -10,12 +10,11 @@ description: >-
   Extracts
   decisions (with their why), gotchas/platform quirks, playbooks/procedures,
   and cross-project patterns; filters OUT anything derivable from the repo
-  (code structure, git history, CLAUDE.md content). Dedupes against existing
+  (code structure, git history, AGENTS.md content). Dedupes against existing
   vault concepts, then presents per-article pre-filled recommendations (type,
   title, description, tags, target path) that the user confirms or edits
   before ANY write. On approval writes OKF-conformant concepts, wires index.md
-  files, appends to /log.md, and verifies conformance + links. Composes with
-  checkpoint (session-boundary harvest point) and ingest-source (external URL/PDF
+  files, appends to /log.md, and verifies conformance + links.   Composes with ingest-source (external URL/PDF
   captures route into reference/). Also the vault's MAINTENANCE mode — use
   when the user wants the vault itself cleaned up: "groom the vault", "clean
   up the claude/ folder in the vault", "find stale or duplicate vault
@@ -117,12 +116,10 @@ Analyze the session transcript and/or project per
 `references/curation-guide.md`. Keep only durable, non-derivable insights:
 decisions **with their why**, gotchas/quirks, playbooks, cross-project
 patterns. Filter OUT anything the repo already records (code structure, git
-history, CLAUDE.md content) and anything only relevant to this conversation.
+history, AGENTS.md content) and anything only relevant to this conversation.
 Draft each candidate's full article body, not just a title. Bodies follow
-the house markdown style spec at
-`~/.cursor/skills/format-markdown/references/markdown-style.md` (read it
-before drafting); OKF rules (frontmatter, absolute links, reserved files)
-win where they overlap — see the deference table in that spec.
+OKF rules in `references/okf-conventions.md` (frontmatter, absolute links,
+reserved files).
 
 ## Step 4 — Dedupe
 
@@ -174,7 +171,7 @@ any degraded/gated preflight items. If verification fails on a file this run
 wrote, fix it before finishing; pre-existing issues are reported, not fixed.
 
 **Wire suggestion (interactive only):** if this run filed articles under
-`projects/<name>/` and the current project's CLAUDE.md lacks the wire-vault
+`projects/<name>/` and the current project's AGENTS.md lacks the wire-vault
 marker block (`<!-- wire-vault:start -->`, checked case-insensitively),
 suggest running `/wire-vault` once in the report — a suggestion, not an
 action; wire-vault has its own consent gates. Skip under `--agent`.

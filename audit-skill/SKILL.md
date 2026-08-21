@@ -1,6 +1,6 @@
 ---
 name: audit-skill
-description: Audit a Claude skill against the canonical skill-architecture spec. Use when the user wants to QA, review, audit, or health-check a skill's structure, reliability, secret hygiene, gates, preflight, or conventions — "audit this skill", "qa the X skill", "review skill X", "is this skill well-built", "check skill X against our architecture", "find issues in this skill". Also sweeps the whole suite ("audit all skills") and offers an opt-in triggering check that measures whether a skill's description routes real prompts correctly and whether overlapping skills cross-trigger ("check triggering for X", "is my description firing", "test skill triggering"). Produces a severity-grouped findings report with file:line evidence and concrete fixes.
+description: Audit a skill against the canonical skill-architecture spec. Use when the user wants to QA, review, audit, or health-check a skill's structure, reliability, secret hygiene, gates, preflight, or conventions — "audit this skill", "qa the X skill", "review skill X", "is this skill well-built", "check skill X against our architecture", "find issues in this skill". Also sweeps the whole suite ("audit all skills") and offers an opt-in triggering check that measures whether a skill's description routes real prompts correctly and whether overlapping skills cross-trigger ("check triggering for X", "is my description firing", "test skill triggering"). Produces a severity-grouped findings report with file:line evidence and concrete fixes.
 ---
 
 # audit-skill
@@ -48,6 +48,7 @@ For each checkbox in spec §B, decide **PASS / FAIL / N/A** with concrete
 - A gate that triggers on a transient error = FAIL (spec A7a).
 - A documented flag that isn't implemented and isn't marked reserved = FAIL.
 - A secret value found in code/logs/committed files = FAIL (Critical).
+- Frontmatter keys outside spec A2 (non-Cursor or unknown) = FAIL (Structure).
 - Docs referencing removed features/sources = FAIL (Hygiene).
 - Steering text that fails the **deletion test** — a paragraph whose removal
   would not change agent behavior — = FAIL (Hygiene). Agent-written skills
@@ -101,28 +102,11 @@ length (chars) and trigger mode. Every model-invoked description rides in
 every session's context — flag the heaviest ones and any side-effectful
 skills that look like `disable-model-invocation` candidates (spec A14).
 
-## Triggering check (`--triggers`, opt-in, gated)
+## Triggering check (`--triggers`, opt-in)
 
-Measures whether descriptions actually route real prompts to the right skill, and
-whether overlapping skills cross-trigger. **This is the only mode that costs
-money/time** (it fires `claude -p` per query) — run it on description *changes*,
-not routinely. Skills with `disable-model-invocation: true` are excluded from
-the eval set: their descriptions never enter the model's context, so there is
-no routing to measure and they cannot cross-trigger (spec A14). Full method, the run_eval gotcha, and eval-set design are in
-[`references/triggering-eval.md`](references/triggering-eval.md). Flow:
-
-1. **Preflight** — `python3 scripts/preflight.py`. Gate `CLAUDE_CLI_MISSING` →
-   triggering unavailable; say so and fall back to the structural audit (never
-   block). Surface the cost note before proceeding.
-2. **Build the eval set** — per `references/triggering-eval.md`: should-trigger
-   queries + cross-seeded sibling negatives + pure negatives, each labeled with
-   the `expected` skill. Confirm with the user before spending.
-3. **Run** — `python3 scripts/trigger_eval.py --eval-set <set.json>
-   --model <session-model> --out <path>` (all real skills present; records which
-   fires per query, kills on detection so nothing executes).
-4. **Report** — routing match + the cross-triggering verdict; if wording needs
-   work, hand off to `example-skills:skill-creator` (it owns description
-   optimization). `--agent`: run only if an eval set is supplied; never prompt.
+Skipped in Cursor. The optional bake-off harness is not wired to a Cursor CLI;
+run the structural audit only. If you still have `scripts/trigger_eval.py`,
+treat it as unused.
 
 ## `--agent` mode
 
@@ -135,7 +119,5 @@ The rubric is NOT duplicated here — it lives once in
 single source of truth). Editing the spec changes both this auditor and any
 future generator.
 
-`scripts/` exists only for the opt-in `--triggers` mode (a measurement harness,
-not the rubric): `trigger_eval.py` (all-skills bake-off; JSON stdout, diagnostics
-stderr, never hangs — spec A4) and `preflight.py` (gates on the `claude` CLI —
-spec A6/A7). The structural audit stays script-free by design.
+`scripts/` is unused for the structural audit (script-free by design). An old
+`--triggers` harness may still sit in `scripts/`; do not run it.

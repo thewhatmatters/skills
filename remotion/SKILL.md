@@ -49,7 +49,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS** (use `prob
 ## Conventions this skill follows
 
 - Spec is `~/.cursor/skills/skill-architecture.md`.
-- **Compose, don't vendor** (CLAUDE.md 5-step external-skill convention; spec A3/A7/A8): defer Remotion API knowledge to `remotion-best-practices`; probe-gate it; keep local references thin so they don't drift each release. `remotion` owns the *workflow*; the official skill owns the *API*.
+- **Compose, don't vendor** (AGENTS.md 5-step external-skill convention; spec A3/A7/A8): defer Remotion API knowledge to `remotion-best-practices`; probe-gate it; keep local references thin so they don't drift each release. `remotion` owns the *workflow*; the official skill owns the *API*.
 - **No-monoculture**: never introduce Remotion into a project that doesn't use it without explicit consent.
 - **Determinism guardrails are non-negotiable** — they're cheap, stable, and exactly what agents get wrong (spec A12 honesty).
 - **Scripts** (A4): JSON to stdout, diagnostics to stderr, graceful failure, never hang. Keyless; no network (probe/preflight read the filesystem only).

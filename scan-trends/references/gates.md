@@ -45,8 +45,8 @@ SKILL.md; this file holds the full anatomy plus the per-gate walkthroughs.
 - **Trigger:** `preflight.py` reports Web `status:"gated"`, `gate:"web_key"` (no
   `TAVILY_API_KEY` or `EXA_API_KEY` found).
 - **Fix it for me:** not applicable — an API key can't be provisioned automatically.
-- **I'll do it myself:** tell the user to add one line to `~/.claude/.env` (create it,
-  then `chmod 600 ~/.claude/.env`): `TAVILY_API_KEY=...` (free tier at tavily.com) or
+- **I'll do it myself:** tell the user to add one line to `~/.cursor/skills/.env` (create it,
+  then `chmod 600 ~/.cursor/skills/.env`): `TAVILY_API_KEY=...` (free tier at tavily.com) or
   `EXA_API_KEY=...` (exa.ai). Then re-run `python3 scripts/preflight.py` to confirm `ready`.
 - **Skip / `--agent`:** proceed on DuckDuckGo; mark Web `degraded` in the stats block.
   If DDG is also blocked in this environment, Web is `down` — omit it.

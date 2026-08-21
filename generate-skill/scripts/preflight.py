@@ -25,7 +25,7 @@ PER-CHECK STATUS  ∈ {ready, degraded, gated, down}  (+ a gate id when not read
     docs     usable doc set available, and how fresh        gated → DOCS_STALE
                                                             down  → NO_DOCS
     target   destination dir writable / safe                down  → TARGET_UNWRITABLE
-    network  code.claude.com reachable (to refresh)         degraded → OFFLINE
+    network  cursor.com reachable (to refresh)              degraded → OFFLINE
 """
 
 import argparse
@@ -41,7 +41,7 @@ import docs  # noqa: E402 - sibling module, intentional path insert
 SKILL_ROOT = SCRIPT_DIR.parent
 SKILLS_DIR = SKILL_ROOT.parent  # ~/.cursor/skills
 SPEC = SKILLS_DIR / "skill-architecture.md"
-NET_PROBE_URL = "https://code.claude.com/docs/en/skills.md"
+NET_PROBE_URL = "https://cursor.com/docs/skills.md"
 NET_TIMEOUT = 3  # seconds; keeps preflight fast
 
 MARK = {"ready": "✅", "degraded": "⚠ ", "gated": "🔒", "down": "⛔"}
@@ -71,9 +71,10 @@ def check_docs():
     snap_ok = bool(docs.read_dir(docs.SNAPSHOT_DIR))
 
     if cache_ok and age is not None and age <= docs.FRESHNESS_DAYS:
-        v = (manifest or {}).get("claude_code_version")
+        v = (manifest or {}).get("docs_version") or (manifest or {}).get(
+            "claude_code_version")
         return ("ready", None,
-                f"cache fresh ({age:.0f}d ≤ {docs.FRESHNESS_DAYS}d), CC {v}")
+                f"cache fresh ({age:.0f}d ≤ {docs.FRESHNESS_DAYS}d), {v}")
     if cache_ok or snap_ok:
         src = "stale cache" if cache_ok else "committed snapshot"
         agetxt = f"{age:.0f}d old" if age is not None else "no manifest"
@@ -109,7 +110,7 @@ def check_network():
             req, timeout=NET_TIMEOUT, context=docs.ssl_context()
         ) as r:
             if r.status < 400:
-                return ("ready", None, "code.claude.com reachable")
+                return ("ready", None, "cursor.com reachable")
             return ("degraded", "OFFLINE", f"probe http {r.status}")
     except Exception as e:  # noqa: BLE001 - any failure = treat as offline
         return ("degraded", "OFFLINE",

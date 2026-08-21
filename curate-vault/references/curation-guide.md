@@ -17,7 +17,7 @@ Save knowledge that **survives refactors and applies beyond one repo**:
 Do NOT save:
 
 - Anything derivable from the repo: code structure, what functions do, git
-  history, CLAUDE.md content, test results.
+  history, AGENTS.md content, test results.
 - Session state: open threads, half-done work, "next steps" — that is
   `handoff` territory.
 - Secrets, tokens, or key values — ever (spec A12).

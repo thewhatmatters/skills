@@ -14,9 +14,8 @@ decorative.
 - **Subgrid "band"** patterns that place every element by **column line**, a
   toggleable **column + baseline overlay** (press `g`), and a runtime
   **optical-alignment** module so big display type lands its *ink* on the line.
-- A **verification path** (four adherence checks) run through your existing
-  `audit-ui` / `automate-browser` skills — so a finished page proves it sits on
-  its grid at multiple widths.
+- A **verification path** (four adherence checks in this skill) so a finished
+  page proves it sits on its grid at multiple widths.
 
 ## How to run
 
@@ -27,9 +26,9 @@ grid", "Müller-Brockmann / Swiss layout", or run
 
 ## What it needs
 
-Nothing required — it is keyless and works with no setup. Verification
-uses your audit-ui / automate-browser skills when installed and falls back
-to manual overlay checks otherwise. For the full Tailwind
+Nothing required — it is keyless and works with no setup. Verification is
+the four checks in `references/verification.md` (optional
+`automate-browser` if installed; otherwise overlay-by-eye). For the full Tailwind
 path it expects a Tailwind v4 project (it detects this); otherwise it degrades to
 a framework-free `:root` scaffold. The optional React overlay composes the
 `tailwindcss-react-grid-overlay` package when React is present.
@@ -45,8 +44,8 @@ a framework-free `:root` scaffold. The optional React overlay composes the
    overlay utilities, consuming a project `DESIGN.md ## Grid` block if one exists.
 4. **Build on it** — place elements by column line as subgrid bands; lock spacing
    and leading to the 8px baseline; add the overlay + optical-alignment.
-5. **Verify** — measure column / overlay / baseline / ink adherence via audit-ui
-   at widths above and below the content max-width; hand fixes to build-ui.
+5. **Verify** — measure column / overlay / baseline / ink adherence at widths
+   above and below the content max-width.
 
 This skill is the *grid spine*: execution lives in `build-ui`, aesthetic taste in
 `frontend-design`, the token spec in `design-md`, reference layouts in
@@ -54,7 +53,7 @@ This skill is the *grid spine*: execution lives in `build-ui`, aesthetic taste i
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `handoff.md` — design decisions and the "why".
 - `references/` — the canon (`canon.md`), the Tailwind token/utility layer
   (`tailwind.md`), the two profiles (`profiles.md`), optical alignment

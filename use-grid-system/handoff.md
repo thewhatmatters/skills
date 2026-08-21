@@ -13,11 +13,10 @@ a toggleable overlay, and runtime optical alignment — then prove it adheres.
 ## 2. Reusable patterns (link to spec A1..A13)
 Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
 
-- **A15 (2026-07-16):** audit-ui + automate-browser promoted from soft composes
-  to a preflighted hard pair (`preflight-deps.py` in Step 1) — Step 7's
-  measured verification is part of this skill's contract, so their absence
-  gates with a documented manual-pass degrade (verification.md §Degraded)
-  rather than being silently assumed.
+- **A15:** verification is this skill's own four checks
+  (`references/verification.md`). `automate-browser` is optional. Absence of
+  browser automation uses the documented manual overlay pass — not a second
+  skill.
 - **A1 progressive disclosure** — the canon + Tailwind layer + profiles + optical
   + verification + non-Tailwind fallback all live in `references/`; SKILL.md stays
   lean and routes to them.
@@ -26,8 +25,8 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
 - **A7/A8 setup-gate + no-monoculture** — probe first; never impose Tailwind,
   never silently re-scale a live project's `--spacing`.
 - **A8 composition by reference** — build-ui (execution), frontend-design (taste),
-  audit-ui/automate-browser (verification), design-md (token spec), source-ui
-  (reference). Runs none of their code; no bespoke Puppeteer verifier.
+  design-md (token spec), source-ui (reference). Verification stays in this
+  skill. Runs none of their code.
 
 ## 3. Decision log
 - 2026-06-13: scaffolded by generate-skill.
@@ -48,9 +47,8 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
   progressive enhancement only.
 - **Compose the overlay + verifier, don't rebuild.** `tailwindcss-react-grid-
   overlay` already ships a `g`-key column overlay (React); we add the baseline
-  layer and standardize on `g`. Verification runs as an audit-ui dimension, not a
-  parallel Chrome driver (the export's platform-foreign Puppeteer flags are dropped
-  on the way in).
+  layer and standardize on `g`. Verification is the four checks in
+  `references/verification.md` (optional `automate-browser`).
 - **Two profiles in v1.** `editorial` (strict whole-field) and `app` (column-line
   + baseline, relaxed rows) — the user's target is web apps, but the canon and the
   live example are editorial, so both ship.
@@ -73,8 +71,7 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
 
 ## 5. Audit rubric coverage
 See `skill-architecture.md` §B; this skill targets every PASS that applies.
-Verification (the four adherence checks) is delegated to audit-ui by design — see
-`references/verification.md`.
+Verification is `references/verification.md`.
 
 ## 6. Notes
 Upstream knowledge (do not re-derive): the prior `müller-brockmann.json` skill

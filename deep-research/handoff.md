@@ -7,7 +7,7 @@ Created: 2026-05-19  ·  Generator: generate-skill @ CC 2.1.145
 
 ## 1. Purpose
 A multi-pass research engine that scopes a question, sweeps and follows up
-across the web (with Tavily/Exa keys or Claude's built-in search), and
+across the web (with Tavily/Exa keys or the agent's built-in search), and
 synthesizes a cited markdown report — optionally with a self-contained HTML
 companion.
 
@@ -23,7 +23,7 @@ Notable choices:
   that subquery — no cross-skill Python imports. Each skill stays
   self-contained. SKILL.md "Conventions" makes this explicit.
 - **Dual-mode is real, not aspirational.** SCRIPTS mode uses Tavily/Exa for
-  quality; NATIVE mode uses Claude's built-in `WebSearch` + `WebFetch` and
+  quality; NATIVE mode uses the agent's built-in `WebSearch` + `WebFetch` and
   produces **the same artifact**. NATIVE is a real fallback, not a
   degraded-by-design path (spec A3 + A7d).
 - **`KEYS_MISSING` is a Recoverable Setup Gate but NEVER blocks.** The gate
@@ -76,7 +76,7 @@ Notable choices:
   skips verify_bundle with a note if curate-vault's files are missing. This
   deliberately reinterprets "vault writes only via curate-vault": the
   destination choice is the per-write human confirmation (recorded in both
-  CLAUDE.md write-path rules). Audit findings from 2026-07-16 (preflight
+  AGENTS.md write-path rules). Audit findings from 2026-07-16 (preflight
   proxy, --out bypass, scan-trends if-available guard) fixed same day.
 - 2026-05-19: scaffolded by generate-skill (formal `/generate-skill`
   invocation).

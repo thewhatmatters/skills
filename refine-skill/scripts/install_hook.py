@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
-"""Wire (or remove) the refine-skill Stop hook in ~/.claude/settings.json.
+"""Wire (or remove) the refine-skill stop hook in ~/.cursor/hooks.json.
 
-Portable + idempotent: the hook command is computed from THIS file's location
-(`stop_hook.py` next to it), so a fresh clone on any machine/user wires the
-correct absolute path — no hardcoded home dir. Safe to re-run; preserves all
-other settings; backs up before writing.
+Portable + idempotent: the hook command is computed from THIS file's location.
+Safe to re-run; preserves all other hooks; backs up before writing.
 
 I/O: [--remove] [--settings PATH] · stdout JSON {action, settings_path,
      hook_command, backup} · stderr human status · exit 0 ok, 1 only if the
-     existing settings.json is unparseable (never clobbered).
-
-Run on a new machine:  python3 refine-skill/scripts/install_hook.py
-Remove the hook:       python3 refine-skill/scripts/install_hook.py --remove
+     existing hooks.json is unparseable (never clobbered).
 """
 import argparse
 import json
@@ -23,7 +18,7 @@ import time
 HERE = os.path.dirname(os.path.realpath(__file__))
 HOOK_SCRIPT = os.path.join(HERE, "stop_hook.py")
 HOOK_COMMAND = f"python3 {HOOK_SCRIPT}"
-DEFAULT_SETTINGS = os.path.expanduser("~/.claude/settings.json")
+DEFAULT_SETTINGS = os.path.expanduser("~/.cursor/hooks.json")
 MARKER = "stop_hook.py"  # how we recognise our own Stop entries
 
 
@@ -74,13 +69,19 @@ def main():
     path = os.path.expanduser(args.settings)
 
     settings, _fresh = load_settings(path)
-    hooks = settings.setdefault("hooks", {}) if isinstance(settings, dict) else {}
-    stop = hooks.get("Stop")
+    if not isinstance(settings, dict):
+        settings = {}
+    hooks = settings.setdefault("hooks", {})
+    if not isinstance(hooks, dict):
+        hooks = {}
+        settings["hooks"] = hooks
+    stop = hooks.get("stop")
     if not isinstance(stop, list):
         stop = [] if stop is None else [stop]
 
     ours = [e for e in stop if _is_ours(e)]
     action, backup = "none", None
+    entry = {"command": HOOK_COMMAND, "timeout": 15}
 
     if args.remove:
         if ours:
@@ -90,20 +91,22 @@ def main():
             action = "absent"
     else:
         current = ours[0] if ours else None
-        already_correct = current and _commands_in(current) == [HOOK_COMMAND]
+        already_correct = (
+            isinstance(current, dict)
+            and current.get("command") == HOOK_COMMAND
+        )
         if already_correct:
             action = "already-installed"
         else:
-            stop = [e for e in stop if not _is_ours(e)]  # drop stale/mismatched
-            stop.append({"hooks": [{"type": "command", "command": HOOK_COMMAND}]})
+            stop = [e for e in stop if not _is_ours(e)]
+            stop.append(entry)
             action = "updated" if ours else "installed"
 
-    # Persist only if something changed; tidy empty structures.
     if action in ("installed", "updated", "removed"):
         if stop:
-            hooks["Stop"] = stop
+            hooks["stop"] = stop
         else:
-            hooks.pop("Stop", None)
+            hooks.pop("stop", None)
         if not hooks:
             settings.pop("hooks", None)
         backup = write_settings(path, settings)
@@ -112,7 +115,7 @@ def main():
            "already-installed": "✅ already installed (no change)",
            "removed": "✅ removed", "absent": "· not present (nothing to remove)",
            "none": "· no change"}[action]
-    print(f"refine-skill Stop hook → {path}", file=sys.stderr)
+    print(f"refine-skill stop hook → {path}", file=sys.stderr)
     print(f"  {sym}", file=sys.stderr)
     print(f"  command: {HOOK_COMMAND}", file=sys.stderr)
     if not os.path.isfile(HOOK_SCRIPT):

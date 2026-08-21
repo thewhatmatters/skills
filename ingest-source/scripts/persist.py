@@ -7,14 +7,14 @@ One concern: deterministic persistence. Takes a finished summary (stdin or
      ingested, tier) — re-ingesting the same `source` UPDATES the existing
      file instead of duplicating it;
   2. upserts the one-line entry in `<docs-dir>/INDEX.md`;
-  3. reports (but NEVER edits) the project CLAUDE.md wiring: whether the
-     marker-delimited @-import block is present, absent, or there is no
-     CLAUDE.md — and emits the exact block to insert. Editing the user's
-     CLAUDE.md is a consent-gated step the caller performs (spec A7).
+  3. reports (but NEVER edits) the project AGENTS.md wiring: whether the
+     marker-delimited pointer block is present, absent, or there is no
+     AGENTS.md — and emits the exact block to insert. Editing AGENTS.md is
+     a consent-gated step the caller performs (spec A7).
 
 I/O: --source URL|PATH --type T --title S --tier S [--hook S] [--file PATH]
      [--docs-dir P] [--project-root P] [--date YYYY-MM-DD]
-     · stdout JSON {written, action, index, claude_md} · stderr diagnostics
+     · stdout JSON {written, action, index, agents_md} · stderr diagnostics
      · exit 0 on success, 1 on failure. No network.
 """
 import argparse
@@ -88,25 +88,23 @@ def upsert_index(docs_dir, filename, title, typ, date, hook):
     return index
 
 
-def claude_md_block(rel_docs_dir):
+def agents_md_block(rel_docs_dir):
     return (
         f"{MARKER_START}\n"
         "## Ingested sources\n"
         "\n"
         f"Captured source material (videos, articles, PDFs, images) lives in\n"
-        f"`{rel_docs_dir}/`, ingested by the ingest-source skill. The index below\n"
-        "is imported every session; read the underlying file when a listed source\n"
-        "is relevant to the task at hand.\n"
-        "\n"
-        f"@{rel_docs_dir}/INDEX.md\n"
+        f"`{rel_docs_dir}/`, ingested by the ingest-source skill. When a task\n"
+        f"relates to captured sources, Read `{rel_docs_dir}/INDEX.md` and then\n"
+        "the linked file — do not dump every ingestion into context.\n"
         f"{MARKER_END}\n"
     )
 
 
-def claude_md_status(project_root, docs_dir):
-    path = os.path.join(project_root, "CLAUDE.md")
+def agents_md_status(project_root, docs_dir):
+    path = os.path.join(project_root, "AGENTS.md")
     rel = os.path.relpath(os.path.abspath(docs_dir), os.path.abspath(project_root))
-    block = claude_md_block(rel.replace(os.sep, "/"))
+    block = agents_md_block(rel.replace(os.sep, "/"))
     if not os.path.exists(path):
         return {"path": path, "status": "no-file", "block": block}
     try:
@@ -174,17 +172,17 @@ def main():
     index = (upsert_index(args.docs_dir, os.path.basename(path), args.title,
                           args.type, date, args.hook)
              if in_docs_dir else None)
-    cm = claude_md_status(args.project_root, args.docs_dir)
+    am = agents_md_status(args.project_root, args.docs_dir)
 
     print("ingest-source persist", file=sys.stderr)
     print(f"  ✅ {action}: {path}", file=sys.stderr)
     print(f"  {'✅ index:   ' + index if index else '⚠  index:   skipped (--out is outside --docs-dir)'}",
           file=sys.stderr)
-    mark = {"present": "✅", "absent": "🔒", "no-file": "🔒"}[cm["status"]]
-    print(f"  {mark} CLAUDE.md wiring: {cm['status']}", file=sys.stderr)
+    mark = {"present": "✅", "absent": "🔒", "no-file": "🔒"}[am["status"]]
+    print(f"  {mark} AGENTS.md wiring: {am['status']}", file=sys.stderr)
 
     print(json.dumps({"written": path, "action": action, "index": index,
-                      "claude_md": cm}, indent=2, ensure_ascii=False))
+                      "agents_md": am}, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

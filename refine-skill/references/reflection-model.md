@@ -120,8 +120,8 @@ commits** — the human owns the commit, exactly as `generate-skill` does.
 
 ## Trigger wiring (opt-in Stop hook) — implemented
 
-`scripts/stop_hook.py` is registered as a Claude Code `Stop` hook in
-`~/.claude/settings.json`. When a session used a skill, it *offers* to reflect — it
+`scripts/stop_hook.py` is registered as a Cursor `stop` hook in
+`~/.cursor/hooks.json`. When a session used a skill, it *offers* to reflect — it
 does not silently run a reflect-and-edit loop (expensive, noisy, and unsafe to
 auto-edit committed shared code). Contract: stdin carries `transcript_path` /
 `session_id` / `stop_hook_active`; the hook exits 0 with `{"systemMessage": ...}` to

@@ -1,7 +1,7 @@
 # audit-skill
 
-**What it is:** a reviewer for Claude skills. It checks a skill against our
-house standard and tells you what's solid and what needs fixing.
+**What it is:** a reviewer for house skills. It checks a skill against our
+standard and tells you what's solid and what needs fixing.
 
 ## What you get
 
@@ -24,11 +24,8 @@ Just ask, e.g.:
 - "QA the skill in ./my-skill"
 - "audit all skills" — sweeps the whole suite and gives you one summary table.
 
-There's also an **opt-in triggering check** ("check triggering for X"): it
-measures whether a skill's description actually routes real prompts to it, and
-whether overlapping skills steal each other's queries. It costs money (it runs
-real model calls), needs the `claude` CLI, and is best run only after you change
-a description — so it asks before spending.
+The default is a **structural audit** (no extra CLI). An old optional
+triggering harness is unused here — skip it.
 
 ## What it needs
 

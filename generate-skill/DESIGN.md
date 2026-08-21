@@ -12,15 +12,15 @@ exists; this completes the pair.
 
 ## 1. Purpose & the loop it closes
 
-Scaffold a new Claude Code skill that satisfies our house conventions, using
+Scaffold a new Cursor Agent Skill that satisfies our house conventions, using
 **two inputs reconciled**:
 
 - **In-house truth:** `~/.cursor/skills/skill-architecture.md` — the same spec
   `audit-skill` checks against. Generator *emits* against it; auditor *checks*
   against it. One spec, both directions.
-- **Upstream truth:** the official Claude docs (✅ *Official Claude docs*),
+- **Upstream truth:** the official Cursor skills docs (✅ *Cursor docs*),
   pinned and cached locally, used to keep our frontmatter/format current and to
-  **flag drift** when Anthropic changes the SKILL.md contract.
+  **flag drift** when Cursor changes the SKILL.md contract.
 
 Closing step: the generator runs `audit-skill` on its own output. A skill it
 produces must pass the auditor, or the generator reports the findings instead of
@@ -31,22 +31,21 @@ claiming success. generator → auditor → shared spec is a closed loop.
 `skill-architecture.md` from upstream (drift is surfaced, you decide); it does
 NOT continuously poll docs (✅ *on-demand + preflight*, not a background poller).
 
-## 2. Authoritative docs (✅ Official Claude docs)
+## 2. Authoritative docs (✅ Cursor skills.md)
 
-Pinned canonical URLs (verified; served as clean `.md`):
+Pinned canonical URL (verified; served as markdown):
 
 | Slug | URL | Used for |
 |------|-----|----------|
-| `skills` | `https://code.claude.com/docs/en/skills.md` | SKILL.md format + frontmatter field list (the field set we validate against) |
-| `changelog` | `https://code.claude.com/docs/en/changelog.md` | cheap version signal (e.g. `2.1.144`) + "skill"-mentioning entries |
-| `plugins-reference` | `https://code.claude.com/docs/en/plugins-reference.md` | skill-in-plugin specs |
-| `claude-directory` | `https://code.claude.com/docs/en/claude-directory.md` | skill discovery locations |
-| `agent-sdk-skills` | `https://code.claude.com/docs/en/agent-sdk/skills.md` | SDK skill usage (reference only) |
+| `skills` | `https://cursor.com/docs/skills.md` | SKILL.md format + frontmatter field list |
 
-Honest constraint (verified with the docs guide): there is **no JSON schema**
-for SKILL.md, frontmatter is a prose markdown table, and no ETag/Last-Modified is
-guaranteed. So freshness is best-effort by design (see §4), and `docs.py` must
-tolerate the `.md` convention itself changing (fall back to bundled snapshot).
+House allow-list (spec A2) is a **subset plus policy**: required `name` +
+`description`; optional `disable-model-invocation`, `paths`, `icon`, `color`,
+`metadata`. fields outside the Cursor set are forbidden even if they appear in other
+ecosystems.
+
+Honest constraint: there is **no JSON schema** for SKILL.md; frontmatter is a
+prose markdown table. Freshness is best-effort (`docs.py` + snapshot).
 
 ## 3. File layout
 
@@ -57,7 +56,7 @@ generate-skill/
   DESIGN.md                      # this file (living design record, like scan-trends/handoff.md)
   references/
     generation-recipe.md         # the step-by-step scaffold the model follows (progressive disclosure)
-    claude-docs-snapshot/        # committed offline fallback copy of the §2 docs (NATIVE path)
+    cursor-docs-snapshot/        # committed offline fallback (NATIVE path)
   scripts/
     _env.py                      # shared key loader — copied verbatim from scan-trends convention
     docs.py                      # fetch/cache/diff canonical docs; emit drift report
@@ -87,7 +86,7 @@ committed even after `generate-skill/` is opted in.
 - **Resolution order (dual-mode, mirrors scan-trends SCRIPTS vs NATIVE):**
   1. live fetch of the pinned URLs (SCRIPTS: `urllib`; NATIVE: `WebFetch`),
   2. local `.cache/docs/` if fetch fails, or if cache is fresh and no `--refresh`,
-  3. committed `references/claude-docs-snapshot/` if offline (NATIVE fallback).
+  3. committed `references/cursor-docs-snapshot/` if offline (NATIVE fallback).
 - **Cache entry:** `{slug, url, sha256, fetched_at, http_status,
   claude_code_version}` in `.cache/docs/manifest.json`.
 - **Version signal:** tolerant regex for the first version token in
@@ -170,7 +169,7 @@ generator should *generate* skills that themselves reuse these, not reinvent.
 
 A `README.md` per skill folder, written in plain language for a reader who is
 *not* deep in the code: one-line "what it is", "what you get", "how to run",
-"what it needs", and a short "how it works" — distinct from `SKILL.md` (Claude's
+"what it needs", and a short "how it works" — distinct from `SKILL.md` (the agent's
 operating instructions) and `handoff.md`/`DESIGN.md` (the why/decision record).
 
 Applied now to the existing skills (`scan-trends/README.md`,
@@ -184,7 +183,7 @@ listed as decision (5) below rather than made unilaterally.
 ## 9. Decisions (resolved 2026-05-19)
 
 1. ✅ **Snapshot bootstrap** — yes; fetch the §2 docs once and commit under
-   `references/claude-docs-snapshot/` as the offline fallback.
+   `references/cursor-docs-snapshot/` as the offline fallback.
 2. ✅ **Self-audit = report-only, never blocks** — always emit; honest verdict
    line; no hard fail/gate (§6 step 5).
 3. ✅ **Fetch mechanism** — stdlib `urllib` in SCRIPTS, `WebFetch` in NATIVE
@@ -203,8 +202,9 @@ committed snapshot → **(next)** the scaffold recipe → wire the self-audit.
 ## 11. Build status
 
 - **Phase 1 — DONE & tested.** `scripts/docs.py`, `scripts/preflight.py`, and
-  the committed `references/claude-docs-snapshot/` (5 docs, Claude Code
-  `2.1.144`). Smoke-tested: live→`refreshed`, cache→`fresh`,
+  the committed `references/cursor-docs-snapshot/` (Cursor `skills.md`).
+  Smoke-tested 2026-08-20: live→`refreshed` against cursor.com. Historical
+  Claude snapshot retired.
   `--refresh`→`refreshed`; degraded chain proven (stale-cache→`stale`,
   no-cache→`snapshot`, nothing→exit 1); preflight 4-state board verified in
   `ready`, `gated`, and `degraded`/offline states. `.cache/` confirmed

@@ -3,7 +3,7 @@ name: ingest-source
 description: >-
   Ingest any source — a YouTube video, webpage/article, PDF, image, or local
   document — into a structured, cited markdown summary, then save it as
-  project knowledge in docs/sources/ with an index that CLAUDE.md @-imports so
+  project knowledge in docs/sources/ with an index that AGENTS.md points at so
   future sessions are informed by it. Use when the user supplies a link or
   file and wants it summarized, transcribed, captured, or remembered for the
   project — "summarize this YouTube video", "tl;dr this video/article", "what
@@ -26,7 +26,7 @@ description: >-
 
 Turn any source — YouTube video, webpage, PDF, image, document — into a
 structured, cited markdown summary, and persist it as project knowledge the
-project's CLAUDE.md can see.
+project's AGENTS.md can see.
 
 ## What it does
 
@@ -35,11 +35,11 @@ through the best available tier (degrading, never blocking — spec A3),
 writes a summary shaped to the content type with real locators (`MM:SS`,
 `p. N`, `§ Heading`), and saves it to `<project>/docs/sources/<slug>.md` with
 YAML frontmatter. An `INDEX.md` line is upserted per ingestion, and — once,
-with consent — a marker block is added to the project's CLAUDE.md that
-`@`-imports the index, so every future session starts aware of what's been
-ingested. Acquisition details live in `references/youtube.md` and
+with consent — a marker block is added to the project's AGENTS.md that
+tells the agent to Read the index when a captured source is relevant.
+Acquisition details live in `references/youtube.md` and
 `references/web-docs.md`; summary shapes in `references/templates.md`; the
-persistence contract and CLAUDE.md gate in `references/persistence.md` (A1).
+persistence contract and AGENTS.md gate in `references/persistence.md` (A1).
 Before persisting, a destination gate asks whether the summary belongs to the
 project, the personal OKF vault (delegated to `curate-vault`), or both.
 
@@ -99,9 +99,9 @@ yt-dlp by hand per `references/youtube.md`, persistence by hand per
 6. **Persist — project** (when dest includes `project`) — pipe the summary to
    `python3 scripts/persist.py --source=… --type=… --title=… --tier=…
    --hook=…` (idempotent: same source updates in place). Read the JSON. Then
-   the **CLAUDE.md gate (spec A7)** — if `claude_md.status` is
+   the **AGENTS.md gate (spec A7)** — if `agents_md.status` is
    `absent`/`no-file`, run the consent gate in `references/persistence.md`:
-   ask before inserting the `@`-import block (scripts never edit CLAUDE.md;
+   ask before inserting the pointer block (scripts never edit AGENTS.md;
    under `--agent`, skip and report the block instead).
 7. **Persist — vault** (when dest includes `vault`) — delegate to the
    `curate-vault` skill (by reference, spec A8): hand it the summary as a

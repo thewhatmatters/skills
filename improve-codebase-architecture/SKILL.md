@@ -41,7 +41,7 @@ python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=codebase-design,gril
 Both siblings are hard dependencies (the vocabulary source; the Step-3
 interview loop). If the helper itself is missing, treat both deps as
 `gated` and continue with the degrades below (spec A11). On `gated`,
-interactive runs offer *Fix it for me (git pull in ~/.claude) / I'll do it
+interactive runs offer *Fix it for me (git pull in ~/Development/skills) / I'll do it
 myself / Skip* (spec A7c); on Skip or fix failure — and always under
 `--agent` — degrade rather than block (spec A7d): missing
 `codebase-design` → use the vocabulary summary inlined above (the intro's

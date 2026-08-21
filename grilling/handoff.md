@@ -17,7 +17,7 @@ Sibling skills from the same vendoring session: `codebase-design`,
 - **Kept as its own skill, not folded into `karpathy-spec`.** There's real
   overlap (both are interview-driven alignment tools), but they operate at
   different scopes and different points in the lifecycle: `karpathy-spec`
-  is a full spec-first method that drafts and locks a `PRD.md` + `CLAUDE.md`
+  is a full spec-first method that drafts and locks a `PRD.md` + `AGENTS.md`
   for a whole project or feature; `grilling` is a lightweight, reusable
   interview primitive with no document output, meant to be invoked
   standalone *or* embedded inside other skills (as

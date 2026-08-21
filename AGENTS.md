@@ -27,11 +27,10 @@ elsewhere; reference it.
 - **`SKILL.md`** — loaded on every invocation, so keep it **lean**. YAML frontmatter is
   `name` (must equal the directory) + a trigger-rich `description`. Conservative
   frontmatter is `name` + `description` only; never invent a frontmatter field —
-  `generate-skill` still validates against the Claude-docs field list (`scripts/docs.py`,
-  `scripts/reconcile.py`) — intersection with Cursor is `name`, `description`, and
-  `disable-model-invocation`. See `skill-architecture.md` A2.
+  `generate-skill` still validates against the Cursor skills docs (`scripts/docs.py`,
+  `scripts/reconcile.py`) — allowed fields are spec A2. See `skill-architecture.md`.
 - **`references/`** — progressive disclosure (A1): bulky detail (templates, long tables,
-  syntax guides) lives here and is pulled in *only when SKILL.md routes Claude to it*. A
+  syntax guides) lives here and is pulled in *only when SKILL.md routes the agent to it*. A
   reference file the skill never points to is dead weight.
 - **`scripts/`** — stdlib-first Python. Each script: one concern, a docstring stating its
   I/O contract, **JSON to stdout / diagnostics to stderr**, graceful failure, never hangs.
@@ -67,7 +66,7 @@ elsewhere; reference it.
 ## Secrets
 
 Shared loader `scripts/_env.py` (copied verbatim into skills that need keys). Precedence
-**real env → `~/.cursor/skills/.env` → `~/.claude/.env`** (legacy fallback); empty values skipped; keys go
+**real env → `~/.cursor/skills/.env`** (and `~/.claude/.env` if that file still exists); empty values skipped; keys go
 in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitignored;
 **`.env.example` is committed** with a "Used by:" note per key. Do not create per-skill
 `.env.example` files.

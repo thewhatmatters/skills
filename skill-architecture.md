@@ -4,9 +4,8 @@ The single source of truth for how a "research/automation" skill in this family
 is built. **`audit-skill` checks against this; `generate-skill` scaffolds to
 this.** Edit here once; both tools follow.
 
-Reference implementation: `scan-trends`. Last updated: 2026-07-16 (added A15
-dependency discipline + its rubric item; previously 2026-07-03: A14 trigger
-mode, the A1 branch test, the deletion-test rubric item).
+Reference implementation: `scan-trends`. Last updated: 2026-08-20 (Cursor
+frontmatter is the upstream field list; fields outside the Cursor set are forbidden).
 
 ---
 
@@ -22,21 +21,22 @@ deviations should be deliberate, not accidental.
    material only some branches of the skill consult moves behind a reference
    pointer.
 2. **YAML frontmatter.** `name` matches the directory; `description` is
-   trigger-rich (verbs + example phrases the model will see) and accurate to
-   current capability. Required Cursor/Agent-Skills fields are `name` +
-   `description`. `disable-model-invocation` is shared. Cursor-only extras
-   (`paths`, `icon`, `color`, `metadata`) are valid in Cursor but **not** in
-   the Claude-docs field list `generate-skill` validates against — omit them
-   unless you are authoring by hand; do not invent Claude-only fields
-   (`allowed-tools`, `arguments`, `context: fork`, `user-invocable`) for
-   Cursor.
+   trigger-rich (verbs + example phrases the model will see), accurate, and
+   ≤ 1024 chars. Allowed fields are the Cursor/Agent-Skills set:
+   `name`, `description` (required), `disable-model-invocation`, `paths`,
+   `icon`, `color`, `metadata`. Conservative default is `name` + `description`
+   only; add `disable-model-invocation: true` when the skill should be
+   slash-only (A14); add `paths` only for file-scoped skills. **Forbidden**
+   (non-Cursor — ignored or misleading in Cursor): `allowed-tools`,
+   `arguments`, `argument-hint`, `when_to_use`, `context`, `user-invocable`.
+   Do not emit legacy `globs` (Cursor accepts it; new skills use `paths`).
 3. **Mode probe + degraded path.** A Step 0 probe picks an execution mode; every
    capability has a functional fallback path when the preferred one is absent.
 4. **One concern per script.** Each script does one thing, has a docstring
    stating its I/O contract, writes its payload to **stdout as JSON** and
    diagnostics to **stderr**, and fails gracefully (never hangs the run).
 5. **Shared key loader.** Secrets via a single loader with precedence
-   `real env → ~/.cursor/skills/.env → ~/.claude/.env` (legacy fallback); empty values skipped so
+   `real env → ~/.cursor/skills/.env` (optional extra file `~/.claude/.env` if it still exists); empty values skipped so
    a placeholder never shadows a real key; keys sent in **headers only**, never
    in URLs or logs; no heavyweight dependency. `.env` is `chmod 600` and
    gitignored; `.env.example` is committed with a "Used by:" note per key.
@@ -73,7 +73,7 @@ deviations should be deliberate, not accidental.
     decision record (handoff/DESIGN). Every skill has one.
 14. **Deliberate trigger mode.** Model-invoked vs user-invoked is a design
     decision, not a default. Model-invoked (the default) puts the description
-    in every session's context — pay that **context load** only when Claude
+    in every session's context — pay that **context load** only when the agent
     should fire the skill itself, keep the description trigger-rich (A2), and
     accept that routing needs measurement (audit-skill `--triggers`).
     User-invoked (`disable-model-invocation: true`, live-docs field) keeps the
@@ -94,7 +94,7 @@ deviations should be deliberate, not accidental.
     `python3 ~/.cursor/skills/scripts/preflight-deps.py --skills=… --agents=… --files=…`.
     A missing dep gates as `DEPS_MISSING` — full A7 applies: interactive
     runs offer the A7c menu when the fix is actionable (*Fix it for me* —
-    usually one `git pull` — */ I'll do it myself / Skip*); announce-then-
+    usually one `git pull` in `~/Development/skills` — */ I'll do it myself / Skip*); announce-then-
     degrade without asking is the `--agent` posture. Either way SKILL.md
     documents the specific degrade (e.g. generate-skill without audit-skill
     scaffolds but ships unaudited, said up front), and when the run is
@@ -106,8 +106,8 @@ deviations should be deliberate, not accidental.
     tool absent → inline/serial).
     (c) **Soft composes** — mentioned skills that enhance but aren't required
     stay guarded by "if available"; never assumed installed, never gated.
-    The weekly lint (`~/.claude/scripts/vault-skills-lint.py`) backstops all
-    three classes with zero per-skill wiring: stale `~/.claude/...` path
+    The weekly lint (`(optional local lint, if you keep one)`) backstops all
+    three classes with zero per-skill wiring: stale hardcoded home-dir path
     references alert immediately; unknown skill/agent names alert when new.
 
 ## B. Audit rubric
@@ -115,7 +115,8 @@ deviations should be deliberate, not accidental.
 Each item is PASS / FAIL / N/A with file:line evidence.
 
 **Structure**
-- [ ] SKILL.md has valid frontmatter; `name` == dir; description trigger-rich.
+- [ ] SKILL.md has valid frontmatter; `name` == dir; description trigger-rich
+      and ≤ 1024 chars; no non-Cursor / unknown keys (A2).
 - [ ] SKILL.md is lean; bulky detail is in `references/`.
 - [ ] Inline content passes the branch test — no reference material that only
       one branch of the skill consults (A1).

@@ -42,7 +42,7 @@ Tier label: `native read (pdf)`.
 
 ## Local PDF / image / document
 
-No scripts — Claude's Read tool handles PDFs and images natively; plain-text
+No scripts — the Read tool handles PDFs and images natively; plain-text
 documents are just files. For an image, describe what it shows *and* transcribe
 any text in it (that text is usually why it's being ingested). Tier labels:
 `native read (pdf)` · `native read (image)` · `native read (document)`.

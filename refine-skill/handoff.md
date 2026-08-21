@@ -40,18 +40,18 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A14. Notable:
   The captured failing input is committed alongside the fix (a test asset, not a
   generated report) — seeding a regression suite for a repo that has none.
 - 2026-05-24: **trigger = opt-in Stop hook (implemented).** `scripts/stop_hook.py`
-  is registered as a Claude Code `Stop` hook. Contract: stdin JSON carries
+  is registered as a Cursor `stop` hook. Contract: stdin JSON carries
   `transcript_path`/`session_id`/`stop_hook_active`; it exits 0 with
   `{"systemMessage": ...}` to surface a non-blocking offer — never `decision:block`
   / exit 2 (which would force continuation). Gated to **once per session** via a
   `/tmp/refine-skill-hook/<session_id>.seen` marker so it isn't noisy; only suggests
   skills that exist under `~/.cursor/skills` (excludes refine-skill itself; silent if
   refine-skill was already used). Fails silent (always exit 0) so a trigger can never
-  disrupt a session. Registered in `~/.claude/settings.json` (user scope, so it fires
+  disrupt a session. Registered in `~/.cursor/hooks.json` (user scope, so it fires
   wherever skills are used); the handler script is versioned here, the wiring just
   points at its absolute path.
 - 2026-05-24: **portability — `scripts/install_hook.py` owns the wiring.**
-  `~/.claude/settings.json` is user-global and outside this repo, so it does NOT
+  `~/.cursor/hooks.json` is user-global and outside this repo, so it does NOT
   travel with a clone; the docs alone wouldn't reliably tell a fresh machine to wire
   the hook, and a hardcoded path would break under a different username. The
   idempotent installer computes the handler's absolute path from its own `__file__`
@@ -63,7 +63,7 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A14. Notable:
 ## 4. Known limitations / environment caveats
 - One session is weak evidence; the guard in §reflection-model is what keeps this
   honest. Generality must be argued, not just validated on one input.
-- Transcript location is the Claude Code convention `~/.claude/projects/<cwd with
+- Transcript location is the legacy transcript convention `~/.cursor/projects/<cwd with
   '/' and '.' replaced by '-'>/`; if that layout changes, `extract_evidence.py`'s
   resolver needs updating (pass `--transcript=PATH` as the escape hatch).
 - The Stop-hook trigger is not implemented yet — manual invocation only for now.

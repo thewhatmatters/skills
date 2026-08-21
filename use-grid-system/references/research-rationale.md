@@ -162,9 +162,9 @@ skill's regime) and `app` (column-line alignment + baseline spacing, relaxed row
   gradient, ported to a token-driven component), keep the `g` gesture.
 - **Verification:** do **not** ship a bespoke Puppeteer harness. The prior skill's four
   checks (column adherence both-edges, overlay-matches-content, baseline modulo, optical
-  ink-on-its-own-line) are sound — but they should run **through our existing `audit-ui` /
-  `automate-browser` Playwright engine** as a new "grid-adherence" dimension, not a parallel
-  Chrome driver. This is house-spec composition-by-reference (the platform-foreign Puppeteer
+  ink-on-its-own-line) are sound — but they should run **as this skill's own
+  four checks** (`references/verification.md`), optionally via `automate-browser`.
+  This is house-spec composition-by-reference (the platform-foreign Puppeteer
   flags in the JSON export are a liability we drop on the way in).
 
 ### 7. No-monoculture + composition
@@ -185,7 +185,7 @@ Composition (by reference, never import — house spec A8):
 - **`build-ui`** *executes* the grid in the real codebase (this skill supplies the
   patterns/tokens; build-ui writes the components).
 - **`frontend-design`** owns *taste* (when a strict grid is right vs. expressive).
-- **`audit-ui`** *verifies* adherence (hosts the grid-adherence check + the overlay).
+- **`verification.md`** *verifies* adherence (the four checks + overlay).
 - **`source-ui`** supplies *reference* layouts (Mobbin/Refero) to ground a grid in precedent.
 
 `use-grid-system` is therefore a **thin spine**: the canon + the Tailwind token/utility
@@ -243,7 +243,7 @@ existing DESIGN.md `## Grid`, baseline of current `--spacing`.
 - `references/profiles.md` — `editorial` vs `app` grid profiles (Finding 5).
 - `references/optical-alignment.md` — the canvas `actualBoundingBoxLeft` module + the
   `text-box-trim` progressive-enhancement note + the font-measurement caveat.
-- `references/verification.md` — the four checks, expressed as an `audit-ui` dimension.
+- `references/verification.md` — the four checks.
 - `references/non-tailwind.md` — the degraded vanilla-CSS scaffold.
 
 **`scripts/`:**
@@ -251,7 +251,7 @@ existing DESIGN.md `## Grid`, baseline of current `--spacing`.
   `--cols/--baseline/--gutter/--margin/--maxw/--accent/--profile=editorial|app`; warn when
   gutter/margin aren't baseline multiples (carry the prior warning). JSON/stderr discipline.
 - `probe.py` — stack detection (Tailwind version, framework, DESIGN.md grid) → JSON gate.
-- *(no bespoke verifier)* — verification composes audit-ui/automate-browser.
+- *(no bespoke verifier)* — verification is this skill's four checks.
 
 **The overlay/optical module** — a small framework-agnostic JS (ported from the export):
 columns + baseline + margin lines reading the `@theme` CSS variables, `g`-key toggle,
@@ -274,8 +274,8 @@ convention; the canon stays branded internally as "Müller-Brockmann."
    alignment JS; wire the `g` toggle; compose the React overlay lib where present.
 4. **Phase 3 — profiles + responsive.** `editorial` vs `app`; container-query component
    profiles; `clamp()` baseline-quantized type.
-5. **Phase 4 — verification.** Add the grid-adherence dimension to `audit-ui` (or a documented
-   automate-browser recipe); retire the Puppeteer dependency.
+5. **Phase 4 — verification.** Document the grid-adherence checks in
+   `references/verification.md`; optional `automate-browser`. Retire the Puppeteer dependency.
 6. **Phase 5 — degrade + compose.** `references/non-tailwind.md` vanilla path; probe-gated
    routing to build-ui/design-md/frontend-design; `/audit-skill use-grid-system`.
 
@@ -295,7 +295,7 @@ convention; the canon stays branded internally as "Müller-Brockmann."
   (summary p.174).
 - **Subgrid fallback drift** — the `@supports` path must be tested at widths above and below
   `--grid-maxw` (the centered-container bug the export documents).
-- **Composition seams** — design-md/build-ui/audit-ui boundaries must be sharp or the skill
+- **Composition seams** — design-md/build-ui boundaries must be sharp or the skill
   re-implements them. Enforce by reference-only (A8).
 
 ## Open questions

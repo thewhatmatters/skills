@@ -1,15 +1,15 @@
 # automate-browser
 
-**What it is:** a way for Claude to drive a real Chromium browser — navigate,
+**What it is:** a way for the agent to drive a real Chromium browser — navigate,
 click, fill forms, log in, take screenshots, and extract or scrape data — with
 your **login sessions remembered between runs**.
 
 ## What you get
 
-- A browser Claude can operate step by step against any site.
+- A browser the agent can operate step by step against any site.
 - **Persistent logins:** sign in once; later runs are already authenticated.
 - **Token-efficient page reading:** instead of burning vision tokens on
-  screenshots, Claude can pull a compact list of the clickable elements, the
+  screenshots, the agent can pull a compact list of the clickable elements, the
   visible text, or the page structure.
 - Screenshots when you actually want to *see* the page.
 
@@ -25,7 +25,7 @@ Just ask, e.g.:
 ## What it needs
 
 - **`python3`** + the **`playwright`** package. If `playwright` isn't
-  installed, Claude will offer to install it — one line:
+  installed, the agent will offer to install it — one line:
   ```bash
   pip install playwright && python3 -m playwright install chromium
   ```
@@ -33,7 +33,7 @@ Just ask, e.g.:
 - No API keys, no accounts, no external services.
 
 If Playwright can't be set up, the skill **falls back to read-only mode** —
-it can still fetch and read a page's content via Claude's built-in tools, it
+it can still fetch and read a page's content via the agent's built-in tools, it
 just can't click or fill. It never hard-fails on a missing browser.
 
 ## How it works (high level)
@@ -44,15 +44,15 @@ just can't click or fill. It never hard-fails on a missing browser.
 2. **Persistent profile.** Chromium runs against a saved profile under
    `~/.cursor/skills/automate-browser/.cache/profile`, so cookies and logins
    survive across runs. (This folder is never committed.)
-3. **Small-scripts loop.** Claude writes a short script to do one thing
+3. **Small-scripts loop.** The agent writes a short script to do one thing
    (navigate, discover, click, fill), looks at the result, and decides the
    next step — repeating until the task is done.
-4. **Discover then act.** Claude lists the page's interactive elements
+4. **Discover then act.** The agent lists the page's interactive elements
    (cheap), then clicks/fills using real Playwright locators.
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `references/browser-api.md` — the `browser.py` library + Playwright Page API.
 - `references/scraping.md` — scraping large datasets via network interception.
 - `handoff.md` — design decisions and how this differs from the original

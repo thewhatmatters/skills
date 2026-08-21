@@ -51,6 +51,6 @@ Python 3 makes the scans faster, but the skill works without it.
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `handoff.md` — design decisions and the "why".
 - `references/` — the curation filter and OKF authoring rules.

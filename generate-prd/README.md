@@ -8,7 +8,7 @@ Document you can hand to engineering, design, or your future self.
 
 - `prd-<slug>.md` — a markdown PRD with sections: **Problem · Solution · UX
   flow · Technical architecture · Data model · Pricing · Roadmap · Risks ·
-  Open questions**. Drops in cleanly anywhere Claude Code reads markdown.
+  Open questions**. Drops in cleanly anywhere the agent reads markdown.
 - `prd-<slug>.html` *(optional)* — a single self-contained HTML file (inline
   CSS, no external assets) for sharing or print.
 
@@ -54,7 +54,7 @@ Nothing required. Optional:
 
 ## Where to look next
 
-- `SKILL.md` — operating instructions Claude follows.
+- `SKILL.md` — operating instructions the agent follows.
 - `references/output-templates.md` — the JSON shape, markdown layout, and
   synthesis rules in detail.
 - `handoff.md` — design decisions and the "why".

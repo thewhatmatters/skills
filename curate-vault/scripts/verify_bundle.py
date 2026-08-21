@@ -45,7 +45,7 @@ def yaml_errors(fm, rel):
 DEFAULT_VAULT = os.path.expanduser(
     "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSDN"
 )
-# Tool files (CLAUDE.md, HANDOFF.md) are a documented producer deviation:
+# Tool files (AGENTS.md, HANDOFF.md) are a documented producer deviation:
 # infrastructure with externally-defined formats, exempt from the frontmatter
 # rule like reserved files. Their links are still checked. Compared
 # case-insensitively — macOS's filesystem preserves whatever casing the file
