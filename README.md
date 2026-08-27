@@ -25,6 +25,7 @@ and generated junk** — drop a new skill in and it's tracked.
 | [`polish-copy`](polish-copy/) | Luxury-bar product microcopy review. |
 | [`refine-skill`](refine-skill/) | Improve a skill from one real session transcript. |
 | [`remotion`](remotion/) | Remotion video workflow (defers API to `remotion-best-practices`). |
+| [`scaffold-studio`](scaffold-studio/) | Wire Motion (Cursor plugin) and CSS Studio into a web project. |
 | [`scan-trends`](scan-trends/) | Recency scan across Reddit, X, YouTube, HN, Polymarket, web. |
 | [`use-grid-system`](use-grid-system/) | Josef Müller-Brockmann modular grid. |
 | [`wire-vault`](wire-vault/) | Layer-2 vault pointer in the project's `AGENTS.md`. |
