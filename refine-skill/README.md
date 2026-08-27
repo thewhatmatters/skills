@@ -53,6 +53,6 @@ dir). `preflight.py` reports `HOOK_NOT_INSTALLED` when it isn't wired.
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 - `references/reflection-model.md` — the classification taxonomy, evidence signals,
   validation ladder, and the n=1 overfitting guard.

@@ -103,6 +103,7 @@ mode in one line.
 ## Conventions this skill follows
 
 - Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Dual-mode + degraded ladder (A3); probe-gated, no-monoculture (A7/A8): never
   impose Tailwind, never silently re-scale a project's `--spacing`.

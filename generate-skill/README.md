@@ -12,7 +12,7 @@ A new folder under `~/.cursor/skills/<name>/` (personal) or
 - `SKILL.md` — agent operating instructions, with YAML frontmatter validated
   against the **current** Cursor skills docs (no invented or non-Cursor fields).
 - `README.md` — plain-language explainer (house convention; this file is one).
-- `handoff.md` — a decision-log seed for recording the "why" as you build it.
+- `WHY.md` — a decision-log seed for recording the "why" as you build it.
 - `scripts/` — only if the skill needs them, pre-wired with `_env.py`,
   `preflight.py`, and (if it produces output) `report.py`.
 

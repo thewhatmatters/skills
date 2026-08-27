@@ -85,6 +85,7 @@ native file reads.
 ## Conventions this skill follows
 
 - Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.
 - Composition by reference (spec A8): curate-vault owns all vault writes
   and the vault preflight. Broader `AGENTS.md` authoring is the project's
   (or `/create-rule`); this skill manages only its marker block.

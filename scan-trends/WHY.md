@@ -1,4 +1,4 @@
-# scan-trends — Handoff & Skill Architecture
+# scan-trends — Why
 
 Living record of what scan-trends is, the reusable patterns it established, why
 decisions were made, and a rubric usable by a future **generate-skill** and
@@ -35,7 +35,7 @@ scripts/
   _env.py                    # shared key loader (NOT a source)
   preflight.py               # readiness check (NOT a source)
   report.py                  # JSON → self-contained results.html (NOT a source)
-handoff.md                   # this file
+WHY.md                       # this file
 ```
 Key store: `~/.cursor/skills/.env` and/or `~/.cursor/skills/.env` (the latter is canonical;
 `.env.example` is the committable template). `chmod 600`.

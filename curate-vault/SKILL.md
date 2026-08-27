@@ -179,6 +179,7 @@ action; wire-vault has its own consent gates. Skip under `--agent`.
 ## Conventions this skill follows
 
 - Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Keyless — no secrets, no network.
 - The vault's own OKF rules are mirrored at `<vault>/reference/okf-spec-v0.1.md`;

@@ -9,12 +9,12 @@ invites this: "Hack around with them. Make them your own."
 
 - Frontmatter rewritten to this house's `skill-architecture.md` conventions.
   `disable-model-invocation: true` was kept from the source — a deliberate
-  call, not a blind copy: see `handoff.md` for the reasoning. Per spec A14,
+  call, not a blind copy: see `WHY.md` for the reasoning. Per spec A14,
   because this skill is user-invoked its `description` is written for the
   human skill list (plain sentence, no quoted trigger-phrase block) rather
   than the trigger-rich style used for model-invoked skills — an early draft
   used the trigger-rich style regardless and was corrected after the
-  skill-auditor fan-out caught the mismatch (see `handoff.md`).
+  skill-auditor fan-out caught the mismatch (see `WHY.md`).
 - Cross-skill references changed from the source's slash-command style
   (`/codebase-design`, `/grilling`) to plain skill-name references (`the
   codebase-design skill`, `the grilling skill`), matching how skills in
@@ -27,7 +27,7 @@ invites this: "Hack around with them. Make them your own."
   terms, sharpening fuzzy language, cross-referencing code against the
   glossary) were dropped; only the passive "read/write CONTEXT.md and
   docs/adr/ opportunistically" behavior survives, inline in SKILL.md Step 3.
-  See `codebase-design/handoff.md` for when to revisit this.
+  See `codebase-design/WHY.md` for when to revisit this.
 - Added this NOTICE.md and a plain-language README.md (required by this
   house's spec, pattern A13; the upstream repo doesn't have per-skill
   READMEs).

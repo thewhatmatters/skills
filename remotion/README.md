@@ -29,7 +29,7 @@ Say something like "make a Remotion video from this script", "animate this in Re
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 - `references/compose.md` — how it coordinates with the official Remotion skill (+ no-monoculture).
 - `references/guardrails.md` — core concepts + the non-negotiable deterministic-render rules.
 - `references/workflow.md` — the script → scenes → render → composite pipeline.

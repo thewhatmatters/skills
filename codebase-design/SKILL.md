@@ -170,3 +170,8 @@ Good interfaces make testing natural:
   [references/DESIGN-IT-TWICE.md](references/DESIGN-IT-TWICE.md): spin up
   parallel sub-agents to design the interface several radically different
   ways, then compare on depth, locality, and seam placement.
+
+## Conventions this skill follows
+
+- Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

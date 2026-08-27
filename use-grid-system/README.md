@@ -54,7 +54,7 @@ This skill is the *grid spine*: execution lives in `build-ui`, aesthetic taste i
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 - `references/` — the canon (`canon.md`), the Tailwind token/utility layer
   (`tailwind.md`), the two profiles (`profiles.md`), optical alignment
   (`optical-alignment.md`), verification (`verification.md`), the non-Tailwind

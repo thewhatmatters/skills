@@ -292,3 +292,4 @@ open questions: 4 items
   vault destination's OKF wiring (`research/index.md`, `/log.md`), which is
   part of landing the article conformantly and is covered by the user's
   explicit destination choice in Step 7.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

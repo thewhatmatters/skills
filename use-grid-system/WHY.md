@@ -1,4 +1,4 @@
-# use-grid-system — Handoff & decisions
+# use-grid-system — Why
 
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).

@@ -53,7 +53,7 @@ a *live page* does not survive between separate processes. Implications:
 - Log in **once**; later runs are already authenticated → re-`goto` is cheap.
 - A multi-step interaction on one live page must happen inside **one script**.
 - This is a deliberate simplification over the Amp skill's server (simpler,
-  more robust; see `handoff.md`).
+  more robust; see `WHY.md`).
 
 ## Operating: the small-scripts loop
 
@@ -98,7 +98,7 @@ EOF
 2. **Act** with standard Playwright locators — `page.get_by_role(...)`,
    `page.get_by_text(...)`, `page.locator("css")`. (We use real locators
    rather than the original's custom snapshot refs — more robust; see
-   `handoff.md`.)
+   `WHY.md`.)
 3. **Verify** by printing `page.url` / `page.title()` or re-extracting.
 
 `page` is a standard Playwright `Page` — full API in
@@ -148,3 +148,4 @@ just need to *understand* a page — screenshots cost vision tokens.
   env override; no hard-coded external install path.
 - No secrets: browser automation needs none here; no `_env.py`.
 - Self-contained: everything lives under `~/.cursor/skills/automate-browser/`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

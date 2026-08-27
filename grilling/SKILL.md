@@ -25,3 +25,8 @@ understanding.
 Adapted from Matt Pocock's `grilling` skill
 ([mattpocock/skills](https://github.com/mattpocock/skills), MIT) — see
 `NOTICE.md` in this directory.
+
+## Conventions this skill follows
+
+- Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

@@ -1,4 +1,4 @@
-# deep-research — Handoff & decisions
+# deep-research — Why
 
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).

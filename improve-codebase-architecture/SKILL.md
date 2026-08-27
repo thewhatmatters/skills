@@ -167,3 +167,8 @@ an explicit offer before it's written.
 - **Want to explore alternative interfaces for the deepened module?** Run
   the `codebase-design` skill and use its design-it-twice parallel
   sub-agent pattern (`references/DESIGN-IT-TWICE.md` there).
+
+## Conventions this skill follows
+
+- Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

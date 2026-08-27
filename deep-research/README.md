@@ -88,4 +88,4 @@ and Exa's semantic search. The skill never blocks on missing keys.
 - `references/research-templates.md` — the 8 type templates (one section
   structure per research type).
 - `references/synthesis-rules.md` — citation discipline and honesty rules.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".

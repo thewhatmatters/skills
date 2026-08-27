@@ -8,7 +8,7 @@ script exists for SCRIPTS mode where Tavily/Exa keys give better ranking.
 Keys are loaded via the shared `_env.py` convention (spec A5):
   TAVILY_API_KEY — sent in `Authorization: Bearer <key>` header.
   EXA_API_KEY    — sent in `x-api-key: <key>` header.
-Neither key is ever logged or written to stdout (spec A5; scan-trends handoff §3).
+Neither key is ever logged or written to stdout (spec A5; scan-trends WHY.md §3).
 
 USAGE
     python3 scripts/search.py "<query>" [--provider=tavily|exa|auto] \\

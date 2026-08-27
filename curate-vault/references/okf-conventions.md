@@ -45,7 +45,7 @@ Conventional headings when applicable: # Schema, # Examples, # Citations.
 case-insensitively) are treated like reserved files (no OKF
 frontmatter required, never concepts, excluded from the knowledge inventory).
 Their links are still verified. A strict external OKF consumer may flag them;
-accepted trade-off for a personal vault, recorded in the handoff decision log.
+accepted trade-off for a personal vault, recorded in this skill's WHY.md.
 
 ## Reserved files
 

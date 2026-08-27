@@ -53,26 +53,14 @@ automate-browser/tmp/
 /design-md
 /transitions-dev
 
-# --- Session handoff (per-machine; rebuilt each session via /handoff) --------
-# HANDOFF.md is the resume-ready session-state file the handoff skill writes;
-# .claude/current-task.txt is the one-line label the status line reads;
-# .claude/handoff-archive/ is the PreCompact hook's rolling snapshot history
-# (machine-local debug history, not curated memory — that lives in
-# ~/.claude/projects/<encoded>/memory/ via the typed-memory system).
-# All session-local and don't belong in the shared repo.
-# Unanchored (**/) on purpose: sessions sometimes run with cwd inside an
-# individual skill folder (e.g. skills/curate-vault/), not just skills/
-# itself, so these must match at any depth or they silently stop applying.
+# --- Leftover session HANDOFF.md (uppercase) --------------------------------
+# The old session-handoff skill wrote HANDOFF.md; ignore it if one reappears.
+# Per-skill decision logs are WHY.md and do not collide on case-insensitive
+# filesystems, so no un-ignore is needed. Unanchored (**/) so it matches
+# when cwd is inside an individual skill folder.
 **/HANDOFF.md
 **/.claude/current-task.txt
 **/.claude/handoff-archive/
-# core.ignorecase=true (macOS) makes **/HANDOFF.md also swallow the
-# lowercase per-skill DECISION LOGS (skills/<name>/handoff.md — tracked,
-# living docs). Un-ignore those explicitly. Residual risk accepted: a
-# session HANDOFF.md written inside a skill dir becomes trackable — but on
-# a case-insensitive filesystem it would be the same file as handoff.md
-# anyway, so the real hazard there is content clobber, not tracking.
-!*/handoff.md
 
 # macOS
 .DS_Store

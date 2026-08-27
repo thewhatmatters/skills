@@ -1,4 +1,4 @@
-# Handoff — improve-codebase-architecture
+# Why — improve-codebase-architecture
 
 _Created 2026-07-10_
 
@@ -32,7 +32,7 @@ scratch. Sibling skills from the same pass: `codebase-design`, `grilling`.
   blocks or before/after tables, and writes no file.
 - **Vendor + adapt**, chosen by the user over a from-scratch simplified
   version or a full 4-skill port (see the three-option `AskUserQuestion` in
-  this session). Rationale in `codebase-design/handoff.md`.
+  this session). Rationale in `codebase-design/WHY.md`.
 - **`disable-model-invocation: true`, kept from the source.** This is a
   deliberate first real use of that field in this skill suite — as of this
   session, every other skill here is model-invoked (confirmed via grep: no
@@ -47,7 +47,7 @@ scratch. Sibling skills from the same pass: `codebase-design`, `grilling`.
   session's handoff for `announce-conan-release` / `wire-vault` /
   `automate-browser` — those are separate, still-open decisions.
 - **`domain-modeling` not ported as a full skill** — see
-  `codebase-design/handoff.md` and this skill's `NOTICE.md`. Only the two
+  `codebase-design/WHY.md` and this skill's `NOTICE.md`. Only the two
   format references it needs (`CONTEXT-FORMAT.md`, `ADR-FORMAT.md`) were
   copied in.
 - **Cross-skill references use plain names** ("the `codebase-design`

@@ -62,6 +62,7 @@ Run `python3 --version`. python3 + `scripts/` present → **SCRIPTS**. Otherwise
 ## Conventions this skill follows
 
 - Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.
 - **Read-only is the contract**: no file inside the vault is ever created, modified, or deleted by this skill — that includes "harmless" fixes. All writes belong to curate-vault's gated flow (composition by reference, spec A8).
 - Scripts: JSON stdout / diagnostics stderr / graceful failure, never hang (spec A4).
 - State (snapshots) lives in `~/.cursor/cache/audit-vault/` — gitignored, outside the vault, safe to delete (first run after deletion simply has no deltas).

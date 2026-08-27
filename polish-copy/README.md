@@ -31,5 +31,5 @@ Say "polish the copy", "review the microcopy on the settings page", "fix these e
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 - `references/` — `floor.md` (the universal rules), `voice-pass.md` (the voice attribute set, audit method, bootstrap recipe, luxury baseline).

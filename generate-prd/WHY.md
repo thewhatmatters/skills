@@ -1,4 +1,4 @@
-# generate-prd — Handoff & decisions
+# generate-prd — Why
 
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).

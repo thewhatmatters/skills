@@ -85,7 +85,7 @@ NATIVE: skip reconcile (no "live" to compare).
 
 Required (any not supplied via flags):
 - **name** — kebab-case, ≤64 chars, matches `^[a-z][a-z0-9-]*$`.
-- **one-line "what it does"** — used in `README.md` and the handoff seed.
+- **one-line "what it does"** — used in `README.md` and the WHY.md seed.
 - **trigger mode** (spec A14) — model-invoked (default) or user-invoked
   (`disable-model-invocation: true`). Heuristic: side-effectful / outward /
   timing-sensitive skills (deploy, announce, send) → user-invoked.
@@ -117,7 +117,7 @@ Files created under `<out>/<name>/`:
 
 - `SKILL.md` — frontmatter validated against the live field set; lean body.
 - `README.md` — plain-language (spec A13 — audited, required).
-- `handoff.md` — decision-log seed (rubric checklist + decision log placeholder).
+- `WHY.md` — decision-log seed (rubric checklist + decision log placeholder).
 - `references/` — empty dir, ready for progressive disclosure (spec A1).
 - `DESIGN.md` — visual-identity spec (google-labs design.md format) — written
   **only** when the skill emits styled visual output (`needs_design`); most
@@ -167,3 +167,5 @@ This skill does **not** run git.
 - Live docs from `cursor.com/docs/skills.md` are pinned in `scripts/docs.py`.
   Changes upstream require either `--refresh-docs` at the user's request or a
   `reconcile.py` drift review — never silently re-aligned (DESIGN.md §5).
+
+- **`DESIGN.md` / `WHY.md`:** this skill's decision record is `DESIGN.md`. Read it before changing the generator's design. After a run that locks a non-obvious choice, append a dated line there. Skip routine runs.

@@ -4,7 +4,7 @@ Status: **built** — living record. Last updated 2026-05-24.
 Decisions locked with the user are marked ✅. Open items in §9; see §11 for the
 as-built record and self-audit result.
 
-This is the counterpart named in `scan-trends/handoff.md` §intro:
+This is the counterpart named in `scan-trends/WHY.md` §intro:
 *"a rubric usable by a future generate-skill and audit-skill."* `audit-skill`
 exists; this completes the pair.
 
@@ -53,7 +53,7 @@ prose markdown table. Freshness is best-effort (`docs.py` + snapshot).
 generate-skill/
   SKILL.md                       # lean core; YAML frontmatter; trigger-rich description
   README.md                      # plain-language "what this is / how it works" (house convention)
-  DESIGN.md                      # this file (living design record, like scan-trends/handoff.md)
+  DESIGN.md                      # this file (living design record, like scan-trends/WHY.md)
   references/
     generation-recipe.md         # the step-by-step scaffold the model follows (progressive disclosure)
     cursor-docs-snapshot/        # committed offline fallback (NATIVE path)
@@ -121,7 +121,7 @@ spec changes — same reason the handoff added Recoverable Setup Gates.
    `reconcile.py`; surface drift per §5.
 3. **Inputs** — skill name (kebab, ≤64), trigger-rich description, needs-scripts?,
    needs-secrets?, external deps/sources. `--agent` takes documented defaults.
-4. **Scaffold** against the 10 reusable patterns in `handoff.md` §3:
+4. **Scaffold** against the 10 reusable patterns in `WHY.md` §3:
    - `SKILL.md` — frontmatter validated against the **live** field list from
      `docs.py` (never invent fields not in upstream docs); lean body.
    - `references/` — progressive disclosure for bulky/occasional detail.
@@ -131,7 +131,7 @@ spec changes — same reason the handoff added Recoverable Setup Gates.
      graceful degrade, `--agent`/`--out`/`--days` where applicable.
    - `README.md` — plain-language, high-level "what this is / how it works"
      (house convention; every skill gets one — see §8a).
-   - seed a `handoff.md` (decision log + audit rubric stub) for the new skill.
+   - seed a `WHY.md` (decision log + audit rubric stub) for the new skill.
    - print the exact `!/<skill>/` `.gitignore` opt-in line (you run git).
 5. **Self-audit (✅ report-only, never blocks)** — run `audit-skill` on the
    output and attach the full report (severity-grouped issues + what's working).
@@ -170,7 +170,7 @@ generator should *generate* skills that themselves reuse these, not reinvent.
 A `README.md` per skill folder, written in plain language for a reader who is
 *not* deep in the code: one-line "what it is", "what you get", "how to run",
 "what it needs", and a short "how it works" — distinct from `SKILL.md` (the agent's
-operating instructions) and `handoff.md`/`DESIGN.md` (the why/decision record).
+operating instructions) and `WHY.md`/`DESIGN.md` (the why/decision record).
 
 Applied now to the existing skills (`scan-trends/README.md`,
 `audit-skill/README.md`) and emitted for every generated skill (§6 step 4).
@@ -189,7 +189,7 @@ listed as decision (5) below rather than made unilaterally.
 3. ✅ **Fetch mechanism** — stdlib `urllib` in SCRIPTS, `WebFetch` in NATIVE
    (§4); keyless, zero added dependency.
 4. ✅ **DESIGN.md long-term** — kept at `generate-skill/DESIGN.md`, committed
-   with the skill like scan-trends's `handoff.md`.
+   with the skill like scan-trends's `WHY.md`.
 5. ✅ **README convention enforced** — added pattern A13 + a §B Structure
    rubric line to `skill-architecture.md` (commit `cc1be62`); `audit-skill`
    now checks it. Not advisory.

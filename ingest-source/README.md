@@ -30,5 +30,5 @@
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why" (including what carried over from summarize-yt).
+- `WHY.md` — design decisions and the "why" (including what carried over from summarize-yt).
 - `references/` — the YouTube tier ladder, web/PDF/image acquisition, summary templates, and the persistence contract.

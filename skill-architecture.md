@@ -4,8 +4,9 @@ The single source of truth for how a "research/automation" skill in this family
 is built. **`audit-skill` checks against this; `generate-skill` scaffolds to
 this.** Edit here once; both tools follow.
 
-Reference implementation: `scan-trends`. Last updated: 2026-08-20 (Cursor
-frontmatter is the upstream field list; fields outside the Cursor set are forbidden).
+Reference implementation: `scan-trends`. Last updated: 2026-08-21 (Cursor
+frontmatter is the upstream field list; fields outside the Cursor set are forbidden;
+per-skill decision log is `WHY.md`).
 
 ---
 
@@ -66,11 +67,17 @@ deviations should be deliberate, not accidental.
     failure when the optimistic path is absent.
 12. **Honesty & memory discipline.** Distinguish code-verified vs live-verified;
     disclose partial/degraded runs; never write secret values to memory/logs;
-    record non-obvious decisions so they are not re-litigated.
+    record non-obvious decisions so they are not re-litigated. The skill's
+    **`WHY.md`** (or `DESIGN.md` when that is the decision record) is that
+    log. **Read** it before changing the skill's design (trigger mode, degrade
+    ladder, report-only vs fix). **Append** a dated line after a run that
+    locks a choice — something that went unusually well *or* badly, for a
+    reason not already in `SKILL.md`. Skip routine green runs; do not dump
+    session state. Cross-project lessons still go to `/curate-vault`.
 13. **Plain-language README.** A `README.md` in the skill folder explains, for a
     non-expert reader, what it is / what you get / how to run it / what it needs
     / how it works — distinct from SKILL.md (model instructions) and the
-    decision record (handoff/DESIGN). Every skill has one.
+    decision record (`WHY.md` / visual `DESIGN.md`). Every skill has one.
 14. **Deliberate trigger mode.** Model-invoked vs user-invoked is a design
     decision, not a default. Model-invoked (the default) puts the description
     in every session's context — pay that **context load** only when the agent
@@ -153,7 +160,8 @@ Each item is PASS / FAIL / N/A with file:line evidence.
 
 **Hygiene**
 - [ ] No secret values in code, logs, memory, or committed files.
-- [ ] Non-obvious decisions recorded (decision log / memory).
+- [ ] Non-obvious decisions recorded in `WHY.md` (dated choices with a why;
+      not session state).
 - [ ] Docs match reality (no stale references to removed features/sources).
 - [ ] Steering text survives the **deletion test** — no no-op paragraphs
       (text whose removal would not change agent behavior) and no sediment

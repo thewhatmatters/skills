@@ -27,5 +27,5 @@ Nothing to set up — Python standard library only. It reuses curate-vault's `ve
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 - `references/report-template.md` — the report structure.

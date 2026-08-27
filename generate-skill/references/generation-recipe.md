@@ -44,7 +44,7 @@ must be emitted verbatim into the generated script.
 | `needs_scripts` | flag / inferred | bool |
 | `needs_secrets` | interactive | bool (false if `needs_scripts` false) |
 | `needs_design` | inferred / interactive | bool — true iff the skill emits **styled visual output** (see criterion below) |
-| `deps_notes` | interactive (optional) | free text — used in handoff seed |
+| `deps_notes` | interactive (optional) | free text — used in WHY.md seed |
 | `out_dir` | `--out=` (default `~/.cursor/skills` personal, or `<cwd>/.cursor/skills` if `--location=project`) | parent for `<name>/` |
 | `live_fields` | docs.py JSON Step 2 | set of valid frontmatter field names |
 | `docs_version` | docs.py JSON Step 2 | fetch date or `"snapshot"` |
@@ -140,6 +140,7 @@ paragraphs of instruction; their adoption is verifiable in reasoning traces
 
 - Spec is `~/.cursor/skills/skill-architecture.md`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.
 <<SECRETS_NOTE_OR_BLANK>>
 ```
 
@@ -171,16 +172,16 @@ external dependencies named once.)
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 <<REFERENCES_LINK_OR_BLANK>>
 ```
 
-### 3. `<out_dir>/<name>/handoff.md`
+### 3. `<out_dir>/<name>/WHY.md`
 
 Seed only — the user expands it as decisions are made.
 
 ```
-# <<NAME>> — Handoff & decisions
+# <<NAME>> — Why
 
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).
@@ -216,7 +217,7 @@ Empty file so the directory exists for future progressive-disclosure content.
 Copy verbatim from this skill's own scripts/ as templates:
 
 - `_env.py` — copy `generate-skill/scripts/_env.py` byte-for-byte
-  (scan-trends handoff §5: flat name, do not rename) **ONLY if `needs_secrets`**.
+  (scan-trends WHY.md §5: flat name, do not rename) **ONLY if `needs_secrets`**.
   This file is purely a key-loader; shipping it in a keyless skill is dead
   code that confuses the auditor and future readers.
 - `preflight.py` — write the minimal skeleton below, then the user extends
@@ -358,11 +359,11 @@ components:
 
 Reference implementation to mirror: `render-html/DESIGN.md`. Keep the canonical
 tokens here; if the skill's scripts are pure-stdlib they may hard-code the
-values to match (no YAML parser) — note that in the skill's handoff.
+values to match (no YAML parser) — note that in the skill's WHY.md.
 
 ## Secrets — shared `.env` convention (when `needs_secrets`)
 
-Do NOT create a per-skill `.env.example`. The convention (scan-trends handoff
+Do NOT create a per-skill `.env.example`. The convention (scan-trends WHY.md
 §3.3) is: edit the shared `~/.cursor/skills/.env.example` and add a block:
 
 ```
@@ -386,7 +387,7 @@ created tree:
   <out_dir>/<<NAME>>/
     SKILL.md
     README.md
-    handoff.md
+    WHY.md
     references/.gitkeep
     [DESIGN.md if needs_design]
     [scripts/ if needs_scripts]

@@ -37,9 +37,11 @@ spec to check against. Do not audit from memory.
 ## Step 2: Inventory the target
 
 Enumerate and read: `SKILL.md` (frontmatter, length, whether bulky detail is
-offloaded to `references/`), every file in `scripts/`, `references/`, and any
-`.env.example`. Note what each script does from its docstring + code. Gather
-real evidence — open files; do not assume.
+offloaded to `references/`), `WHY.md` if present (recorded design choices —
+do not re-litigate them as findings unless the code has drifted), every file
+in `scripts/`, `references/`, and any `.env.example`. Note what each script
+does from its docstring + code. Gather real evidence — open files; do not
+assume.
 
 ## Step 3: Evaluate every rubric item
 
@@ -121,3 +123,8 @@ future generator.
 
 `scripts/` is unused for the structural audit (script-free by design). An old
 `--triggers` harness may still sit in `scripts/`; do not run it.
+
+**`WHY.md`:** read before changing this skill's design. After a run that
+locks a non-obvious choice (went unusually well or badly, reason not already
+in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons
+go to `/curate-vault`.

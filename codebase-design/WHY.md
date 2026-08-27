@@ -1,4 +1,4 @@
-# Handoff — codebase-design
+# Why — codebase-design
 
 _Created 2026-07-10_
 
@@ -44,7 +44,7 @@ frontmatter YAML fold issue (description had an unquoted `: ` mid-line —
 parsed fine by the lenient harness reader but failed strict
 `yaml.safe_load`; folded with `>-`), and a LOW sediment duplication (the
 "Boundary" avoid-note appeared verbatim in both the glossary and Rejected
-framings; kept only in the glossary). See `improve-codebase-architecture/handoff.md`
+framings; kept only in the glossary). See `improve-codebase-architecture/WHY.md`
 for the fuller audit summary across all three vendored skills.
 
 ## Not done

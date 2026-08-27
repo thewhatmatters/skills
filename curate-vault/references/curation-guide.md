@@ -19,7 +19,7 @@ Do NOT save:
 - Anything derivable from the repo: code structure, what functions do, git
   history, AGENTS.md content, test results.
 - Session state: open threads, half-done work, "next steps" — that is
-  `handoff` territory.
+  Cursor conversation territory, not the vault.
 - Secrets, tokens, or key values — ever (spec A12).
 - Speculation. Only things that were actually established/learned.
 

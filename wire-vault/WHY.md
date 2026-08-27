@@ -1,4 +1,4 @@
-# wire-vault — Handoff & decisions
+# wire-vault — Why
 
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12).

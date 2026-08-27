@@ -35,8 +35,11 @@ elsewhere; reference it.
 - **`scripts/`** — stdlib-first Python. Each script: one concern, a docstring stating its
   I/O contract, **JSON to stdout / diagnostics to stderr**, graceful failure, never hangs.
   `audit-skill` has no scripts (it reads the spec and reports).
-- **`README.md`** (plain-language, A13) and **`handoff.md`** (decision log + rubric
-  coverage — the "why").
+- **`README.md`** (plain-language, A13) and **`WHY.md`** (decision log — dated
+  choices with a why; not session state). When invoking or editing a skill,
+  read its `WHY.md` before changing design; append a dated line after a run
+  that locks a non-obvious choice (unusually well or badly). Skip routine
+  runs. `generate-skill` uses `DESIGN.md` for the same job.
 - **`DESIGN.md`** — *only* for skills that emit **styled visual output** (e.g.
   `render-html`). Uses the [google-labs design.md](https://github.com/google-labs-code/design.md)
   format (YAML design tokens + rationale). Most skills have none. NB: a skill's own

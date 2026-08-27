@@ -201,3 +201,8 @@ Per-source failure→action tables live in
 
 **Both modes:** if fewer than 3 sources return data, halt and report to the user
 before synthesizing.
+
+## Conventions this skill follows
+
+- Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

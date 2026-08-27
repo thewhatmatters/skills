@@ -37,5 +37,5 @@ Layer 1 (vault-before-web) lives in Cursor User Rules, not in this file.
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 - `references/marker-block.md` — the block that gets inserted.

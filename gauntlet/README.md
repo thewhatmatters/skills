@@ -45,5 +45,5 @@ the gauntlet against the PRD".
 ## Where to look next
 
 - `SKILL.md` — operating instructions the agent follows.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".
 - `references/critic-protocol.md` — packet templates, findings schema, rubric shapes.

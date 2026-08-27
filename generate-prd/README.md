@@ -57,4 +57,4 @@ Nothing required. Optional:
 - `SKILL.md` — operating instructions the agent follows.
 - `references/output-templates.md` — the JSON shape, markdown layout, and
   synthesis rules in detail.
-- `handoff.md` — design decisions and the "why".
+- `WHY.md` — design decisions and the "why".

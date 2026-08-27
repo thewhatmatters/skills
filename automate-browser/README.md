@@ -55,5 +55,5 @@ just can't click or fill. It never hard-fails on a missing browser.
 - `SKILL.md` — operating instructions the agent follows.
 - `references/browser-api.md` — the `browser.py` library + Playwright Page API.
 - `references/scraping.md` — scraping large datasets via network interception.
-- `handoff.md` — design decisions and how this differs from the original
+- `WHY.md` — design decisions and how this differs from the original
   Amp dev-browser skill.

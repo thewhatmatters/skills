@@ -91,5 +91,6 @@ final diff for human review; NEVER commit, push, or merge.
 ## Conventions this skill follows
 
 - Spec is `~/.cursor/skills/skill-architecture.md`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.
 - Scripts: JSON stdout / diagnostics stderr / graceful failure (spec A4).
 - Keyless — the critic CLI carries its own auth; this skill never handles or logs credentials.

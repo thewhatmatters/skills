@@ -126,3 +126,4 @@ sections: problem ✓  solution ✓  ux_flow ✓  technical_architecture ✓
 - Honest fallbacks: missing sections labelled, never invented (spec A12).
 - No clobber: never overwrite an existing `prd-<slug>.md` (spec A11).
 - This skill doesn't run git; it doesn't write outside `<out>`.
+- **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

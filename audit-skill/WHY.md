@@ -1,4 +1,4 @@
-# audit-skill — Handoff & decisions
+# audit-skill — Why
 
 Living record of what this skill is, the decisions behind it, and any
 non-obvious constraints (spec A12). Backfilled 2026-05-21 (the skill predates the
