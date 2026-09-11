@@ -53,8 +53,8 @@ index of the tracked skills. House conventions for this collection live in
   bundled/npx/default`.
 - **Composition by reference, not import.** Skills mention each other and run each
   other's documented entry points; they do not import across skill dirs. E.g.
-  `deep-research` owns recency (`--recent` / `--days`); vault writes go
-  through `curate-vault` only.
+  `deep-research` owns recency (`--recent` / `--days`); `ingest-source` hands
+  vault writes to `curate-vault`.
 
 ## Secrets
 
@@ -66,7 +66,7 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
 
 ## House conventions
 
-- **Naming is verb-noun** for action skills (`curate-vault`, `automate-browser`); a brandable **noun** is
+- **Naming is verb-noun** for action skills (`curate-vault`, `ingest-source`); a brandable **noun** is
   reserved for named engines/tools (`deep-research`). Match this when adding skills.
 - **Commit-by-default.** `.gitignore` tracks everything under the repo *except* secrets
   and generated junk (`.env`, `**/settings.local.json`, `**/.cache/`, `__pycache__/`,

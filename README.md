@@ -18,6 +18,7 @@ collection goes through `/curate-vault` into the OKF vault shelf
 | [`codebase-design`](codebase-design/) | Deep-module vocabulary; `--improve` scans for shallow modules. |
 | [`curate-vault`](curate-vault/) | Gated harvest into the OKF vault; `--audit` / `--groom` / `--wire`. |
 | [`deep-research`](deep-research/) | Multi-pass cited research, including recency (`--recent` / `--days`). |
+| [`ingest-source`](ingest-source/) | YouTube / web / PDF / image → `docs/sources/` (+ optional vault). |
 | [`use-grid-system`](use-grid-system/) | Josef Müller-Brockmann modular grid. |
 
 ## External skills (composed, not vendored)

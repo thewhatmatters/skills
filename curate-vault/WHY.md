@@ -58,8 +58,9 @@ deliberate deviations:
   `<vault>/reference/` is reserved for format ground truth (the OKF spec
   mirror) and must not receive new captures. Path recommendations at the HITL
   gate should prefer existing topics before inventing new ones.
-- 2026-09-11: **`ingest-source` retired.** External captures are summarized
-  in-session, then this skill's gate. No pre-drafted ingest pipeline.
+- 2026-09-11: **`ingest-source` restored** (still on the laptop; GitHub
+  matches). Vault-destined captures still hand this skill a pre-drafted
+  `type: Reference` candidate.
 - 2026-07-02: skill created as a **separate skill** rather than an extension
   of `handoff` — different lifecycles (state capture vs knowledge curation),
   triggering clarity, and handoff must stay fast at the context limit.
@@ -128,7 +129,7 @@ Secrets/env items are N/A (keyless, no network).
 
 ## 6. Notes
 
-Composes with: `deep-research` (optional vault destination). There is no
-`ingest-source`. Health is `--audit` on this skill, not a sibling. The vault's own format
+Composes with: `ingest-source` (external sources → vault), `deep-research`
+(optional vault destination). Health is `--audit` on this skill, not a sibling. The vault's own format
 documentation is the OKF wiki inside the vault itself, including the mirrored
 spec at `reference/okf-spec-v0.1.md`.
