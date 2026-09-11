@@ -1,6 +1,14 @@
 ---
 name: deep-research
-description: Conduct deep, structured research on any topic — markets, products, features, competitors, problems, industries, regulations, or opportunities. Trigger whenever the user wants to research, explore, investigate, analyze, or understand something. This includes entering new markets, evaluating products or services, exploring features, solving business problems, competitive landscapes, regulatory research, or any "I need to understand X" scenario. Also trigger for "look into", "dig into", "explore whether", "map out the landscape", "what are the options for X", "how does Y work in practice". Trigger aggressively — if there's research intent, use this skill. Covers market research, competitive analysis, feature exploration, regulatory deep-dives, product evaluation, problem-solving, opportunity assessment, landscape mapping. Outputs a structured markdown report with inline citations (always) and a self-contained HTML version (optional). Composes with /scan-trends when the question is about recent discussion specifically.
+description: >-
+  Conduct deep, structured research on any topic — markets, products,
+  features, competitors, problems, industries, regulations, or opportunities.
+  Trigger for research, explore, investigate, analyze, "look into", "dig
+  into", "map out the landscape", "what are the options for X". Also recent
+  discussion: "what are people saying about X", "what's trending", "X in the
+  last 7 days", "/scan-trends" (this skill's --recent / --days). Outputs a
+  cited markdown report (optional HTML). Recency pass: Reddit, HN, Polymarket
+  plus WebSearch for X/YouTube/web. NOT vault health (`/curate-vault --audit`).
 ---
 
 # deep-research
@@ -21,6 +29,8 @@ when needed (spec A1 — progressive disclosure):
 - [`references/agent-fanout.md`](references/agent-fanout.md) — parallel sweep:
   the subagent brief, the findings contract, rounds, and degradation rules.
   Loaded only when Step 4 chooses fan-out.
+- [`references/recency.md`](references/recency.md) — recent-discussion pass
+  (`--recent` / `--days`). Loaded only when Step 1 sets RECENCY.
 
 ## Flags
 
@@ -35,6 +45,8 @@ when needed (spec A1 — progressive disclosure):
 | `--transcript=PATH` | load the research question from a file instead of the current session |
 | `--agent` | non-interactive; never prompt; use documented defaults |
 | `--dry-run` | print the research plan + would-be file paths; write nothing. (See [`references/research-templates.md` §9](references/research-templates.md) for the exact dry-run shape.) |
+| `--recent` | force the recency pass (Reddit / HN / Polymarket + WebSearch for X/YouTube/web) |
+| `--days=N` | recency lookback in days (default 30). Implies the recency pass |
 
 ## Step 0 — Mode probe
 
@@ -64,10 +76,11 @@ prompt — classify the question along three axes:
 1. **Type.** Match to one of `market | competitive | feature | regulatory |
    product | problem | opportunity | landscape`. If `--type` was given, use
    it; otherwise infer from the question's keywords and structure.
-2. **Recency.** If the question is fundamentally about "what people are
-   saying lately" / "what's trending recently in X" — **suggest /scan-trends
-   instead** (interactive: offer *Use scan-trends / Stay here / Cancel*;
-   `--agent`: stay and note the recency angle in the report).
+2. **Recency.** If the question is about recent discussion / trending / last
+   N days, OR `--recent` / `--days` was given: set RECENCY=yes and
+   WINDOW=`--days` (default 30). Stay in this skill. Load
+   [`references/recency.md`](references/recency.md) at Step 4. `/scan-trends`
+   is this pass.
 3. **Single-fact lookup.** If the question is answerable in one sentence
    from general knowledge ("what year did Y ship?", "who founded Z?"), this
    skill is overkill. **Gracefully exit** with a one-line answer + a note:
@@ -145,13 +158,11 @@ URLs and quote/inference markers), never prose.
 Either way: collect results across all subqueries into one working set and
 deduplicate by URL.
 
-If recency is one of the angles (e.g. "recent regulatory changes"), **invoke
-`/scan-trends`** for that subquery instead of search — if it's available;
-otherwise run the recency angle as a date-bounded search in the main session
-and note the substitution. This is normal skill composition, not a
-cross-skill import. Always run it in the main session, never inside a
-subagent (its gates are interactive); in fan-out mode run it alongside the
-agents and merge its findings into the working set.
+If recency is on (the whole question, or one planned angle), **run the
+recency pass** from [`references/recency.md`](references/recency.md) in the
+main session and merge into the working set. Never run it inside a
+subagent. In fan-out mode, exclude recency angles from the agent list and
+run this pass alongside them.
 
 ## Step 5 — Focused follow-up (standard & exhaustive only)
 
@@ -272,8 +283,9 @@ open questions: 4 items
 
 ## Conventions this skill follows
 
-- **Composes with `/scan-trends`** for recency-focused subqueries; otherwise
-  uses bundled `search.py` (Tavily → Exa). No cross-skill imports.
+- **Recency is in-skill** (`references/recency.md`): Reddit, HN, Polymarket
+  scripts plus WebSearch for X/YouTube/web. `/scan-trends` routes here.
+  No X cookies, no YouTube Playwright.
 - **Fan-out is an execution strategy, not a new pipeline** — parallel
   gathering, serial synthesis. Subagents only search and distill to the
   findings contract in `references/agent-fanout.md`; classification,

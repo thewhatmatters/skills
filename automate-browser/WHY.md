@@ -71,7 +71,7 @@ Two problems motivated the rewrite:
   a screenshot when a page is unusual.
 
 ## 5. Audit rubric coverage
-See `skill-architecture.md` §B. Items expected to be N/A for this skill:
+House conventions live in `AGENTS.md`. Items expected to be N/A for this skill:
 - **A5 secrets / `_env`** — no API keys; browser automation needs none. N/A.
 - **A8 multi-source scope picker** — single tool (one browser); the scope
   controls are the extraction `--mode`, `--headless`, `--selector` flags.
@@ -84,5 +84,4 @@ See `skill-architecture.md` §B. Items expected to be N/A for this skill:
 Self-contained under `~/.cursor/skills/automate-browser/`. Profile lives at
 `.cache/profile` (gitignored). Browsers resolved from the shared ms-playwright
 cache (per-OS path, `PLAYWRIGHT_BROWSERS_PATH` override). Composes naturally
-with `/scan-trends` (which has its own authenticated-X browser path) and
-`/deep-research` (which can hand off interactive fetches here).
+with `/deep-research` (which can hand off interactive fetches here).

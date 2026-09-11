@@ -19,9 +19,7 @@ decorative.
 
 ## How to run
 
-Say "put this on a grid", "set up our grid system", "add a column + baseline
-grid", "Müller-Brockmann / Swiss layout", or run
-`/use-grid-system [path] --profile=app`. Example:
+Run `/use-grid-system` (slash-only — it will not auto-invoke). Example:
 `/use-grid-system src/app --profile=app --cols=12`.
 
 ## What it needs

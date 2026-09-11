@@ -12,16 +12,14 @@ synthesizes a cited markdown report — optionally with a self-contained HTML
 companion.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A15;
+This skill follows `AGENTS.md` patterns A1–A15;
 note here any deliberate deviations.
 
 Notable choices:
 
-- **Composes with `/scan-trends`, doesn't import it.** When the research
-  question has a recency angle ("what are people saying lately about X"),
-  the skill's Step 4 invokes `/scan-trends` via standard skill composition for
-  that subquery — no cross-skill Python imports. Each skill stays
-  self-contained. SKILL.md "Conventions" makes this explicit.
+- **Recency is in-skill (`--recent` / `--days`).** Folded from `scan-trends`
+  (2026-09-11). Reddit / HN / Polymarket stay as scripts; X and YouTube are
+  WebSearch only. Same markdown artifact. No sibling skill to compose with.
 - **Dual-mode is real, not aspirational.** SCRIPTS mode uses Tavily/Exa for
   quality; NATIVE mode uses the agent's built-in `WebSearch` + `WebFetch` and
   produces **the same artifact**. NATIVE is a real fallback, not a
@@ -29,12 +27,13 @@ Notable choices:
 - **`KEYS_MISSING` is a Recoverable Setup Gate but NEVER blocks.** The gate
   offers *Set keys / Proceed in NATIVE / Cancel*. Even if the user cancels
   the key prompt, the graceful-dead-end is automatic — NATIVE still works.
-  This contrasts with scan-trends's tighter coupling to specific providers.
+  This contrasts with the old scan-trends tighter coupling to specific
+  providers (X cookies, Tavily-or-bust).
 - **Anti-overtrigger guard at Step 1.** The description is intentionally
   aggressive on triggering (per the user's spec). Step 1 acts as the
   countermeasure: a quick scope assessment that gracefully exits for single-
-  fact lookups and suggests `/scan-trends` when the real question is about
-  recent discussion.
+  fact lookups and turns recent-discussion questions into the recency pass
+  instead of another skill.
 - **8 research-type templates, loaded on demand.** Section structures for
   market / competitive / feature / regulatory / product-eval / problem-
   solving / opportunity / landscape live in `references/research-
@@ -44,7 +43,7 @@ Notable choices:
   place so they apply uniformly across all 8 templates.
 - **No clobber on output filenames.** Re-running on the same slug writes
   `research-<slug>-2.md`, `-3.md`, … (spec A11 layered fallback applied to
-  filenames, same convention as `generate-prd`).
+  filenames).
 - **Fan-out sweep (2026-07-03) — parallel gathering, serial synthesis.** At
   `exhaustive` depth (opt-in at `standard` via `--parallel`) Step 4 fans the
   sweep out to parallel general-purpose subagents, one per angle, governed by
@@ -52,8 +51,8 @@ Notable choices:
   Why: wall-clock (angles run concurrently) and — the bigger win — context
   isolation: agents burn their own context reading pages and return only
   distilled cited findings, keeping the main context fresh for synthesis.
-  Hard boundaries: gap analysis and synthesis never delegate; recency angles
-  stay in the main session (`/scan-trends` gates are interactive); degrades
+  Hard boundaries: gap analysis and synthesis never delegate; recency
+  stays in the main session (`references/recency.md`); degrades
   to the serial sweep whenever the `Agent` tool is unavailable (spec A3).
   Rejected: Workflow-tool orchestration (heavier dependency than the task
   needs) and fan-out at `quick` (overhead exceeds the win). "Specialists"
@@ -66,6 +65,12 @@ Notable choices:
   documents on the dev machine's DDG endpoint.
 
 ## 3. Decision log
+
+- **2026-09-11 — folded `scan-trends` into this skill.** Recency is
+  `--recent` / `--days` plus `references/recency.md`. Moved
+  `reddit.py` / `hackernews.py` / `polymarket.py`. Dropped X cookie
+  Playwright, YouTube Playwright, and the trends HTML report. `/scan-trends`
+  in a prompt still means this pass. Catalog no longer lists a sibling.
 
 - **2026-07-15/16 — destination step + vault write path.** Step 7 resolves
   the report destination (`--out` verbatim → `--agent` cwd → ask: project
@@ -94,15 +99,13 @@ Notable choices:
 - 2026-07-03: added the parallel fan-out sweep — SKILL.md Steps 4–6 +
   `--parallel`/`--no-parallel` flags + new `references/agent-fanout.md`;
   README updated. No script changes (fan-out is model-orchestrated via the
-  Agent tool). Not yet exercised on a real run — `/refine-skill
-  deep-research` after the first parallel run.
+  Agent tool). Not yet exercised on a real run.
 
 ## 4. Known limitations / environment caveats
 - NATIVE mode (no python3 or no keys) produces the same artifact but search
   quality may differ — Tavily's ranking and Exa's semantic match are
   generally better than `WebSearch` for research-grade queries.
-- Search.py uses `requests` (already in the environment via scan-trends); no
-  new dependency added.
+- Search.py uses `requests` (already in the environment); no new dependency.
 - Trendscan handoff §6 documents a DDG 202-challenge on this dev machine —
   not relevant to deep-research, since we don't include a DDG path here.
 - Tavily/Exa rate limits apply to SCRIPTS mode; the skill doesn't enforce
@@ -113,7 +116,7 @@ Notable choices:
   follow-up round; accepted as the price of parallelism.
 
 ## 5. Audit rubric coverage
-See `skill-architecture.md` §B. Items expected to be N/A or special for
+House conventions live in `AGENTS.md`. Items expected to be N/A or special for
 this skill:
 
 - **A8 user scope control** — implemented via `--type`, `--depth`,
@@ -126,11 +129,7 @@ this skill:
   themselves; the skill prints a paste-ready block).
 
 ## 6. Notes
-Composes with `/scan-trends` for recency; uses Tavily/Exa via the shared
-`~/.cursor/skills/.env`; NATIVE fallback via built-in `WebSearch` keeps the
-skill working keyless.
-
-The shared `.env.example`'s `TAVILY_API_KEY` / `EXA_API_KEY` "Used by:"
-notes now read `scan-trends, deep-research` (updated 2026-05-19 as part of the
-post-audit cleanup). The skill itself never edits the shared file — this was
-a manual maintainer touch.
+Composes with Tavily/Exa via the shared `~/.cursor/skills/.env`; NATIVE
+fallback via built-in `WebSearch`. Recency is `--recent` / `--days`, not a
+sibling skill. The shared `.env.example` Tavily/Exa notes list
+`deep-research` only.

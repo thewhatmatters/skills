@@ -1,23 +1,25 @@
 # Notice
 
-This skill is adapted from `skills/engineering/codebase-design/` in
+This skill is adapted from `skills/engineering/codebase-design/` and
+`skills/engineering/improve-codebase-architecture/` in
 [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock,
 licensed under the MIT License. The repo's README explicitly invites this:
 "Hack around with them. Make them your own."
 
 ## What changed from the source
 
-- Frontmatter rewritten to this house's `skill-architecture.md` conventions
-  (trigger-rich `description` with example phrases; no other fields added).
-- `DEEPENING.md` and `DESIGN-IT-TWICE.md` moved under `references/` (this
-  house's progressive-disclosure convention — see `skill-architecture.md`
-  pattern A1); internal relative links updated accordingly. Content
-  otherwise unchanged.
-- Added this NOTICE.md and a plain-language README.md (required by this
-  house's spec, pattern A13; the upstream repo doesn't have per-skill
-  READMEs).
-- No content or behavioral changes to the glossary, principles, or
-  techniques themselves.
+- Frontmatter rewritten to this house's conventions (trigger-rich
+  `description`; no `disable-model-invocation` — the scan is `--improve`,
+  not a hidden skill).
+- `DEEPENING.md` and `DESIGN-IT-TWICE.md` under `references/`. The scan
+  workflow lives in `references/improve.md`; HTML/CONTEXT/ADR formats
+  moved here from the former `improve-codebase-architecture/` skill.
+- The upstream `/domain-modeling` skill was **not** ported. Only
+  `CONTEXT-FORMAT.md` and `ADR-FORMAT.md` were copied. Active
+  domain-modeling (challenging terms, etc.) was dropped.
+- `--improve` report defaults to markdown; `--html` is the original visual
+  report. No sibling-skill preflight (2026-09-11: `grilling` retired).
+- Added this NOTICE.md and a plain-language README.md.
 
 ## Original license
 

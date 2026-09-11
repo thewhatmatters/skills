@@ -7,64 +7,54 @@ Project instructions for Cursor (and any Agent Skills–compatible tool) working
 A personal collection of **skills**, version-controlled. Each top-level
 directory (except dotfiles) is one skill the agent can invoke. There is no app to build
 or deploy — the "product" is the skills themselves. `README.md` is the user-facing
-index of the tracked skills; `skill-architecture.md` is the canonical spec they're all
-built to.
-
-## Single source of truth
-
-`skill-architecture.md` defines how every skill in this family is built:
-**§A** 15 architecture patterns (A1–A15), **§B** the audit rubric, **§C** the severity
-guide. Two skills are bound to it:
-
-- **`generate-skill`** scaffolds new skills *to* the spec (then self-audits).
-- **`audit-skill`** checks existing skills *against* the spec.
-
-Edit `skill-architecture.md` once and both follow. Do not duplicate the rubric
-elsewhere; reference it.
+index of the tracked skills. House conventions for this collection live in
+**this file** — there is no separate architecture spec. Cursor's
+`/create-skill` covers SKILL.md shape; copy a sibling (`deep-research`,
+`curate-vault`) for house runtime (preflight, `--agent`, `_env`).
 
 ## Anatomy of a skill
 
 - **`SKILL.md`** — loaded on every invocation, so keep it **lean**. YAML frontmatter is
   `name` (must equal the directory) + a trigger-rich `description`. Conservative
-  frontmatter is `name` + `description` only; never invent a frontmatter field —
-  `generate-skill` still validates against the Cursor skills docs (`scripts/docs.py`,
-  `scripts/reconcile.py`) — allowed fields are spec A2. See `skill-architecture.md`.
-- **`references/`** — progressive disclosure (A1): bulky detail (templates, long tables,
-  syntax guides) lives here and is pulled in *only when SKILL.md routes the agent to it*. A
+  frontmatter is `name` + `description` only; never invent a frontmatter field.
+  Cursor fields: `name`, `description` (required), `disable-model-invocation`,
+  `paths`, `icon`, `color`, `metadata`. Do not emit Claude-Code extras
+  (`allowed-tools`, `arguments`, `argument-hint`, `when_to_use`, `context`,
+  `user-invocable`) or legacy `globs` (use `paths`).
+- **`references/`** — bulky detail (templates, long tables, syntax guides) lives
+  here and is pulled in *only when SKILL.md routes the agent to it*. A
   reference file the skill never points to is dead weight.
 - **`scripts/`** — stdlib-first Python. Each script: one concern, a docstring stating its
   I/O contract, **JSON to stdout / diagnostics to stderr**, graceful failure, never hangs.
-  `audit-skill` has no scripts (it reads the spec and reports).
-- **`README.md`** (plain-language, A13) and **`WHY.md`** (decision log — dated
+- **`README.md`** (plain-language) and **`WHY.md`** (decision log — dated
   choices with a why; not session state). When invoking or editing a skill,
   read its `WHY.md` before changing design; append a dated line after a run
   that locks a non-obvious choice (unusually well or badly). Skip routine
-  runs. `generate-skill` uses `DESIGN.md` for the same job.
+  runs. If a run reveals a gap (bad trigger, missing degrade, confusing
+  step), fix that skill in the same session — there is no `refine-skill`.
 - **`DESIGN.md`** — *only* for skills that emit **styled visual output** (e.g.
-  `render-html`). Uses the [google-labs design.md](https://github.com/google-labs-code/design.md)
-  format (YAML design tokens + rationale). Most skills have none. NB: a skill's own
-  architecture-decisions doc may *also* be named `DESIGN.md` (e.g. `generate-skill/DESIGN.md`)
-  — that is a different artifact from a visual-identity DESIGN.md.
+  a branded HTML page). Uses the [google-labs design.md](https://github.com/google-labs-code/design.md)
+  format (YAML design tokens + rationale). Most skills have none. A skill's own
+  architecture-decisions doc may *also* be named `DESIGN.md` — that is a
+  different artifact from a visual-identity DESIGN.md.
 
-## Cross-cutting patterns (read these in the spec before editing a skill)
+## Cross-cutting patterns (match a sibling; don't invent a parallel runtime)
 
-- **Dual-mode + degraded ladder (A3).** A Step-0 mode probe picks SCRIPTS (full,
+- **Dual-mode + degraded ladder.** A Step-0 mode probe picks SCRIPTS (full,
   usually needs keys/Node) vs NATIVE (built-in fallback). Every capability degrades
   rather than blocks — e.g. `deep-research` falls back to built-in WebSearch;
-  `draw-diagram` falls back fenced-block → mmdc → Kroki → fenced-block;
   `automate-browser` falls back to read-only WebFetch.
-- **Preflight (A6).** `scripts/preflight.py` emits a 4-state status
+- **Preflight.** `scripts/preflight.py` emits a 4-state status
   (`ready | degraded | gated | down`) with a gate id on stdout (JSON) + a human board on
   stderr. Only `down` stops a run.
-- **Setup gates (A7).** A recoverable gap (missing key, not logged in) is a *gate*, never
+- **Setup gates.** A recoverable gap (missing key, not logged in) is a *gate*, never
   a silent degrade; it always offers a fallback and never blocks under `--agent`.
-- **Layered binary resolution (A11).** Resolve external tools as `$OVERRIDE → on-PATH →
-  bundled/npx/default` (see `draw-diagram` `$MMDC_BIN → mmdc → npx`).
+- **Layered binary resolution.** Resolve external tools as `$OVERRIDE → on-PATH →
+  bundled/npx/default`.
 - **Composition by reference, not import.** Skills mention each other and run each
   other's documented entry points; they do not import across skill dirs. E.g.
-  `deep-research` composes with `scan-trends`; `deep-research`/`generate-prd` reference
-  `render-html` as an opt-in branded-HTML step; `draw-diagram` diagrams flow into
-  `render-html`/`generate-prd`.
+  `deep-research` owns recency (`--recent` / `--days`); vault writes go
+  through `curate-vault` only.
 
 ## Secrets
 
@@ -76,8 +66,7 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
 
 ## House conventions
 
-- **Naming is verb-noun** for action skills (`audit-skill`, `generate-skill`,
-  `generate-prd`, `render-html`, `draw-diagram`, `scan-trends`); a brandable **noun** is
+- **Naming is verb-noun** for action skills (`curate-vault`, `automate-browser`); a brandable **noun** is
   reserved for named engines/tools (`deep-research`). Match this when adding skills.
 - **Commit-by-default.** `.gitignore` tracks everything under the repo *except* secrets
   and generated junk (`.env`, `**/settings.local.json`, `**/.cache/`, `__pycache__/`,
@@ -89,10 +78,9 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
   the user's home dir or `/tmp`, never into this repo (it's commit-by-default).
 - **Reports default to markdown; HTML is opt-in.** A report-emitting skill presents
   markdown (in-conversation or as a `.md` file) by default and offers HTML behind a flag
-  (`--html`, or an explicit render step like `render-html`) — never HTML-only (e.g.
-  `improve-codebase-architecture` defaults to markdown, `--html` restores its visual
-  report; `deep-research`/`generate-prd` write md + optional HTML). `render-html` itself
-  is exempt (HTML is its product).
+  (`--html`, or an explicit render step) — never HTML-only (e.g.
+  `codebase-design --improve` defaults to markdown, `--html` restores its visual
+  report; `deep-research` writes md + optional HTML).
 - **Compose with external skills; don't vendor them.** When a well-maintained upstream
   skill (e.g. `shadcn` from `shadcn/ui`, `next-best-practices` from `vercel-labs/next-skills`)
   is installed via [skills.sh](https://www.skills.sh) — `npx skills add <repo> --skill <name>` —
@@ -112,15 +100,14 @@ in **headers only**, never URLs/logs. The shared `.env` is `chmod 600` + gitigno
 
 ## Commands
 
-- **Invoke a skill:** `/<name>` (e.g. `/render-html report.md`) or let it trigger on its
+- **Invoke a skill:** `/<name>` (e.g. `/curate-vault --audit`) or let it trigger on its
   description. Pass `--agent` for non-interactive (no prompts), `--out=PATH`, etc.
 - **Run a script directly:** `python3 <skill>/scripts/<name>.py …` — preflight first,
   e.g. `python3 deep-research/scripts/preflight.py --out=<dir>`.
 - **Check scripts compile (the de-facto test — there is no suite or CI):**
   `python3 -m py_compile <skill>/scripts/*.py`.
-- **New skill:** `/generate-skill --name=<kebab> …` → scaffolds against the spec and runs
-  `audit-skill` on the result.
-- **Audit a skill:** `/audit-skill <path-or-name>`.
+- **New skill:** add a top-level folder + `SKILL.md` following this file
+  (Cursor `/create-skill` is fine).
 
 ## Git workflow
 

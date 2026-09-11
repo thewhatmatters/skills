@@ -12,7 +12,7 @@ vault, behind a mandatory per-article human confirmation gate.
 
 ## 2. Reusable patterns (link to spec A1..A13)
 
-This skill follows `~/.cursor/skills/skill-architecture.md` patterns A1–A13;
+This skill follows `AGENTS.md` patterns A1–A13;
 deliberate deviations:
 
 - **A7b vs the mandatory HITL gate.** `--agent` cannot bypass the
@@ -39,7 +39,8 @@ deliberate deviations:
   under `projects/<name>/` and the current project's AGENTS.md lacks the
   marker block. Placed HERE, not in handoff — this skill is the one that
   knows where articles landed (compose-over-extend, again). Suggestion only;
-  interactive only.
+  interactive only. **Superseded 2026-09-11:** wire is `--wire` on this
+  skill; Step 8 offers to continue into Wire mode in the same run.
 - 2026-07-02: **Added Step 5 (Relate) + `--relink` maintenance mode.**
   `scan_vault.py` now emits each concept's outgoing links (backlinks
   computable by inversion). Policy: links are curation, not indexing —
@@ -57,10 +58,8 @@ deliberate deviations:
   `<vault>/reference/` is reserved for format ground truth (the OKF spec
   mirror) and must not receive new captures. Path recommendations at the HITL
   gate should prefer existing topics before inventing new ones.
-- 2026-07-02: `ingest-source` gained a destination gate (project/vault/both);
-  its vault path hands this skill a pre-drafted `type: Reference` candidate
-  for `<vault>/reference/`. Incoming pre-drafted candidates skip extraction
-  (Step 3) but still go through dedupe and the HITL gate.
+- 2026-09-11: **`ingest-source` retired.** External captures are summarized
+  in-session, then this skill's gate. No pre-drafted ingest pipeline.
 - 2026-07-02: skill created as a **separate skill** rather than an extension
   of `handoff` — different lifecycles (state capture vs knowledge curation),
   triggering clarity, and handoff must stay fast at the context limit.
@@ -72,6 +71,21 @@ deliberate deviations:
   keeps the skill dependency-free.
 - 2026-07-02: dedupe favors proposing an UPDATE to an existing concept over
   creating a near-duplicate file; the update is still gated.
+- 2026-09-11: **Merged `wire-vault` into this skill as `--wire`.** Same
+  contract: consent-gated `AGENTS.md` marker, optional `overview.md`
+  through the article gate, `--agent` prints the block and writes nothing,
+  don't-over-wire when there is no knowledge to point at. Marker HTML
+  comments stay `<!-- wire-vault:start -->` so existing projects keep
+  matching. Target remains `AGENTS.md` (not a Claude-specific file).
+  Folded rather than nested-skill: one vault skill. `--audit` (2026-09-11)
+  is the read-only health report on this same skill.
+
+- 2026-09-11: **Merged `audit-vault` into this skill as `--audit`.** Same
+  contract as the old skill: read-only, cron-safe `--agent`, `--deep`
+  ignored unattended, snapshots stay in `~/.cursor/cache/audit-vault/`.
+  `--audit` never writes the vault; harvest `--agent` still cannot write.
+  Dropped `--html` (no `render-html`). `/audit-vault` routes here.
+
 - 2026-07-03: **Added `--groom[=FOLDER]` maintenance mode** (vault cleanup:
   duplicates → merge, stale claims → update/archive, orphans → wire,
   mechanical drift → fix), detail in `references/grooming-guide.md`. Kept
@@ -100,23 +114,21 @@ deliberate deviations:
 - Title-similarity dedupe is heuristic; the HITL gate is the real safety net.
 - `scan_vault.py`/`verify_bundle.py` parse only top-level flat frontmatter
   keys (all OKF requires); nested YAML extensions are preserved but ignored.
-- `DEFAULT_VAULT` is intentionally duplicated in all three scripts (stdlib-only,
+- `DEFAULT_VAULT` is intentionally duplicated in the scripts (stdlib-only,
   no shared module by design); if the vault ever moves, update it in
-  `preflight.py`, `scan_vault.py`, and `verify_bundle.py` — or just pass
-  `--vault=`.
+  `preflight.py`, `scan_vault.py`, `verify_bundle.py`, and `healthscan.py` —
+  or just pass `--vault=`.
 - The vault lives in Dropbox (CloudStorage); writes are local-first and sync
   is Dropbox's problem, but rapid successive runs may race sync on slow links.
 
 ## 5. Audit rubric coverage
 
-See `skill-architecture.md` §B; this skill targets every PASS that applies.
+House conventions live in `AGENTS.md`.
 Secrets/env items are N/A (keyless, no network).
 
 ## 6. Notes
 
-Composes with: `ingest-source`
-  (external sources → vault `reference/`). The vault's own format documentation
-is the OKF wiki inside the vault itself, including the mirrored spec at
-`reference/okf-spec-v0.1.md`. Generated while upstream docs showed additive
-frontmatter drift vs spec baseline (`disallowed-tools` added in CC 2.1.181);
-field not used here.
+Composes with: `deep-research` (optional vault destination). There is no
+`ingest-source`. Health is `--audit` on this skill, not a sibling. The vault's own format
+documentation is the OKF wiki inside the vault itself, including the mirrored
+spec at `reference/okf-spec-v0.1.md`.

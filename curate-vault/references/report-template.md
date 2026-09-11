@@ -1,8 +1,9 @@
 # Vault health report — structure
 
-Loaded by SKILL.md Step 5 (spec A1). Every number comes from the healthscan
-JSON (plus verify_bundle for conformance); a section whose input was skipped
-or gated says "not measured — <reason>" instead of guessing (spec A12).
+Loaded by `references/audit.md` (spec A1). Every number comes from the
+healthscan JSON (plus verify_bundle for conformance); a section whose input
+was skipped or gated says "not measured — <reason>" instead of guessing
+(spec A12).
 
 ```markdown
 # Vault health — <date>
@@ -57,4 +58,4 @@ Rules:
 - Suggestions come verbatim from the engine's `suggestions` array; the model
   may add a reason per line but never invents new targets.
 - Never propose an edit, merge, archive, or deletion — name the folder and
-  hand it to curate-vault.
+  hand it to `--groom` / `--relink` on this same skill.

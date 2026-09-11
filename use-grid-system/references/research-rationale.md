@@ -266,7 +266,7 @@ convention; the canon stays branded internally as "Müller-Brockmann."
 ## Phased build plan
 
 1. **Phase 0 — fold the canon.** Move `grid-system-summary.md` → `references/canon.md`;
-   scaffold the skill with `/generate-skill --name=use-grid-system` (self-audits to spec).
+   add a `use-grid-system/` folder against `AGENTS.md`.
 2. **Phase 1 — Tailwind token layer.** `grid_tokens.py` emits the `@theme`+`@utility` block;
    `references/tailwind.md`. Verify on a throwaway Tailwind v4 app: subgrid bands + baseline
    spacing hold at 3 widths.
@@ -277,7 +277,7 @@ convention; the canon stays branded internally as "Müller-Brockmann."
 5. **Phase 4 — verification.** Document the grid-adherence checks in
    `references/verification.md`; optional `automate-browser`. Retire the Puppeteer dependency.
 6. **Phase 5 — degrade + compose.** `references/non-tailwind.md` vanilla path; probe-gated
-   routing to build-ui/design-md/frontend-design; `/audit-skill use-grid-system`.
+   routing to build-ui/design-md/frontend-design.
 
 ---
 

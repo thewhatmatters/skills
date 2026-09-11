@@ -3,14 +3,13 @@ name: codebase-design
 description: >-
   Shared vocabulary and principles for designing deep modules — a lot of
   behaviour behind a small interface, at a clean seam, testable through that
-  interface. Use when the user wants to design or improve a module's
-  interface, find a deepening opportunity, decide where a seam should go,
-  make code more testable or more AI-navigable, classify a dependency for
-  testing purposes, or when another skill (e.g. improve-codebase-architecture)
-  needs the deep-module vocabulary. Trigger phrases: "design this module's
-  interface", "is this module too shallow", "where should the seam go",
-  "make this more testable", "how do I mock this dependency", "deepen this
-  module".
+  interface. Use when the user wants to design a module's interface, decide
+  where a seam should go, make code more testable or more AI-navigable,
+  classify a dependency for testing, or "deepen this module". Full-repo
+  scan for shallow modules: "--improve", "/codebase-design --improve",
+  "/improve-codebase-architecture", "find shallow modules", "improve the
+  architecture of this codebase" (also "--html"). Do NOT start a repo-wide
+  scan unless the user asked for that scan.
 ---
 
 # Codebase Design
@@ -20,9 +19,22 @@ at a clean seam, testable through that interface. Use this language and
 these principles wherever code is being designed or restructured. The aim is
 leverage for callers, locality for maintainers, and testability for everyone.
 
-Adapted from Matt Pocock's `codebase-design` skill
+Adapted from Matt Pocock's `codebase-design` and
+`improve-codebase-architecture` skills
 ([mattpocock/skills](https://github.com/mattpocock/skills), MIT) — see
 `NOTICE.md` in this directory.
+
+## Modes
+
+Default is this file: glossary and principles. Cheap to keep in context.
+
+**`--improve`** (also `/improve-codebase-architecture`): scan the repo for
+shallow modules, report candidates, then interview the pick. That path is
+expensive (Explore subagent; optional HTML). Enter it **only** when the
+user asked for a scan. Read
+[`references/improve.md`](references/improve.md) and follow it. Flags on
+that path: `--html` (visual report in `$TMPDIR`), `--agent` (report only;
+no pick, no interview).
 
 ## Glossary
 
@@ -170,8 +182,10 @@ Good interfaces make testing natural:
   [references/DESIGN-IT-TWICE.md](references/DESIGN-IT-TWICE.md): spin up
   parallel sub-agents to design the interface several radically different
   ways, then compare on depth, locality, and seam placement.
+- **Repo-wide scan** — [`references/improve.md`](references/improve.md)
+  (`--improve`).
 
 ## Conventions this skill follows
 
-- Spec is `~/.cursor/skills/skill-architecture.md`.
+- House conventions: repo `AGENTS.md`.
 - **`WHY.md`:** read before changing this skill's design. After a run that locks a non-obvious choice (went unusually well or badly, reason not already in SKILL.md), append a dated line. Skip routine runs. Cross-project lessons go to `/curate-vault`.

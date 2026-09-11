@@ -1,9 +1,8 @@
-# wire-vault marker block template
+# Project-layer marker block template
 
-Loaded by SKILL.md Step 6. Substitute `<name>` (project name) and `<vault>`
-(vault root — the `--vault` value or the default shown below), and keep the
-markers EXACTLY as written — they are the idempotency contract (Step 3 finds
-and replaces everything between them, inclusive).
+Loaded by [`wire.md`](wire.md). Substitute `<name>` (project name) and
+`<vault>` (the `--vault` value or the default shown below). Keep the HTML
+comment markers EXACTLY as written — they are the idempotency contract.
 
 ```markdown
 <!-- wire-vault:start -->
@@ -25,5 +24,5 @@ Rules:
 - Insert at the END of an existing `AGENTS.md` (least disruptive to the
   project's own rules), or as the sole content of a new one.
 - On update, replace only marker-to-marker; never touch anything outside.
-- If the user renames the project, re-run wire-vault — the block updates in
-  place.
+- If the user renames the project, re-run `/curate-vault --wire` — the
+  block updates in place.

@@ -48,7 +48,7 @@ def fetch_json(url, retries=2, delay=3):
                     continue
                 # marker the caller/model can see — a rate limit must be
                 # distinguishable from a genuinely empty result so the
-                # documented web.py fallback can fire
+                # documented WebSearch fallback in references/recency.md can fire
                 print("[reddit] 429 rate limited — retries exhausted",
                       file=sys.stderr)
                 return None

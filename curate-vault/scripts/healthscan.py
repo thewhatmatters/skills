@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only metrics engine for audit-vault (spec A4, A10).
+"""Read-only metrics engine for curate-vault --audit (spec A4, A10).
 
 Walks the OKF vault (READ-ONLY: vault files are only ever opened for
 reading), computes health metrics, diffs against the newest prior snapshot,

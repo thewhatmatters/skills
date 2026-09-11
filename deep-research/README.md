@@ -40,6 +40,8 @@ You can also tune the run:
   or force the serial loop. Default: fan-out at `exhaustive`, serial
   otherwise.
 - `--no-html` — markdown only.
+- `--recent` — force the recency pass (community discussion in a dated window).
+- `--days=N` — lookback for that pass (default 30).
 - `--dry-run` — show the research plan without doing the search or writing
   any files. Useful to sanity-check angles before committing to an
   exhaustive run.
@@ -62,15 +64,16 @@ and Exa's semantic search. The skill never blocks on missing keys.
 1. **Scope.** Classifies the question (research type + depth + recency
    axis). If it's secretly a single-fact lookup, the skill says so and gives
    you a one-line answer instead of a multi-pass research run. If it's
-   secretly about *recent discussion*, it suggests `/scan-trends` instead.
+   about *recent discussion*, it runs the recency pass (`--recent` /
+   `--days`) instead of a separate skill.
 2. **Plan.** Picks the section template for the research type and generates
    the right number of subquery angles for the chosen depth.
 3. **Search.** Runs the subqueries through Tavily/Exa (SCRIPTS) or built-in
    WebSearch (NATIVE). At `exhaustive` depth (or with `--parallel`) the
    sweep fans out to parallel subagents — one specialist per angle, each
    returning distilled, cited findings — while synthesis still happens in
-   one place. When recency matters for one of the angles, it invokes
-   `/scan-trends` instead of normal search — skill composition.
+   one place. Recency angles run in the main session (Reddit / HN /
+   Polymarket + WebSearch).
 4. **Follow up** (standard/exhaustive depths). Finds gaps and chases them
    with targeted queries; fetches full content for the most cited sources.
 5. **Synthesize.** Fills in the type template, citing every claim inline,
@@ -88,4 +91,5 @@ and Exa's semantic search. The skill never blocks on missing keys.
 - `references/research-templates.md` — the 8 type templates (one section
   structure per research type).
 - `references/synthesis-rules.md` — citation discipline and honesty rules.
+- `references/recency.md` — recent-discussion pass.
 - `WHY.md` — design decisions and the "why".

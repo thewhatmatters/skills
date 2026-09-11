@@ -34,7 +34,7 @@ BRACE SAFETY
     re-parses them, so only the TEMPLATE string itself needs `{{ }}`
     escapes (its CSS braces). Values must NOT be brace-doubled — doing so
     leaks literal `{{...}}` into the rendered page. Same contract as
-    generate-prd's report.py.
+    this skill's report.py.
 """
 
 import argparse
@@ -120,7 +120,9 @@ PROVIDER_LABEL = {
     "exa": "Exa",
     "websearch": "WebSearch",
     "webfetch": "WebFetch (full page)",
-    "scan-trends": "via /scan-trends",
+    "reddit": "Reddit",
+    "hn": "Hacker News",
+    "polymarket": "Polymarket",
 }
 
 

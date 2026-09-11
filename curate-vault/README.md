@@ -2,9 +2,8 @@
 
 **What it is:** Captures the durable lessons from a working session — decisions,
 gotchas, playbooks — and files them into your personal OKF knowledge vault,
-after you approve each one. Also the vault's groundskeeper: `--groom` sweeps
-an existing vault folder for duplicates, stale articles, orphans, and broken
-links, and proposes the cleanup for your approval.
+after you approve each one. Also the vault's health report (`--audit`),
+groundskeeper (`--groom`), and project pointer (`--wire`).
 
 ## What you get
 
@@ -13,6 +12,10 @@ links, and proposes the cleanup for your approval.
 - A verification pass proving the vault still conforms and no links broke.
 - In non-interactive runs: a proposals file you can review later — the vault
   is never touched without you.
+- `--wire`: a marked `AGENTS.md` block pointing at `projects/<name>/` (optional
+  vault overview, still gated).
+- `--audit`: a markdown health report (conformance, staleness, growth). Never
+  writes the vault. Snapshots in `~/.cursor/cache/audit-vault/`.
 
 ## How to run
 
@@ -31,6 +34,15 @@ Duplicates get merged, stale claims updated, superseded articles archived (to
 For always-fresh maintenance, schedule a weekly `--groom --agent` run: it
 writes a report of proposed cleanups, and a later interactive pass applies
 only what you approve.
+
+To point this repo at its vault shelf, say "wire this project to the vault"
+or `/curate-vault --wire`. That inserts (or updates) a marked section in
+`AGENTS.md`. It is safe to re-run. `--agent` prints the block and does not
+edit. `/wire-vault` is the same mode.
+
+To measure the vault without changing it, say "how healthy is the vault" or
+`/curate-vault --audit`. Cron: `/curate-vault --audit --agent --out=~/vault-health.md`.
+`/audit-vault` is the same mode.
 
 ## What it needs
 
@@ -53,4 +65,4 @@ Python 3 makes the scans faster, but the skill works without it.
 
 - `SKILL.md` — operating instructions the agent follows.
 - `WHY.md` — design decisions and the "why".
-- `references/` — the curation filter and OKF authoring rules.
+- `references/` — curation filter, OKF rules, grooming, `--audit`, and `--wire`.

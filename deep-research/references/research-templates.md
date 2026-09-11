@@ -21,7 +21,7 @@ piped into `scripts/report.py` for the HTML render).
   "question": "<the question the user asked, verbatim>",
   "summary": "<one-paragraph TL;DR>",
   "sources": [
-    {"id": 1, "url": "...", "title": "...", "provider": "tavily|exa|websearch|webfetch|scan-trends",
+    {"id": 1, "url": "...", "title": "...", "provider": "tavily|exa|websearch|webfetch|reddit|hn|polymarket",
      "accessed": "<YYYY-MM-DD>"},
     ...
   ],
@@ -137,7 +137,7 @@ Use when the user is evaluating ONE product (vs. competitive's many).
 
 **Starter subquery angles:** "<product> features", "<product> pricing",
 "<product> review", "<product> vs", "<product> limitations", "<product>
-complaints" (Reddit, HN — consider `/scan-trends` for this angle).
+complaints" (Reddit, HN — recency pass if the complaints are "lately").
 
 ### 2.6 `problem` — Problem-solving research
 
@@ -263,7 +263,7 @@ User-derived strings are HTML-escaped only. Literal `{...}` in research
 content (pseudocode, JSON examples, regex) is safe because `.format()`
 substitutes replacement values verbatim and never re-parses them — values
 must not be brace-doubled, or `{{...}}` leaks into the rendered page.
-Same contract as generate-prd's report.py.
+Same brace-safety contract as this skill's `report.py`.
 
 ---
 
@@ -278,7 +278,9 @@ muted tag next to each source. The full set:
 | `exa` | Exa |
 | `websearch` | WebSearch |
 | `webfetch` | WebFetch (full page) |
-| `scan-trends` | via /scan-trends |
+| `reddit` | Reddit |
+| `hn` | Hacker News |
+| `polymarket` | Polymarket |
 
 This is honesty discipline (spec A12): the reader sees where each citation
 came from, including the difference between a search-snippet citation and
@@ -298,7 +300,9 @@ a full-page WebFetch.
 
 ## 8. Anti-overtrigger fallback shapes
 
-Step 1's bail paths emit one of three short outputs (no file written):
+Step 1's **bail** paths emit a short output and write no file
+(single-fact, out-of-scope). Recency is **not** a bail — announce it, then
+continue the full flow with `references/recency.md`.
 
 **Single-fact lookup:**
 ```
@@ -307,13 +311,8 @@ answer: <one sentence with a citation>
 (if you want a deeper dive, say so explicitly.)
 ```
 
-**Recency-focused → /scan-trends:**
-```
-this question is fundamentally about recent discussion of <topic>.
-/scan-trends is a better fit. invoke it with:
-  /scan-trends <topic> --days=<N>
-(re-run /deep-research if you want an evergreen treatment instead.)
-```
+**Recency (continue):** announce `RECENCY=yes`, WINDOW=`--days` (default 30),
+then proceed to Step 3. Do not stop.
 
 **Out-of-scope:**
 ```
@@ -322,8 +321,8 @@ products, etc. this question doesn't seem to fit. answering directly:
 <one-paragraph response>
 ```
 
-Step 9 (Emit) does NOT print for these bail paths — they replace the full
-flow.
+Step 9 (Emit) does NOT print for the bail paths — they replace the full
+flow. Recency still emits.
 
 ---
 

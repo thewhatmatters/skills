@@ -1,7 +1,7 @@
 # CONTEXT.md Format
 
 Bundled here (rather than requiring a separate `domain-modeling` skill)
-because `improve-codebase-architecture` is currently this house's only
+because `--improve` on `codebase-design` is currently this house's only
 consumer of `CONTEXT.md`. If a future need for *actively* building and
 challenging a domain model shows up independent of architecture review,
 port Matt Pocock's `domain-modeling` skill properly instead of growing this

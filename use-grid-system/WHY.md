@@ -11,7 +11,7 @@ Make a real Müller-Brockmann modular grid load-bearing in a web project — one
 a toggleable overlay, and runtime optical alignment — then prove it adheres.
 
 ## 2. Reusable patterns (link to spec A1..A13)
-Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
+Follows `AGENTS.md` A1–A15. Notable applications:
 
 - **A15:** verification is this skill's own four checks
   (`references/verification.md`). `automate-browser` is optional. Absence of
@@ -30,6 +30,10 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
 
 ## 3. Decision log
 - 2026-06-13: scaffolded by generate-skill.
+- 2026-09-11: **slash-only** (`disable-model-invocation: true`). House
+  taste stays in this collection; it must not occupy ambient context in
+  research/vault sessions. Frontend persona still points at the path;
+  invoke `/use-grid-system`.
 - **Built from research, not from scratch.** Architecture is the proposal in
   `references/research-rationale.md`; the canon is `references/canon.md`. Both
   grounded against the canonical book (162-pp scan, OCR'd — the scratch ingest
@@ -70,7 +74,7 @@ Follows `~/.cursor/skills/skill-architecture.md` A1–A15. Notable applications:
   must read only `@theme` CSS variables and make no external calls.
 
 ## 5. Audit rubric coverage
-See `skill-architecture.md` §B; this skill targets every PASS that applies.
+House conventions live in `AGENTS.md`.
 Verification is `references/verification.md`.
 
 ## 6. Notes

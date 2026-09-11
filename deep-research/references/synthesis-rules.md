@@ -147,8 +147,8 @@ entries. Each entry includes:
 
 - A descriptive title (not just the bare URL).
 - The provider that surfaced it (`tavily`, `exa`, `websearch`,
-  `webfetch`, or `scan-trends`). This is honesty about HOW the source
-  reached the report.
+  `webfetch`, `reddit`, `hn`, `polymarket`). This is honesty about HOW the
+  source reached the report.
 - The access date.
 
 When a source was fetched in full (via `WebFetch`), note `WebFetch (full
@@ -190,13 +190,12 @@ Each open question is one bullet. Be specific:
 
 ---
 
-## 7. Trendscan-sourced content
+## 7. Recency-sourced content
 
-When a subquery was routed through `/scan-trends` because of a recency
-angle (Step 4), the items it returns get `"provider": "scan-trends"` in
-the sources JSON. The report should label these clearly — e.g. in a
-"Community signals" subsection of `trends` or `gaps` — so the reader
-understands they're discussion-derived, not authoritative.
+When a subquery used the recency pass (Step 4 / `references/recency.md`),
+tag items `"provider": "reddit" | "hn" | "polymarket" | "websearch"`. Put
+discussion-derived claims in a **Community signals** subsection so they
+read as discussion, not authority.
 
 ---
 

@@ -30,7 +30,7 @@ Conventional headings when applicable: # Schema, # Examples, # Citations.
   when the article entered the vault and is immutable; `timestamp` is the
   spec's own "last meaningful change" and is bumped on every gated update.
   New articles set both (identical at birth). Never rewrite `created` during
-  updates, merges, or grooms — audit-vault reads the pair to split document
+  updates, merges, or grooms — `--audit` / `healthscan.py` reads the pair to split document
   age from freshness.
 - Body structure is markdown with a clear heading per section. Where
   formatting would fight OKF (frontmatter, absolute links, reserved

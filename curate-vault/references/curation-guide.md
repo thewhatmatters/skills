@@ -12,7 +12,7 @@ Save knowledge that **survives refactors and applies beyond one repo**:
 | `Gotcha` | A non-obvious fact that cost real time to learn (platform quirk, vendor behavior, API trap). Would past-you have avoided pain knowing it? |
 | `Playbook` | A procedure that will be executed again (release steps, incident triage, setup ritual). Capture as numbered steps with links. |
 | `Project` | Standing facts about a project that aren't in its repo: what it is, where things live, who/what it talks to. |
-| `Reference` | An external source worth mirroring — route through `ingest-source` when available; target a **topic directory** (e.g. `<vault>/claude/best-practices/`), proposing the best-fitting existing topic before inventing a new one. `ingest-source`'s own vault destination hands this skill a pre-drafted candidate: skip extraction, but dedupe, relate, and the HITL gate still apply. |
+| `Reference` | An external source worth mirroring — summarize it in-session (Read / WebFetch), then file through this skill; target a **topic directory** (e.g. `<vault>/claude/best-practices/`), proposing the best-fitting existing topic before inventing a new one. There is no `ingest-source` skill. |
 
 Do NOT save:
 
