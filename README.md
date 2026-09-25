@@ -19,6 +19,7 @@ collection goes through `/curate-vault` into the OKF vault shelf
 | [`curate-vault`](curate-vault/) | Gated harvest into the OKF vault; `--audit` / `--groom` / `--wire`. |
 | [`deep-research`](deep-research/) | Multi-pass cited research, including recency (`--recent` / `--days`). |
 | [`ingest-source`](ingest-source/) | YouTube / web / PDF / image → `docs/sources/` (+ optional vault). |
+| [`mdxcn`](mdxcn/) | mdxcn.dev framed MDX components (callouts, steps, terminal, ASCII graphs) for shadcn + Next.js. |
 | [`use-grid-system`](use-grid-system/) | Josef Müller-Brockmann modular grid. |
 
 ## External skills (composed, not vendored)
